@@ -1,0 +1,66 @@
+= Servicy component
+
+== Features
+
+The service component aggregates re-usable aspects of the Hetzner architecture in a single, low-defect component at the center of the Hetzner architecture. The service component is used to inject services into and to serve these services, facilitating interaction in standardized ways with the other Hetzner architecture building blocks.
+
+The domain analysis for the service component can be viewed here: https://docs.google.com/presentation/d/1fYO0-NufskpMllxtHv_TnbDurqczdskl0KvIMk7nk-4/edit#slide=id.gb65163f25_0_0
+
+=== Non-functional requirements
+
+* {file:features/nfr_security.feature Security NFRs} when fulfilling the security architectural viewpoint.
+* {file:features/nfr_performance.feature Performance NFRs} when fulfilling the performance architectural viewpoint.
+* {file:features/nfr_quality.feature Quality NFRs} when fulfilling the quality architectural viewpoint.
+
+=== feature 1
+* {file:features/list_domain_perspectives.feature listing domain perspectives} when provisioning domain perspectives and service components
+
+== Requirements
+
+The service requires:
+* {file:features/bootstrap_with_configuration.feature bootstrapping with a configuration}
+* {file:features/bootstrap_with_configuration_service.feature boostrapping with a configuration service} URI, token, and configuration identifier
+* {file:features/bootstrap_with_service_registry.feature bootstrapping with a service registry} URI
+* {file:features/bootstrap_with_execution_environment.feature bootstrapping with an execution environment} indicator (one of test, development, staging, production)
+
+== Configuration
+
+The service supports:
+* {file:features/bootstrap_with_configuration_service.feature bootstrapping a configuration service} for when configuring for production
+* {file:features/bootstrap_with_configuration_file.feature bootstrapping a configuration file} for when configuring for development
+* {file:features/bootstrap_with_environment.feature bootstrapping from the environment} when bootstrapping the service component
+* {file:features/bootstrap_with_environment_file.feature bootstrapping from an environment file} when bootstrapping the service component
+
+== Dependencies
+
+The service component depends on:
+* bootstrap configuration
+* a service registry client
+* a configuration service client
+* an authentication implementation
+* an authorization implementation
+* a SMAAK implementation
+* an auditing implementation
+* a Certificate Authority client
+* A routing stack
+* An Identity Management client
+* An MVC framework implementation
+* A framework for injecting providers
+* A tool chain for injecting services
+* A tool for building releases
+* A web server or container suite
+
+== Usage
+
+This feature suite and specification can be used to vet service component architectural building block implementations. The reference implementation can be found here: https://github.hetzner.co.za/hetznerZA/soar_sc
+
+Write an IUT adapter for your implementation, and tell the orchestrator to use it for 'production' orchestration, then execute the specification suite so:
+
+bundle install
+TEST_ORCHESTRATION_PROVIDER=production bundle exec cucumber features
+
+=== Workflows
+
+==== My team wants to build and release a service into the Hetzner architecture:
+
+Using the reference implementation (soar_sc) the workflows are described here: https://docs.google.com/document/d/1eCVcmOcQc-aYcxWMhOkrnVBx-ihRLSayfiIrUEwpJx0/edit
