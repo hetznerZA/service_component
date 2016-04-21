@@ -12,24 +12,122 @@ The domain analysis for the service component can be viewed here: https://docs.g
 * {file:features/nfr_performance.feature Performance NFRs} when fulfilling the performance architectural viewpoint.
 * {file:features/nfr_quality.feature Quality NFRs} when fulfilling the quality architectural viewpoint.
 
-=== feature 1
-* {file:features/list_domain_perspectives.feature listing domain perspectives} when provisioning domain perspectives and service components
-
-== Requirements
-
-The service requires:
-* {file:features/bootstrap_with_configuration.feature bootstrapping with a configuration}
-* {file:features/bootstrap_with_configuration_service.feature boostrapping with a configuration service} URI, token, and configuration identifier
+== Features
+=== Bootstrapping
+* {file:features/bootstrap_with_service_identifier.feature bootstrapping with a service identifier}
+* {file:features/bootstrap_with_service_configuration.feature bootstrapping with a configuration}
+* {file:features/bootstrap_with_configuration_service.feature boostrapping with a configuration service} URI, and access token
 * {file:features/bootstrap_with_service_registry.feature bootstrapping with a service registry} URI
+* {file:features/bootstrap_with_authentication_provider.feature bootstrapping with an authentication provider} URI
 * {file:features/bootstrap_with_execution_environment.feature bootstrapping with an execution environment} indicator (one of test, development, staging, production)
+* {file:features/bootstrap_with_session_configuration.feature bootstrapping with a session secret and key}
+* {file:features/bootstrap_with_ca.feature bootstrapping with a certificate authority configuration}
 
-== Configuration
+=== Execution environment behaviour
+* {file:features/execution_environment_development.feature Development behaviour} when executing in the 'development' execution environment
+* {file:features/execution_environment_test.feature Test behaviour} when executing in the 'test' execution environment
+* {file:features/execution_environment_test.feature Staging behaviour} when executing in the 'staging' execution environment
+* {file:features/execution_environment_test.feature Production behaviour} when executing in the 'production' execution environment
 
-The service supports:
+=== Session support
+
+* {file:features/sessions.feature Session management} when engaging client sessions
+* {file:features/sessions.feature Session security} when engaging client sessions
+
+=== Configuration service
 * {file:features/bootstrap_with_configuration_service.feature bootstrapping a configuration service} for when configuring for production
 * {file:features/bootstrap_with_configuration_file.feature bootstrapping a configuration file} for when configuring for development
 * {file:features/bootstrap_with_environment.feature bootstrapping from the environment} when bootstrapping the service component
 * {file:features/bootstrap_with_environment_file.feature bootstrapping from an environment file} when bootstrapping the service component
+* {file:features/retrieve_configuration.feature retrieving configuration} from a configuration service using the service identifier and credentials injected
+* {file:features/configuration_pluggable.feature Injecting a pluggable} configuration provider
+
+=== Service registry
+* {file:features/find_service_uri.feature finding service URIs} given a service identifier when requiring a service to fulfill a workflow
+* {file:features/find_service_uri.feature finding the best service URI} given a service identifier when the longer lookup is acceptable given the need to find the best URI
+* {file:features/service_registry_client.feature access to a full-featured} service registry client when needing to access the full suite of service registry functionality
+* {file:features/service_registry_policy_lookup.feature Policy lookup} when needing to authorize services
+* {file:features/service_registry_pluggable.feature Injecting a pluggable} service registry provider
+
+=== Authentication
+* {file:features/authentication_check.feature Indicating} whether a user or service has authenticated when needing to access control actions, given a request
+* {file:features/authentication_check.feature Identifying} the authenticated identity by identifier when needing to know who or what authenticated, given a request
+* {file:features/authentication_dev_mode.feature Development authentication} when developing, facilitating development workflows
+* {file:features/authentication_allow.feature Allowing} access to authorization if authenticated, given a service
+* {file:features/authentication_deny.feature Denying} access to authorization if not authenticated, given a service
+* {file:features/authentication_allow.feature Authenticating humans} when humans need access to services
+* {file:features/authentication_allow.feature Authenticating services} when service components need access to services
+* {file:features/authentication_allow.feature Authenticating delegation} when service components are acting on behalf of humans
+* {file:features/authorization_pluggable.feature Injecting a pluggable} authentication provider
+
+=== Authorization
+* {file:features/authorization_policy.feature Applying policies} when authorizing a service
+* {file:features/authorization_allow.feature Allowing} access to controllers if authorized, given a service
+* {file:features/authorization_deny.feature Denying} access to controllers if not authorized, given a service
+* {file:features/authorization_dev_mode.feature Development authorizing} when developing, facilitating development workflows
+* {file:features/authorization_dev_mode.feature Development authorizing} when developing, facilitating development workflows
+* {file:features/authorization_pluggable.feature Injecting a pluggable} authorization provider
+
+=== Auditing
+* {file:features/auditing_levels.feature Levels of auditing} when filtering auditing information
+* {file:features/auditing_levels.feature Categorization of auditing} when categorizing auditing information
+* {file:features/auditing_levels.feature Export of auditing} when centralized auditing is required
+* {file:features/auditing_pluggable.feature Injecting a pluggable} auditing provider
+
+=== Certificate authority
+* {file:features/ca_get_cert.feature Retrieving a certificate} from a CA when authenticating a request
+* {file:features/ca_verify.feature Verifying a certificate} from a CA when authenticating a request
+* {file:features/ca_trust_store.feature Access to CA public cert} in its trust store when verifying certificates
+
+=== Routing stack
+* {file:features/router_match.feature Matching} routes unambiguously when servicing requests
+* {file:features/router_match.feature RESTful} routing is not designed out
+* {file:features/router_authenticate.feature Decrypting requests} at appropriate points when encrypted requests have been received
+* {file:features/router_authenticate.feature Verifying certificates} at appropriate points when signed requests have been received
+* {file:features/router_chain.feature Handling prioritized} using the chain of responsibility pattern
+* {file:features/router_authenticate.feature Firstly handing over to authentication} when servicing human requests
+* {file:features/router_authenticate.feature Firstly handing over to authentication} when servicing service component requests
+* {file:features/router_authenticate.feature Secondly validating} requests against route WADL specifications
+* {file:features/router_authenticate.feature Thirdly handing over to authorization} when servicing requests
+* {file:features/router_authenticate.feature Fourthly handing over to controllers} in a router action when actioning requests
+* {file:features/router_authenticate.feature Fifthly handing over to views} in a router action when rendering responses
+* {file:features/router_lexicon.feature Rendering WADL} lexicons for all available routes
+* {file:features/router_lexicon.feature Rendering WADL} lexicon when requested for a route
+* {file:features/router_lexicon.feature Allowing validated} requests to reach controllers
+* {file:features/router_lexicon.feature Denying invalid} requests from reaching controllers
+* {file:features/route_configuration_signed.feature Understanding signed} route configuration
+* {file:features/route_configuration_signed.feature Understanding unsigned} route configuration
+* {file:features/route_configuration_signed.feature Understanding authorized} route configuration
+* {file:features/route_configuration_signed.feature Understanding unauthorized} route configuration
+* {file:features/route_configuration_signed.feature Understanding facilitated view} rendering
+* {file:features/route_configuration_signed.feature Rendering error messages} for unmatched routes
+
+=== Identity Management
+* {file:features/idm.feature IDM client} when needing to map identities
+* {file:features/idm.feature IDM client} when needing to obtain roles for an identity
+* {file:features/idm.feature IDM client} when needing to obtain attributes for an identity
+
+=== Model View Controller
+* {file:features/mvc_controller.feature Controller} base class including configurability
+* {file:features/mvc_view_html.feature HTML} view rendering HTML
+* {file:features/mvc_view_haml.feature HAML} view rendering HAML
+* {file:features/mvc_view_erb.feature ERB} base rendering ERB
+* {file:features/mvc_view_json.feature JSON} base rendering JSON
+* {file:features/mvc_view_xml.feature XML} base rendering XML
+* {file:features/mvc_model.feature Model} base including configurability
+* {file:features/mvc_factory.feature Factory} for creating models from injection via configuration
+
+=== Web server
+* {file:features/middleware.feature Web server} that is configurable
+* {file:features/middleware.feature Middleware} support for the web server
+
+=== Service tool chain
+* {file:features/jewel_packaging.feature Packaging} tools when packaging controller, view, model and meta into a service
+* {file:features/jewel_creation.feature Creation} tools when creating services
+* {file:features/jewel_extract.feature Extraction} tools when removing services from the web application
+* {file:features/jewel_inject.feature Injection} tools when injecting services into the web application
+* {file:features/launch_debug.feature Debug} launch of the web server with services when debugging
+* {file:features/launch_production.feature Production} build tools to produce a build of the web server with services when wanting to release builds into production
 
 == Dependencies
 
