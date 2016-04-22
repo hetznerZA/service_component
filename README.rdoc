@@ -25,7 +25,6 @@ The domain analysis for the service component can be viewed here: https://docs.g
 
 === Execution environment behaviour
 * {file:features/execution_environment_development.feature Development behaviour} when executing in the 'development' execution environment
-* {file:features/execution_environment_test.feature Test behaviour} when executing in the 'test' execution environment
 * {file:features/execution_environment_test.feature Staging behaviour} when executing in the 'staging' execution environment
 * {file:features/execution_environment_test.feature Production behaviour} when executing in the 'production' execution environment
 
