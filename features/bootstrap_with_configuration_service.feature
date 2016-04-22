@@ -23,6 +23,7 @@ Feature: Bootstrapping with configuration service
 
   Scenario:
     Given no configuration service URI
+    And no configuration file
     And a valid configuration service token
     And the configuration service token is appropriate for my configuration
     When I am bootstrapped

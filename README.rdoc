@@ -34,11 +34,14 @@ The domain analysis for the service component can be viewed here: https://docs.g
 * {file:features/sessions.feature Session security} when engaging client sessions
 
 === Configuration service
+* {file:features/boostrap_configuration_precedence.feature Precedence of configuration} when supplying multiple sources of configuration
 * {file:features/bootstrap_with_configuration_service.feature bootstrapping a configuration service} for when configuring for production
 * {file:features/bootstrap_with_configuration_file.feature bootstrapping a configuration file} for when configuring for development
+* {file:features/bootstrap_with_configuration_service.feature retrieving configuration} from a configuration service using the service identifier and credentials injected
+
+=== Environment configuration
 * {file:features/bootstrap_with_environment.feature bootstrapping from the environment} when bootstrapping the service component
 * {file:features/bootstrap_with_environment_file.feature bootstrapping from an environment file} when bootstrapping the service component
-* {file:features/retrieve_configuration.feature retrieving configuration} from a configuration service using the service identifier and credentials injected
 * {file:features/configuration_pluggable.feature Injecting a pluggable} configuration provider
 
 === Service registry
