@@ -48,8 +48,7 @@ The domain analysis for the service component can be viewed here: https://docs.g
 * {file:features/find_service_uri.feature finding service URIs} given a service identifier when requiring a service to fulfill a workflow
 * {file:features/find_service_uri.feature finding the best service URI} given a service identifier when the longer lookup is acceptable given the need to find the best URI
 * {file:features/service_registry_client.feature access to a full-featured} service registry client when needing to access the full suite of service registry functionality
-* {file:features/service_registry_policy_lookup.feature Policy lookup} when needing to authorize services
-* {file:features/service_registry_pluggable.feature Injecting a pluggable} service registry provider
+* {file:features/service_registry_client.feature Injecting a pluggable} service registry provider
 
 === Authentication
 * {file:features/authentication_check.feature Indicating} whether a user or service has authenticated when needing to access control actions, given a request
@@ -59,27 +58,28 @@ The domain analysis for the service component can be viewed here: https://docs.g
 * {file:features/authentication_deny.feature Denying} access to authorization if not authenticated, given a service
 * {file:features/authentication_allow.feature Authenticating humans} when humans need access to services
 * {file:features/authentication_allow.feature Authenticating services} when service components need access to services
-* {file:features/authentication_allow.feature Authenticating delegation} when service components are acting on behalf of humans
-* {file:features/authorization_pluggable.feature Injecting a pluggable} authentication provider
+* {file:features/authentication_delegation.feature Authenticating delegation} when service components are acting on behalf of humans
+* {file:features/authentication_pluggable.feature Injecting a pluggable} authentication provider
 
 === Authorization
 * {file:features/authorization_policy.feature Applying policies} when authorizing a service
-* {file:features/authorization_allow.feature Allowing} access to controllers if authorized, given a service
-* {file:features/authorization_deny.feature Denying} access to controllers if not authorized, given a service
-* {file:features/authorization_dev_mode.feature Development authorizing} when developing, facilitating development workflows
+* {file:features/authorization_policy.feature Allowing} access to controllers if authorized, given a service
+* {file:features/authorization_policy.feature Denying} access to controllers if not authorized, given a service
 * {file:features/authorization_dev_mode.feature Development authorizing} when developing, facilitating development workflows
 * {file:features/authorization_pluggable.feature Injecting a pluggable} authorization provider
 
 === Auditing
 * {file:features/auditing_levels.feature Levels of auditing} when filtering auditing information
 * {file:features/auditing_levels.feature Categorization of auditing} when categorizing auditing information
-* {file:features/auditing_levels.feature Export of auditing} when centralized auditing is required
+* {file:features/auditing_levels.feature Auditing to stderr} when failing to audit to an auditing provider
+* {file:features/auditing_pluggable.feature Remote auditing} when centralized auditing is required
 * {file:features/auditing_pluggable.feature Injecting a pluggable} auditing provider
 
 === Certificate authority
 * {file:features/ca_get_cert.feature Retrieving a certificate} from a CA when authenticating a request
 * {file:features/ca_verify.feature Verifying a certificate} from a CA when authenticating a request
 * {file:features/ca_trust_store.feature Access to CA public cert} in its trust store when verifying certificates
+* {file:features/ca_revokation.feature Honoring revokation} when verifying certificates
 
 === Routing stack
 * {file:features/router_match.feature Matching} routes unambiguously when servicing requests

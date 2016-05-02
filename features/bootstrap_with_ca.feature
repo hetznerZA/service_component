@@ -5,6 +5,7 @@ Feature: Bootstrapping with a certificate authority
   With a certificate authority trust chain
   And a certificate authority verification URI
   And a certificate revokation list URI
+  And a certificate retrieval URI TBD
 
   Scenario:
     Given a valid certificate authority trust chain

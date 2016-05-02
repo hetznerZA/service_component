@@ -1,4 +1,8 @@
 Feature: Session support
+  As a service component
+  In order to facilitate transactions across separate request
+  I want to facilitate state storage using sessions
+  
   Scenario:
     Given a session client
     And a request
@@ -23,4 +27,4 @@ Feature: Session support
 
   Scenario:
     Given session support
-    And bootstrap validation ensures a session secret is present
+    Then bootstrap validation ensures a session secret is present
