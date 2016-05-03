@@ -76,10 +76,9 @@ The domain analysis for the service component can be viewed here: https://docs.g
 * {file:features/auditing_pluggable.feature Injecting a pluggable} auditing provider
 
 === Certificate authority
-* {file:features/ca_get_cert.feature Retrieving a certificate} from a CA when authenticating a request
 * {file:features/ca_verify.feature Verifying a certificate} from a CA when authenticating a request
-* {file:features/ca_trust_store.feature Access to CA public cert} in its trust store when verifying certificates
-* {file:features/ca_revokation.feature Honoring revokation} when verifying certificates
+* {file:features/ca_verify.feature Access to CA public cert} in its trust store when verifying certificates
+* {file:features/ca_verify.feature Honoring revokation} when verifying certificates
 
 === Routing stack
 * {file:features/router_match.feature Matching} routes unambiguously when servicing requests
