@@ -1,13 +1,10 @@
 = Servicy component
 
-== Features
-
 The service component aggregates re-usable aspects of the Hetzner architecture in a single, low-defect component at the center of the Hetzner architecture. The service component is used to inject services into and to serve these services, facilitating interaction in standardized ways with the other Hetzner architecture building blocks.
 
 The domain analysis for the service component can be viewed here: https://docs.google.com/presentation/d/1fYO0-NufskpMllxtHv_TnbDurqczdskl0KvIMk7nk-4/edit#slide=id.gb65163f25_0_0
 
-=== Non-functional requirements
-
+== Non-functional requirements
 * {file:features/nfr_security.feature Security NFRs} when fulfilling the security architectural viewpoint.
 * {file:features/nfr_performance.feature Performance NFRs} when fulfilling the performance architectural viewpoint.
 * {file:features/nfr_quality.feature Quality NFRs} when fulfilling the quality architectural viewpoint.
@@ -25,11 +22,10 @@ The domain analysis for the service component can be viewed here: https://docs.g
 
 === Execution environment behaviour
 * {file:features/execution_environment_development.feature Development behaviour} when executing in the 'development' execution environment
-* {file:features/execution_environment_test.feature Staging behaviour} when executing in the 'staging' execution environment
+* {file:features/execution_environment_development.feature Test behaviour} when executing in the 'test' execution environment
 * {file:features/execution_environment_test.feature Production behaviour} when executing in the 'production' execution environment
 
 === Session support
-
 * {file:features/sessions.feature Session management} when engaging client sessions
 * {file:features/sessions.feature Session security} when engaging client sessions
 
@@ -101,37 +97,34 @@ The domain analysis for the service component can be viewed here: https://docs.g
 * {file:features/route_configuration_signed.feature Understanding authorized} route configuration
 * {file:features/route_configuration_signed.feature Understanding unauthorized} route configuration
 * {file:features/route_configuration_signed.feature Understanding facilitated view} rendering
-* {file:features/route_configuration_signed.feature Rendering error messages} for unmatched routes
+* {file:features/route_configuration_signed./feature Rendering error messages} for unmatched routes
 
-=== Identity Management
-* {file:features/idm.feature IDM client} when needing to map identities
-* {file:features/idm.feature IDM client} when needing to obtain roles for an identity
-* {file:features/idm.feature IDM client} when needing to obtain attributes for an identity
-
+== Features in support of development. Quality requirement: TDD
 === Model View Controller
-* {file:features/mvc_controller.feature Controller} base class including configurability
-* {file:features/mvc_view_html.feature HTML} view rendering HTML
-* {file:features/mvc_view_haml.feature HAML} view rendering HAML
-* {file:features/mvc_view_erb.feature ERB} base rendering ERB
-* {file:features/mvc_view_json.feature JSON} base rendering JSON
-* {file:features/mvc_view_xml.feature XML} base rendering XML
-* {file:features/mvc_model.feature Model} base including configurability
-* {file:features/mvc_factory.feature Factory} for creating models from injection via configuration
+* {file:spec/lib/web/controllers/configured_controller_spec.rb Controller} base class including configurability
+* {file:spec/lib/web/views/html_spec.rb HTML} view rendering HTML
+* {file:spec/lib/web/views/haml_spec.rb HAML} view rendering HAML
+* {file:spec/lib/web/views/erb_spec.rb ERB} base rendering ERB
+* {file:spec/lib/web/views/json_spec.rb JSON} base rendering JSON
+* {file:spec/lib/web/views/xml_spec.rb XML} base rendering XML
+* {file:spec/lib/web/models/configured_model_spec.rb Model} base class including configurability
+* {file:spec/lib/web/models/model_factory.feature Factory} for creating models from injection via configuration
 
+== Features in support of development. Quality requirement: Framework selection
 === Web server
-* {file:features/middleware.feature Web server} that is configurable
-* {file:features/middleware.feature Middleware} support for the web server
+* Web server that is configurable
+* Middleware support for the web server
 
+== Tools in support of development. Quality requirement: Ad hoc 
 === Service tool chain
-* {file:features/jewel_packaging.feature Packaging} tools when packaging controller, view, model and meta into a service
-* {file:features/jewel_creation.feature Creation} tools when creating services
-* {file:features/jewel_extract.feature Extraction} tools when removing services from the web application
-* {file:features/jewel_inject.feature Injection} tools when injecting services into the web application
-* {file:features/launch_debug.feature Debug} launch of the web server with services when debugging
-* {file:features/launch_production.feature Production} build tools to produce a build of the web server with services when wanting to release builds into production
+* Packaging tools when packaging controller, view, model and meta into a service
+* Creation tools when creating services
+* Extraction tools when removing services from the web application
+* Injection tools when injecting services into the web application
+* Debug launch of the web server with services when debugging
+* Production build tools to produce a build of the web server with services when wanting to release builds into production
 
 == Dependencies
-
 The service component depends on:
 * bootstrap configuration
 * a service registry client
@@ -142,7 +135,6 @@ The service component depends on:
 * an auditing implementation
 * a Certificate Authority client
 * A routing stack
-* An Identity Management client
 * An MVC framework implementation
 * A framework for injecting providers
 * A tool chain for injecting services
@@ -150,13 +142,17 @@ The service component depends on:
 * A web server or container suite
 
 == Usage
+This feature suite and specification can be used to vet service component architectural building block implementations.
 
-This feature suite and specification can be used to vet service component architectural building block implementations. The reference implementation can be found here: https://github.hetzner.co.za/hetznerZA/soar_sc
+A reference implementation can be found here: https://github.hetzner.co.za/hetznerZA/soar_sc
 
 Write an IUT adapter for your implementation, and tell the orchestrator to use it for 'production' orchestration, then execute the specification suite so:
 
-bundle install
-TEST_ORCHESTRATION_PROVIDER=production bundle exec cucumber features
+  TEST_ORCHESTRATION_PROVIDER=production bundle exec cucumber features
+
+Soft-link rspec suites for the Model View Controller test seams to the spec/ directory, and then run:
+
+  bundle exec rspec -cfd spec
 
 === Workflows
 
