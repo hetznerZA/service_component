@@ -1,4 +1,4 @@
-= Servicy component
+= Service component
 
 The service component aggregates re-usable aspects of the Hetzner architecture in a single, low-defect component at the center of the Hetzner architecture. The service component is used to inject services into and to serve these services, facilitating interaction in standardized ways with the other Hetzner architecture building blocks.
 
@@ -70,6 +70,7 @@ The domain analysis for the service component can be viewed here: https://docs.g
 * {file:features/auditing_levels.feature Auditing to stderr} when failing to audit to an auditing provider
 * {file:features/auditing_pluggable.feature Remote auditing} when centralized auditing is required
 * {file:features/auditing_pluggable.feature Injecting a pluggable} auditing provider
+* {file:features/auditing_flow_identifiers.feature Managing flow identifiers} when providing traceability of auditing events
 
 === Certificate authority
 * {file:features/ca_verify.feature Verifying a certificate} from a CA when authenticating a request
@@ -79,15 +80,15 @@ The domain analysis for the service component can be viewed here: https://docs.g
 === Routing stack
 * {file:features/router_match.feature Matching} routes unambiguously when servicing requests
 * {file:features/router_match.feature RESTful} routing is not designed out
-* {file:features/router_authenticate.feature Decrypting requests} at appropriate points when encrypted requests have been received
-* {file:features/router_authenticate.feature Verifying certificates} at appropriate points when signed requests have been received
-* {file:features/router_chain.feature Handling prioritized} using the chain of responsibility pattern
-* {file:features/router_authenticate.feature Firstly handing over to authentication} when servicing human requests
-* {file:features/router_authenticate.feature Firstly handing over to authentication} when servicing service component requests
-* {file:features/router_authenticate.feature Secondly validating} requests against route WADL specifications
-* {file:features/router_authenticate.feature Thirdly handing over to authorization} when servicing requests
-* {file:features/router_authenticate.feature Fourthly handing over to controllers} in a router action when actioning requests
-* {file:features/router_authenticate.feature Fifthly handing over to views} in a router action when rendering responses
+* {file:features/router_stack_decryption.feature Decrypting requests} at appropriate points when encrypted requests have been received
+* {file:features/router_stack_verify.feature Verifying certificates} at appropriate points when signed requests have been received
+* {file:features/router_stack.feature Handling prioritized} using the chain of responsibility pattern
+* {file:features/router_stack.feature Firstly handing over to authentication} when servicing human requests
+* {file:features/router_stack.feature Firstly handing over to authentication} when servicing service component requests
+* {file:features/router_stack.feature Secondly validating} requests against route WADL specifications
+* {file:features/router_stack.feature Thirdly handing over to authorization} when servicing requests
+* {file:features/router_stack.feature Fourthly handing over to controllers} in a router action when actioning requests
+* {file:features/router__stack.feature Fifthly handing over to views} in a router action when rendering responses
 * {file:features/router_lexicon.feature Rendering WADL} lexicons for all available routes
 * {file:features/router_lexicon.feature Rendering WADL} lexicon when requested for a route
 * {file:features/router_lexicon.feature Allowing validated} requests to reach controllers
