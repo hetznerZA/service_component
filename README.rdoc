@@ -147,9 +147,17 @@ This feature suite and specification can be used to vet service component archit
 
 A reference implementation can be found here: https://github.hetzner.co.za/hetznerZA/soar_sc
 
-Write an IUT adapter for your implementation, and tell the orchestrator to use it for 'production' orchestration, then execute the specification suite so:
+Write an IUT adapter for your implementation, and tell the orchestrator to use it for 'development' orchestration, then execute the specification suite. For the SoarSc reference implementation, execute one of the following:
 
-  TEST_ORCHESTRATION_PROVIDER=production bundle exec cucumber features
+  TEST_ORCHESTRATION_PROVIDER=stub bundle exec cucumber features
+
+For TFA and production implementations, first start the service component, and have it reload automatically:
+
+  cd $SOAR_DIR
+  ./keep_running.sh
+
+  SOAR_DIR=path/to/your/implementaion TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features
+  SOAR_DIR=path/to/your/implementaion TEST_ORCHESTRATION_PROVIDER=production bundle exec cucumber features
 
 Soft-link rspec suites for the Model View Controller test seams to the spec/ directory, and then run:
 
