@@ -5,5 +5,6 @@ class Requires
 	  require "test/orchestration_provider_registry"
 	  require "test/base_orchestration_provider"
 	  Dir.glob(File.expand_path("../../../lib/service_component/test/**/*.rb", __FILE__), &method(:require))
+    require 'byebug'
 	end
 end

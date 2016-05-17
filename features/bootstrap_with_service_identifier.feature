@@ -7,18 +7,21 @@ Feature: Bootstrapping with a service identifier
 
   Scenario:
     Given a valid service identifier
+    And an environment configuration
     When I am bootstrapped
     Then I remember my service identifier
     And I complete bootstrap
 
   Scenario:
     Given an invalid service identifier
+    And an environment configuration
     When I am bootstrapped
     Then I notify 'invalid service identifier'
     And I do not complete bootstrap
 
   Scenario:
     Given no service identifier
+    And an environment configuration
     When I am bootstrapped
-    Then I notify 'missing service identifier'
+    Then I notify 'invalid service identifier'
     And I do not complete bootstrap    
