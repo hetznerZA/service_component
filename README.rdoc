@@ -154,6 +154,8 @@ Write an IUT adapter for your implementation, and tell the orchestrator to use i
 For TFA and production implementations, first start the service component, and have it reload automatically:
 
   cd $SOAR_DIR
+  export SOAR_TECH=rackup
+  bundle install
   ./keep_running.sh
 
   SOAR_DIR=path/to/your/implementaion TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features
