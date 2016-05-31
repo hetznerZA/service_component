@@ -173,3 +173,4 @@ Soft-link rspec suites for the Model View Controller test seams to the spec/ dir
 ==== My team wants to build and release a service into the Hetzner architecture:
 
 Using the reference implementation (soar_sc) the workflows are described here: https://docs.google.com/document/d/1eCVcmOcQc-aYcxWMhOkrnVBx-ihRLSayfiIrUEwpJx0/edit
+
