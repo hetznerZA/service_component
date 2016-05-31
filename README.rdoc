@@ -19,6 +19,8 @@ The domain analysis for the service component can be viewed here: https://docs.g
 * {file:features/bootstrap_with_execution_environment.feature bootstrapping with an execution environment} indicator (one of test, development, staging, production)
 * {file:features/bootstrap_with_session_configuration.feature bootstrapping with a session secret and key}
 * {file:features/bootstrap_with_ca.feature bootstrapping with a certificate authority configuration}
+* {file:features/bootstrap_with_time.feature bootstrapping with a reliable time source}
+* {file:features/bootstrap_with_auditing.feature bootstrapping with auditing configuration}
 
 === Execution environment behaviour
 * {file:features/execution_environment_development.feature Development behaviour} when executing in the 'development' execution environment
@@ -67,10 +69,11 @@ The domain analysis for the service component can be viewed here: https://docs.g
 === Auditing
 * {file:features/auditing_levels.feature Levels of auditing} when filtering auditing information
 * {file:features/auditing_levels.feature Categorization of auditing} when categorizing auditing information
-* {file:features/auditing_levels.feature Auditing to stderr} when failing to audit to an auditing provider
+* {file:features/auditing_levels.feature Support audit buffering} when failing to audit to an auditing provider
 * {file:features/auditing_pluggable.feature Remote auditing} when centralized auditing is required
 * {file:features/auditing_pluggable.feature Injecting a pluggable} auditing provider
 * {file:features/auditing_flow_identifiers.feature Managing flow identifiers} when providing traceability of auditing events
+* {file:features/auditing_service_component_information.feature Include service component information} when auditing services on a service component
 
 === Certificate authority
 * {file:features/ca_verify.feature Verifying a certificate} from a CA when authenticating a request
