@@ -20,7 +20,16 @@ The domain analysis for the service component can be viewed here: https://docs.g
 * {file:features/bootstrap_with_session_configuration.feature bootstrapping with a session secret and key}
 * {file:features/bootstrap_with_ca.feature bootstrapping with a certificate authority configuration}
 * {file:features/bootstrap_with_time.feature bootstrapping with a reliable time source}
-* {file:features/bootstrap_with_auditing.feature bootstrapping with auditing configuration}
+* {file:features/bootstrap_with_auditor_configuration.feature bootstrapping with auditor configuration}
+* {file:features/bootstrap_with_auditing_provider_configuation.feature bootstrapping with auditing provider configuation}
+
+=== Dynamic Configuration and Administration
+* Update revocation lists (Pending stretch goal)
+* Configuration updates (Pending stretch goal)
+* Set auditing level (Pending stretch goal)
+* Divert to DSS (Pending stretch goal)
+* Enable AB testing (Pending stretch goal)
+* Dial up multirouting (Pending stretch goal)
 
 === Execution environment behaviour
 * {file:features/execution_environment_development.feature Development behaviour} when executing in the 'development' execution environment
@@ -67,13 +76,18 @@ The domain analysis for the service component can be viewed here: https://docs.g
 * {file:features/authorization_pluggable.feature Injecting a pluggable} authorization provider
 
 === Auditing
+* {file:features/auditing_report.feature Reporting of audit event} when a noteworthy event occurs
 * {file:features/auditing_levels.feature Levels of auditing} when filtering auditing information
+* {file:features/auditing_timestamp.feature Timestamping of auditing events} when reporting audit events
 * {file:features/auditing_levels.feature Categorization of auditing} when categorizing auditing information
-* {file:features/auditing_levels.feature Support audit buffering} when failing to audit to an auditing provider
+* {file:features/auditing_optional_fields.feature Support optional fields} when reporting auditing events
+* {file:features/auditing_buffering.feature Support audit buffering} when failing to audit to an auditor
 * {file:features/auditing_pluggable.feature Remote auditing} when centralized auditing is required
 * {file:features/auditing_pluggable.feature Injecting a pluggable} auditing provider
 * {file:features/auditing_flow_identifiers.feature Managing flow identifiers} when providing traceability of auditing events
 * {file:features/auditing_service_component_information.feature Include service component information} when auditing services on a service component
+* {file:features/auditing_reporting_to_auditor.feature Reporting to auditor} when possible and the buffer is not empty
+* {file:features/auditing_service_component_shutdown.feature Shutdown flushing buffered audit events} when the service component shuts down (Pending stretch goal)
 
 === Certificate authority
 * {file:features/ca_verify.feature Verifying a certificate} from a CA when authenticating a request
@@ -119,7 +133,7 @@ The domain analysis for the service component can be viewed here: https://docs.g
 * Web server that is configurable
 * Middleware support for the web server
 
-== Tools in support of development. Quality requirement: Ad hoc 
+== Tools in support of development. Quality requirement: Ad hoc
 === Service tool chain
 * Packaging tools when packaging controller, view, model and meta into a service
 * Creation tools when creating services
@@ -148,7 +162,7 @@ The service component depends on:
 == Usage
 This feature suite and specification can be used to vet service component architectural building block implementations.
 
-A reference implementation can be found here: https://github.hetzner.co.za/hetznerZA/soar_sc
+A reference implementation can be found here: https://gitlab1.jnb2.host-h.net/hetznerZA/soar_sc
 
 Write an IUT adapter for your implementation, and tell the orchestrator to use it for 'development' orchestration, then execute the specification suite. For the SoarSc reference implementation, execute one of the following:
 
@@ -173,4 +187,3 @@ Soft-link rspec suites for the Model View Controller test seams to the spec/ dir
 ==== My team wants to build and release a service into the Hetzner architecture:
 
 Using the reference implementation (soar_sc) the workflows are described here: https://docs.google.com/document/d/1eCVcmOcQc-aYcxWMhOkrnVBx-ihRLSayfiIrUEwpJx0/edit
-
