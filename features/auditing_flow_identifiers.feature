@@ -10,7 +10,6 @@ Feature: Traceability of auditing events
     And the request does not have a flow identifier
     Then I want to generate a unique flow identifier
     And I want to update the request with the flow identifier
-    And I want to use the flow identifier in auditing
 
   Scenario:
     When I receive a request

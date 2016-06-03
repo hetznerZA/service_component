@@ -11,11 +11,11 @@ Feature: Reporting to auditor
   Scenario:
     Given a buffer with audit events
     When I can to report to auditor
-    Then I report the oldest audit event
-    And I remove the oldest audit event
+    Then I report the oldest audit event from the buffer
+    And I remove the oldest audit event from the buffer
 
   Scenario:
     Given a buffer with audit events
     When I cannot report to the auditor
-    Then I do not repot to the auditor
-    And I do not remove the oldest audit event
+    Then I do not report to auditor
+    And I do not remove the oldest audit event from the buffer

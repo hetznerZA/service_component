@@ -6,5 +6,4 @@ Feature: Auditing service component actions
   Scenario:
     Given an audit event
     When I am asked to audit
-    Then I notify an auditing provider of the audit event
-    And I provide my identifier
+    Then I provide my identifier in the audit event
