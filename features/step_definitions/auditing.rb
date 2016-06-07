@@ -41,6 +41,25 @@ end
 
 
 
+Given(/^an optional field$/) do
+  @test.given_audit_message('[key:value] message with optional field')
+end
+
+Given(/^an empty optional field$/) do
+  @test.given_audit_message('[key:] message with empty optional field')
+end
+
+Given(/^no optional field$/) do
+  @test.given_audit_message('message with no optional field')
+end
+
+Given(/^an invalid optional field$/) do
+  @test.given_audit_message('[[ message with invalid optional field')
+end
+
+
+
+
 
 When(/^I am asked to audit$/) do
   @test.notify_audit
@@ -70,7 +89,6 @@ end
 
 Then(/^I notify an auditing provider of the audit event$/) do
   expect(@test.has_been_notified?).to eq(true)
-   # Write code here that turns the phrase above into concrete actions
 end
 
 Then(/^I provide my identifier$/) do
@@ -118,7 +136,26 @@ Then(/^I provide the 'fatal' auditing level$/) do
   expect(@test.has_audited_with_level?(:fatal)).to eq(true)
 end
 
-
 Then(/^I notify an auditing provider with no audit event$/) do
   expect(@test.has_notified_with_message?('')).to eq(true)
+end
+
+Then(/^I provide my identifier in the audit event$/) do
+  expect(@test.has_notified_with_my_identifier?).to eq(true)
+end
+
+Then(/^I provide the optional field$/) do
+  @test.has_notified_with_message?('[key:value] message with optional field')
+end
+
+Then(/^I provide the empty optional field$/) do
+  @test.has_notified_with_message?('[key:] message with empty optional field')
+end
+
+Then(/^I provide no optional field$/) do
+  @test.has_notified_with_message?('message with no optional field')
+end
+
+Then(/^I treat the option field as normal message text$/) do
+  @test.has_notified_with_message?('[[ message with invalid optional field')
 end

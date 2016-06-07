@@ -9,11 +9,13 @@ module ServiceComponent
 
       attr_reader :uri
       attr_reader :identifier
+      attr_reader :environment
 
       def initialize(uri)
         @uri = uri
         @messages_file = "#{ENV['SOAR_DIR']}/webrick.stdout"
         @environment_file = "#{ENV['SOAR_DIR']}/config/environment.yml"
+        @environment = load_environment_file
       end
 
       def identify(identifier)
@@ -72,6 +74,20 @@ module ServiceComponent
       def bootstrap_with_environment(environment, environment_file)
         File.delete(environment_file)
         File.open(environment_file, 'w') { |f| f.write environment.to_yaml }
+      end
+
+      def load_environment_file
+        if File.exist?(@environment_file)
+          stringify_values(YAML.load_file(@environment_file))
+        else
+          {}
+        end
+      rescue IOError, SystemCallError, Psych::Exception => ex
+        raise LoadError.new("Failed to load environment #{@environment_file} : #{ex}")
+      end
+
+      def stringify_values(hash)
+        Hash[hash.map{ |k, v| [k, v.to_s] }]
       end
     end
   end

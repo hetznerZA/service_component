@@ -10,6 +10,9 @@ module ServiceComponent
       end
 
       def notify_audit
+        #Default the audit level to debug if not set
+        @audit_level = :debug if @audit_level.nil?
+
         @test_flow_id="#{SecureRandom.hex(14)}#{Time.now.to_i.to_s(16)}#{SecureRandom.hex(14)}"
         send_to_test_audit_endpoint(@audit_level, @test_flow_id, @audit_event_message)
         @latest_audit_event_entry = @iut.get_last_audit_entry
@@ -31,12 +34,16 @@ module ServiceComponent
         message == @audit_event_message
       end
 
+      def has_notified_with_my_identifier?
+        @iut.environment["IDENTIFIER"] == extract_service_identifier_from_audit_entry(@latest_audit_event_entry)
+      end
+
       private
 
       def send_to_test_audit_endpoint(level, flow_id, data)
         require 'uri'
-        uri = URI.parse("#{@iut.uri}/audit-test")
-        params = { :level => level, :flow_identifier => flow_id, :data => data.to_s }
+        uri = URI.parse("#{@iut.uri}/audit-test/notify-event")
+        params = { :operation => 'notify', :level => level, :flow_identifier => flow_id, :data => data.to_s }
         uri.query = URI.encode_www_form( params )
         require 'net/http'
         Net::HTTP.get(uri)
