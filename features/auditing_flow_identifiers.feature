@@ -1,4 +1,4 @@
-Feature: Traceability of auditing events
+Feature: Auditing service component actions
   As a developer
   When I am supporting workflows
   In order to connect auditing events for a workflow across multiple services

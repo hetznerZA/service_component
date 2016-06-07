@@ -60,4 +60,4 @@ Feature: Auditing service component actions
     And a valid auditing level
     When I am asked to audit
     Then I notify an auditing provider with no audit event
-    And I provide the debug auditing level
+    And I provide the 'debug' auditing level

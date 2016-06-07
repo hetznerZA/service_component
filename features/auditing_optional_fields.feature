@@ -1,4 +1,4 @@
-Feature: Support optional fields
+Feature: Auditing service component actions
   As a service component
   In order to provide flexibility
   I want to provide optional fields to audit events

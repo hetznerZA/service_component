@@ -29,6 +29,10 @@ module ServiceComponent
         found.size > 0
       end
 
+      def get_last_audit_entry
+        `tail -n 1 #{@messages_file}`
+      end
+
       def bootstrap(environment)
         environment['IDENTIFIER'] = @identifier
         soar_dir = ENV['SOAR_DIR']
@@ -63,7 +67,7 @@ module ServiceComponent
         end
         return nil if not success
         JSON.parse(response)
-      end        
+      end
 
       def bootstrap_with_environment(environment, environment_file)
         File.delete(environment_file)

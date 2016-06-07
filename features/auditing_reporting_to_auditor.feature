@@ -1,4 +1,4 @@
-Feature: Reporting to auditor
+Feature: Auditing service component actions
   As a service component
   In order to report audit events
   I want to report buffered audit events
