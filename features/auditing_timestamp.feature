@@ -26,7 +26,7 @@ Feature: Auditing service component actions
 
   Scenario:
     Given an audit event
-    And a invalid time
+    And an invalid time
     When I am asked to audit
     Then I notify an auditing provider of the audit event
     And I provide the current utc time

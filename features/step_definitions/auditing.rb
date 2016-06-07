@@ -6,6 +6,21 @@ Given(/^no audit event$/) do
   @test.given_audit_message('')
 end
 
+Given(/^a message$/) do
+  @test.given_audit_message('event message')
+end
+
+
+
+Given(/^a valid time$/) do
+  @test.given_valid_time
+end
+
+Given(/^an invalid time$/) do
+  @test.given_invalid_time
+end
+
+
 Given(/^no auditing level$/) do
   @test.given_auditing_level(nil)
 end
@@ -38,9 +53,6 @@ Given(/^an auditing level 'fatal'$/) do
   @test.given_auditing_level(:fatal)
 end
 
-
-
-
 Given(/^an optional field$/) do
   @test.given_audit_message('[key:value] message with optional field')
 end
@@ -57,6 +69,9 @@ Given(/^an invalid optional field$/) do
   @test.given_audit_message('[[ message with invalid optional field')
 end
 
+Given(/^a flow identifier$/) do
+  @test.given_flow_identifier
+end
 
 
 
@@ -80,7 +95,6 @@ Then(/^I report the buffered audit event$/) do
    # Write code here that turns the phrase above into concrete actions
 end
 
-
 Then(/^I report the buffered audit event$/) do
   puts "nothing"
   expect(true).to eq(false)
@@ -91,15 +105,22 @@ Then(/^I notify an auditing provider of the audit event$/) do
   expect(@test.has_been_notified?).to eq(true)
 end
 
-Then(/^I provide my identifier$/) do
-  puts "nothing"
-  expect(true).to eq(false)
-   # Write code here that turns the phrase above into concrete actions
+Then(/^I provide the time$/) do
+  expect(@test.has_notified_with_timestamp?).to eq(true)
+end
+
+Then(/^I provide the time as utc time$/) do
+  expect(@test.has_notified_with_utc_timestamp?).to eq(true)
+end
+
+Then(/^the time I provide is in utc time$/) do
+  expect(@test.has_notified_with_utc_timestamp?).to eq(true)
 end
 
 
-
-
+Then(/^the audit event is correctly formatted$/) do
+  expect(@test.is_correctly_formatted?).to eq(true)
+end
 
 
 
@@ -140,7 +161,7 @@ Then(/^I notify an auditing provider with no audit event$/) do
   expect(@test.has_notified_with_message?('')).to eq(true)
 end
 
-Then(/^I provide my identifier in the audit event$/) do
+Then(/^I provide my identifier$/) do
   expect(@test.has_notified_with_my_identifier?).to eq(true)
 end
 
@@ -158,4 +179,12 @@ end
 
 Then(/^I treat the option field as normal message text$/) do
   @test.has_notified_with_message?('[[ message with invalid optional field')
+end
+
+Then(/^I provide the flow identifier$/) do
+  @test.has_notified_with_flow_identifier?
+end
+
+Then(/^I provide the message$/) do
+  @test.has_notified_with_message?('event message')
 end
