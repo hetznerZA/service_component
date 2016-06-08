@@ -72,11 +72,15 @@ Given(/^a flow identifier$/) do
   @test.given_flow_identifier
 end
 
-Given(/^a request without a flow identifier$/) do
+Given(/^a request$/) do
+  @test.given_request_message(TEST_MESSAGE)
+end
+
+Given(/^the request has no flow identifier$/) do
   @test.given_request_without_flow_identifier
 end
 
-Given(/^a request with a flow identifier$/) do
+Given(/^the request has a flow identifier$/) do
   @test.given_request_with_flow_identifier
 end
 
@@ -91,25 +95,25 @@ When(/^I am asked to audit$/) do
   @test.notify_audit
 end
 
-When(/^I receive a request$/) do
-  #Nothing done here as it is implicit
+When(/^the service component receives a request$/) do
+  @test.receive_a_request
 end
 
-When(/^I need to talk to another service$/) do
-  @test.forward_request_with_flow_identifier
+When(/^the service component need to talk to another service$/) do
+  @test.forward_request_to_another_service
 end
 
 
 
 
 
-Then(/^I want to generate a unique flow identifier$/) do
+Then(/^it should generate a unique flow identifier$/) do
+   @test.has_notified_with_new_flow_identifier?
+ end
+
+Then(/^update the request with the flow identifier$/) do
   @test.has_notified_with_new_flow_identifier?
-end
-
-Then(/^I want to update the request with the flow identifier$/) do
-  @test.has_notified_with_new_flow_identifier?
-end
+ end
 
 Then(/^I want to use the flow identifier in auditing$/) do
   @test.has_notified_with_flow_identifier?
@@ -142,7 +146,6 @@ Then(/^I report the buffered audit event$/) do
   expect(true).to eq(false)
   pending # Write code here that turns the phrase above into concrete actions
 end
-
 
 Then(/^I notify 'Unknown auditing level'$/) do
   puts "Not testable at the moment"

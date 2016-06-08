@@ -1,11 +1,13 @@
-
-
 module ServiceComponent
   module Test
     class SoarScAuditingOrchestrationProvider < BaseOrchestrationProvider
-      ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS = 1 unless defined? ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS;   ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS.freeze
+      ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS = 1 unless defined? ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS; ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS.freeze
 
       def given_audit_message(message)
+        @audit_event_message = message
+      end
+
+      def given_request_message(message)
         @audit_event_message = message
       end
 
@@ -14,38 +16,36 @@ module ServiceComponent
       end
 
       def given_flow_identifier
-        @test_flow_id ="#{SecureRandom.hex(14)}#{Time.now.to_i.to_s(16)}#{SecureRandom.hex(14)}"
+        @test_flow_id = create_unique_test_id
+      end
+
+      def given_request_with_flow_identifier
+        @test_flow_id = create_unique_test_id
+      end
+
+      def given_request_without_flow_identifier
+        @test_flow_id = nil
       end
 
       def notify_audit
-        #TODO add the givens and not have it here
-        #@test_flow_id="#{SecureRandom.hex(14)}#{Time.now.to_i.to_s(16)}#{SecureRandom.hex(14)}" if @test_flow_id.nil?
-
-
-
         @previous_audit_event_entry = @iut.get_last_audit_entry
         notify_event(@audit_level, @test_flow_id, @audit_event_message, @test_timestamp)
         @latest_audit_event_entry = @iut.get_last_audit_entry
-
-        #puts @test_flow_id
-        #puts @latest_audit_event_entry
       end
 
-
-      def given_request_without_flow_identifier
+      def receive_a_request
         @previous_audit_event_entry = @iut.get_last_audit_entry
-        notify_event(@audit_level, nil, @audit_event_message, @test_timestamp)
+        @correlation_identifier = create_unique_test_id
+        start_flow_test_chain(@correlation_identifier)
         @latest_audit_event_entry = @iut.get_last_audit_entry
         #puts @previous_audit_event_entry
         #puts @latest_audit_event_entry
       end
 
-      def given_request_with_flow_identifier
-
-      end
-
-      def forward_request_with_flow_identifier
-
+      def forward_request_to_another_service
+        @correlation_identifier = create_unique_test_id
+        start_flow_test_chain(@correlation_identifier)
+        @latest_audit_event_entry = @iut.get_last_audit_entry
       end
 
 
@@ -59,7 +59,7 @@ module ServiceComponent
       end
 
       def has_notified_with_message?(message)
-        message == @audit_event_message
+        message == extract_message_from_audit_entry(@latest_audit_event_entry)
       end
 
       def has_notified_with_my_identifier?
@@ -72,6 +72,16 @@ module ServiceComponent
 
       def has_notified_with_new_flow_identifier?
         extract_flow_identifier_from_audit_entry(@previous_audit_event_entry) != extract_flow_identifier_from_audit_entry(@latest_audit_event_entry)
+      end
+
+      def has_notified_with_flow_identifier_in_new_request?
+        (@test_flow_id == extract_flow_identifier_from_audit_entry(@latest_audit_event_entry)) and
+        (extract_message_from_audit_entry(@latest_audit_event_entry).include?('flow-test-action-2')) and
+        (extract_message_from_audit_entry(@latest_audit_event_entry).include?(@correlation_identifier))
+      end
+
+      def has_notified_with_flow_identifier?
+        @test_flow_id == extract_flow_identifier_from_audit_entry(@latest_audit_event_entry)
       end
 
       def has_notified_with_timestamp?
@@ -93,24 +103,19 @@ module ServiceComponent
         query_endpoint('audit-test/notify',parameters)
       end
 
-      def pause_audit_buffer
-        parameters = { :operation => 'pause' }
-        query_endpoint('audit-test/buffer',parameters)
-      end
-
-      def continue_audit_buffer
-        parameters = { :operation => 'continue' }
-        query_endpoint('audit-test/buffer',parameters)
-      end
-
-      def view_audit_buffer
-        parameters = { :operation => 'view' }
-        query_endpoint('audit-test/buffer',parameters)
-      end
-
-      def kick_off_flow_test(correlation_identifier)
+      def start_flow_test_chain(correlation_identifier)
         parameters = { :operation => 'flow-test-action-1', :correlation_identifier => correlation_identifier }
         query_endpoint('audit-test/flow',parameters)
+      end
+
+      def connect_auditor
+        parameters = { :operation => 'connect' }
+        query_endpoint('audit-test/auditor',parameters)
+      end
+
+      def disconnect_auditor
+        parameters = { :operation => 'disconnect' }
+        query_endpoint('audit-test/auditor',parameters)
       end
 
       def query_endpoint(resource,parameters)
@@ -138,7 +143,11 @@ module ServiceComponent
       end
 
       def extract_message_from_audit_entry(audit_entry)
-        audit_entry.split(',')[4] unless audit_entry.nil?
+        audit_entry.split(',')[4].delete!("\n") unless audit_entry.nil?
+      end
+
+      def create_unique_test_id
+        "#{SecureRandom.hex(14)}#{Time.now.to_i.to_s(16)}#{SecureRandom.hex(14)}"
       end
     end
   end
