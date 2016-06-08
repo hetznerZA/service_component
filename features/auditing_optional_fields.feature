@@ -5,6 +5,8 @@ Feature: Auditing service component actions
 
   Scenario:
     Given an audit event
+    And a valid auditing level
+    And a flow identifier
     And an optional field
     When I am asked to audit
     Then I notify an auditing provider of the audit event
@@ -12,6 +14,8 @@ Feature: Auditing service component actions
 
   Scenario:
     Given an audit event
+    And a valid auditing level
+    And a flow identifier
     And an empty optional field
     When I am asked to audit
     Then I notify an auditing provider of the audit event
@@ -19,6 +23,8 @@ Feature: Auditing service component actions
 
   Scenario:
     Given an audit event
+    And a valid auditing level
+    And a flow identifier
     And no optional field
     When I am asked to audit
     Then I notify an auditing provider of the audit event
@@ -26,6 +32,8 @@ Feature: Auditing service component actions
 
   Scenario:
     Given an audit event
+    And a valid auditing level
+    And a flow identifier
     And an invalid optional field
     When I am asked to audit
     Then I notify an auditing provider of the audit event

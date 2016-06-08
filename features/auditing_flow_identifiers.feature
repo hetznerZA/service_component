@@ -6,17 +6,19 @@ Feature: Auditing service component actions
   With a unique flow identifier
 
   Scenario:
-    When I receive a request
-    And the request does not have a flow identifier
-    Then I want to generate a unique flow identifier
-    And I want to update the request with the flow identifier
+    Given a request
+    And the request has no flow identifier
+    When the service component receives the request
+    Then it should generate a unique flow identifier
+    And update the request with the flow identifier
 
   Scenario:
+    Given a request with a flow identifier
     When I receive a request
-    And the request has a flow identifier
     Then I want to use the flow identifier in auditing
 
   Scenario:
-    When I have a request with a flow identifier
+    Given a request with a flow identifier
+    When I receive a request
     And I need to talk to another service
     Then I want to use the flow identifier to identify the flow in the new request
