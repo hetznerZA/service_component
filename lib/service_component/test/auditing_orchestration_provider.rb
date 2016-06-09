@@ -40,68 +40,65 @@ module ServiceComponent
       def notify_audit
         @previous_audit_event_entry = @iut.get_lastest_audit_entries
         notify_event(@audit_level, @test_flow_id, @audit_event_message)
-        @latest_audit_event_entry = @iut.get_lastest_audit_entries
       end
 
       def receive_a_request
         @previous_audit_event_entry = @iut.get_lastest_audit_entries
         @correlation_identifier = create_unique_test_id
         start_flow_test_chain(@correlation_identifier)
-        @latest_audit_event_entry = @iut.get_lastest_audit_entries
       end
 
       def forward_request_to_another_service
         @correlation_identifier = create_unique_test_id
         start_flow_test_chain(@correlation_identifier)
-        @latest_audit_event_entry = @iut.get_lastest_audit_entries
       end
 
 
 
       def has_been_notified?
-        @test_flow_id == extract_flow_identifier_from_audit_entry(@latest_audit_event_entry)
+        @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_lastest_audit_entries)
       end
 
       def has_audited_with_level?(level)
-        level.to_s == extract_level_from_audit_entry(@latest_audit_event_entry)
+        level.to_s == extract_level_from_audit_entry(@iut.get_lastest_audit_entries)
       end
 
       def has_notified_with_message?(message)
-        message == extract_message_from_audit_entry(@latest_audit_event_entry)
+        message == extract_message_from_audit_entry(@iut.get_lastest_audit_entries)
       end
 
       def has_notified_with_my_identifier?
-        @iut.environment["IDENTIFIER"] == extract_service_identifier_from_audit_entry(@latest_audit_event_entry)
+        @iut.environment["IDENTIFIER"] == extract_service_identifier_from_audit_entry(@iut.get_lastest_audit_entries)
       end
 
       def has_notified_with_flow_identifier?
-        @test_flow_id == extract_flow_identifier_from_audit_entry(@latest_audit_event_entry)
+        @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_lastest_audit_entries)
       end
 
       def has_notified_with_new_flow_identifier?
-        extract_flow_identifier_from_audit_entry(@previous_audit_event_entry) != extract_flow_identifier_from_audit_entry(@latest_audit_event_entry)
+        extract_flow_identifier_from_audit_entry(@previous_audit_event_entry) != extract_flow_identifier_from_audit_entry(@iut.get_lastest_audit_entries)
       end
 
       def has_notified_with_flow_identifier_in_new_request?
-        (@test_flow_id == extract_flow_identifier_from_audit_entry(@latest_audit_event_entry)) and
-        (extract_message_from_audit_entry(@latest_audit_event_entry).include?('flow-test-action-2')) and
-        (extract_message_from_audit_entry(@latest_audit_event_entry).include?(@correlation_identifier))
+        (@test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_lastest_audit_entries)) and
+        (extract_message_from_audit_entry(@iut.get_lastest_audit_entries).include?('flow-test-action-2')) and
+        (extract_message_from_audit_entry(@iut.get_lastest_audit_entries).include?(@correlation_identifier))
       end
 
       def has_notified_with_flow_identifier?
-        @test_flow_id == extract_flow_identifier_from_audit_entry(@latest_audit_event_entry)
+        @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_lastest_audit_entries)
       end
 
       def has_notified_with_timestamp?
-        ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS > (Time.now - Time.parse(extract_timestamp_from_audit_entry(@latest_audit_event_entry))).abs
+        ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS > (Time.now - Time.parse(extract_timestamp_from_audit_entry(@iut.get_lastest_audit_entries))).abs
       end
 
       def has_notified_with_utc_timestamp?
-        Time.parse(extract_timestamp_from_audit_entry(@latest_audit_event_entry)).utc?
+        Time.parse(extract_timestamp_from_audit_entry(@iut.get_lastest_audit_entries)).utc?
       end
 
       def is_correctly_formatted?
-        not /(debug|info|warn|error|fatal),[^,]*,[^,]*,[^,]*,.*/.match(@latest_audit_event_entry).nil?
+        not /(debug|info|warn|error|fatal),[^,]*,[^,]*,[^,]*,.*/.match(@iut.get_lastest_audit_entries).nil?
       end
 
       def has_removed_the_oldest_event_from_the_buffer?
