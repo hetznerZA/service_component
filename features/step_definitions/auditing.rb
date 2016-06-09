@@ -84,6 +84,9 @@ Given(/^the request has a flow identifier$/) do
   @test.given_request_with_flow_identifier
 end
 
+Given(/^the audit buffer is full$/) do
+  @test.given_the_audit_buffer_is_full
+end
 
 
 
@@ -123,28 +126,8 @@ Then(/^I want to use the flow identifier to identify the flow in the new request
   @test.has_notified_with_flow_identifier_in_new_request?
 end
 
-
-
-
-
-
-
-
 Then(/^I add the audit event to the buffer$/) do
-  puts "nothing" # Write code here that turns the phrase above into concrete actions
-  expect(true).to eq(false)
-end
-
-Then(/^I report the buffered audit event$/) do
-  puts "nothing"
-  expect(true).to eq(false)
-   # Write code here that turns the phrase above into concrete actions
-end
-
-Then(/^I report the buffered audit event$/) do
-  puts "nothing"
-  expect(true).to eq(false)
-  pending # Write code here that turns the phrase above into concrete actions
+  expect(@test.has_been_notified?).to eq(true)
 end
 
 Then(/^I notify 'Unknown auditing level'$/) do
@@ -225,4 +208,8 @@ end
 
 Then(/^I provide the message$/) do
   @test.has_notified_with_message?('event message')
+end
+
+Then(/^I remove the oldest audit event from the buffer$/) do
+  @test.has_removed_the_oldest_event_from_the_buffer?
 end
