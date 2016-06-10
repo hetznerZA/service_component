@@ -127,19 +127,19 @@ end
 
 
 Then(/^it should generate a unique flow identifier$/) do
-   @test.has_notified_with_new_flow_identifier?
- end
+  expect(@test.has_notified_with_new_flow_identifier?).to eq(true)
+end
 
 Then(/^update the request with the flow identifier$/) do
-  @test.has_notified_with_new_flow_identifier?
- end
+  expect(@test.has_notified_with_new_flow_identifier?).to eq(true)
+end
 
 Then(/^I want to use the flow identifier in auditing$/) do
-  @test.has_notified_with_flow_identifier?
+  expect(@test.has_notified_with_flow_identifier?).to eq(true)
 end
 
 Then(/^I want to use the flow identifier to identify the flow in the new request$/) do
-  @test.has_notified_with_flow_identifier_in_new_request?
+  expect(@test.has_notified_with_flow_identifier_in_new_request?).to eq(true)
 end
 
 Then(/^I add the audit event to the buffer$/) do
@@ -167,7 +167,7 @@ Then(/^the time I provide is in utc time$/) do
 end
 
 Then(/^the audit event is correctly formatted$/) do
-  regular_expression = /(debug|info|warn|error|fatal),[a-zA-Z\d_-]*,[a-f\d]{64},[\d]{4}-[\d]{2}-[\d]{2}T[\d]{2}:[\d]{2}:[\d]{2}.[\d]{3}Z,.*/
+  regular_expression = /(debug|info|warn|error|fatal),[a-zA-Z\d_.-]*,[a-f\d]{64},[\d]{4}-[\d]{2}-[\d]{2}T[\d]{2}:[\d]{2}:[\d]{2}.[\d]{3}Z,.*/
   expect(@test.is_correctly_formatted_as?(regular_expression)).to eq(true)
 end
 

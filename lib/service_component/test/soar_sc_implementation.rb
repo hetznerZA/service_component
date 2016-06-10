@@ -79,6 +79,11 @@ module ServiceComponent
         File.open(environment_file, 'w') { |f| f.write environment.to_yaml }
       end
 
+      def bootstrap_with_configuration(configuration, configuration_file)
+        File.delete(configuration_file)
+        File.open(configuration_file, 'w') { |f| f.write configuration.to_yaml }
+      end
+
       def load_yaml_file(file_name)
         YAML.load_file(file_name)
       end

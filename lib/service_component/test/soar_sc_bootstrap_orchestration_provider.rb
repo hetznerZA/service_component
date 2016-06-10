@@ -2,7 +2,7 @@ module ServiceComponent
   module Test
     class SoarScBootstrapOrchestrationProvider < BootstrapOrchestrationProvider
       def given_environment_configuration
-        @environment = 
+        @environment =
           { 'RACK_ENV' => 'production',
             'CAS_SERVER' => 'https://login.konsoleh.co.za/cas',
             'IDENTIFIER' => 'iut.dev.auto-h.net',
@@ -14,12 +14,31 @@ module ServiceComponent
             'SESSION_KEY' => 'uniquesessionkeyforsoarsc',
             'SESSION_SECRET' => 'replacethiswithasessionsecretthatisstrongandsharedamongstallinstancesofthisapplication'
           }
-      end  
+      end
+
+      def given_environment_configuration
+        @configuration =
+        {
+          'service_registry' => {
+            'freshness' =>  3600
+          },
+          'auditing' => {
+            'provider' =>  'AuditingProvider',
+            'nfrs' => {
+              'accessibility' =>  'local',
+              'privacy'       => 'not encrypted',
+              'reliability'   => 'instance',
+              'performance'   => 'high',
+              'buffer_size'   => '10'
+            }
+          }
+        }
+      end
 
       def has_received_notification?(message)
         return true if super(message)
         @iut.has_sent_notification?(message)
-      end          
+      end
     end
   end
 end
