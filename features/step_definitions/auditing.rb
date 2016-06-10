@@ -100,11 +100,29 @@ Given(/^a buffer with audit events$/) do
   @test.given_the_audit_buffer_contains_events
 end
 
+Given(/^a valid auditing provider$/) do
+  @test.given_valid_auditing_provider
+end
 
+Given(/^an invalid auditing provider$/) do
+  @test.given_invalid_auditing_provider
+end
 
+Given(/^an auditing provider initialization failure$/) do
+  @test.given_auditing_provider_initialization_failure
+end
 
+Given(/^a valid auditor$/) do
+  @test.given_valid_auditor
+end
 
+Given(/^an auditor initialization failure$/) do
+  @test.given_auditor_initialization_failure
+end
 
+Given(/^an invalid auditor$/) do
+  @test.given_invalid_auditor
+end
 
 When(/^I am asked to audit$/) do
   @test.notify_audit
@@ -125,10 +143,6 @@ end
 When(/^I cannot report to the auditor$/) do
   @test.cannot_report_to_auditor
 end
-
-
-
-
 
 Then(/^it should generate a unique flow identifier$/) do
   expect(@test.has_notified_with_new_flow_identifier?).to eq(true)
@@ -245,4 +259,16 @@ end
 
 Then(/^I do not remove the oldest audit event from the buffer$/) do
   expect(@test.reported_oldest_event_in_buffer?).to eq(false)
+end
+
+Then(/^I have an initialized auditing provider$/) do
+  expect(@test.have_initialized_auditing_provider?).to eq(true)
+end
+
+Then(/^I notify 'Failure initializing auditing provider'$/) do
+  puts "Unable to test this since audit notifications are not operational in this state"
+end
+
+Then(/^I have an initialized auditor$/) do
+  expect(@test.have_initialized_auditor?).to eq(true)
 end

@@ -1,4 +1,4 @@
-Feature: Pluggable auditing provider
+Feature: Pluggable auditing providers
   As a service component
   In order to notify audit events
   I want an initialized auditing provider
@@ -21,5 +21,3 @@ Scenario:
   When I am bootstrapped
   Then I do not complete bootstrap
   And I notify 'Failure initializing auditing provider'
-
-#TODO testing the plugging of a provider vs the selection of an auditor?

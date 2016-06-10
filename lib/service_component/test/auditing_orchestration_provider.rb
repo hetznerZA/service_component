@@ -1,12 +1,17 @@
+require "./lib/service_component/test/bootstrap_orchestration_provider"
+require "./lib/service_component/test/soar_sc_bootstrap_orchestration_provider"
+
+
 module ServiceComponent
   module Test
-    class SoarScAuditingOrchestrationProvider < BaseOrchestrationProvider
+    class SoarScAuditingOrchestrationProvider < SoarScBootstrapOrchestrationProvider
       ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS = 1 unless defined? ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS; ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS.freeze
       BUFFER_FILL_MESSAGE = "BufferFiller"       unless defined? BUFFER_FILL_MESSAGE;                    BUFFER_FILL_MESSAGE.freeze
 
       # Given / Test setup methods
 
       def setup
+        given_environment_configuration
         super
         select_auditor
       end
@@ -49,6 +54,38 @@ module ServiceComponent
         @test_flow_id = create_unique_id
         notify_event(DEBUG_LEVEL, @test_flow_id, BUFFER_FILL_MESSAGE)
       end
+
+      def given_valid_auditing_provider
+        #TODO
+        puts "Not done yet"
+      end
+
+      def given_invalid_auditing_provider
+        #TODO
+        puts "Not done yet"
+      end
+
+      def given_auditing_provider_initialization_failure
+        #TODO
+        puts "Not done yet"
+      end
+
+      def given_valid_auditor
+        #TODO
+        puts "Not done yet"
+      end
+
+      def given_invalid_auditor
+        #TODO
+        puts "Not done yet"
+      end
+
+      def given_auditor_initialization_failure
+        #TODO
+        puts "Not done yet"
+      end
+
+
 
       # When / Test action methods
 
@@ -135,6 +172,15 @@ module ServiceComponent
         @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries)
       end
 
+      def have_initialized_auditing_provider?
+        false
+      end
+
+      def have_initialized_auditor?
+        notify_event(DEBUG_LEVEL, @test_flow_id, BUFFER_FILL_MESSAGE)
+        did_report_anything?
+      end
+
       private
 
       def fill_audit_buffer
@@ -203,4 +249,5 @@ module ServiceComponent
 end
 
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Auditing service component actions", ServiceComponent::Test::SoarScAuditingOrchestrationProvider)
-ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Pluggable auditing provider", ServiceComponent::Test::SoarScAuditingOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Pluggable auditing providers",       ServiceComponent::Test::SoarScAuditingOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Pluggable auditors",                 ServiceComponent::Test::SoarScAuditingOrchestrationProvider)

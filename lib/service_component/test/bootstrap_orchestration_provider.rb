@@ -16,12 +16,14 @@ module ServiceComponent
       end
 
       def has_remembered_service_identifier?
+        puts @bootstrap_status['data']['environment']['IDENTIFIER']
+        puts @service_identifier
         @service_identifier == @bootstrap_status['data']['environment']['IDENTIFIER']
       end
 
       def has_not_remembered_service_identifier?
         not has_remembered_service_identifier
-      end      
+      end
     end
   end
 end

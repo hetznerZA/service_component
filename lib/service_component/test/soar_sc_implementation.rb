@@ -19,6 +19,7 @@ module ServiceComponent
         @configuration_file = "#{ENV['SOAR_DIR']}/config/config.yml"
         @environment = load_file(@environment_file)
         @configuration = load_yaml_file(@configuration_file)
+        @identifier = environment['IDENTIFIER']
       end
 
       def identify(identifier)
@@ -26,7 +27,8 @@ module ServiceComponent
       end
 
       def clear_messages
-        File.delete(@messages_file)
+        File.delete(@messages_file) rescue nil
+        `touch #{@messages_file}`
       end
 
       def has_sent_notification?(message)
@@ -39,7 +41,7 @@ module ServiceComponent
       end
 
       def bootstrap(environment)
-        environment['IDENTIFIER'] = @identifier
+        #environment['IDENTIFIER'] = @identifier
         soar_dir = ENV['SOAR_DIR']
         puts "NOTE: Run keep_running.sh in #{soar_dir} using SOAR_TECH=rackup"
         if (soar_dir.nil?) or (soar_dir.strip == '')
@@ -75,12 +77,12 @@ module ServiceComponent
       end
 
       def bootstrap_with_environment(environment, environment_file)
-        File.delete(environment_file)
+        File.delete(environment_file) rescue nil
         File.open(environment_file, 'w') { |f| f.write environment.to_yaml }
       end
 
       def bootstrap_with_configuration(configuration, configuration_file)
-        File.delete(configuration_file)
+        File.delete(configuration_file) rescue nil
         File.open(configuration_file, 'w') { |f| f.write configuration.to_yaml }
       end
 

@@ -16,7 +16,7 @@ module ServiceComponent
           }
       end
 
-      def given_environment_configuration
+      def given_configuration
         @configuration =
         {
           'service_registry' => {
