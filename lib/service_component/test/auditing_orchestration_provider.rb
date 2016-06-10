@@ -37,13 +37,26 @@ module ServiceComponent
         fill_audit_buffer
       end
 
+      def given_the_audit_buffer_is_empty
+        #selecting an auditor will ensure the buffer is empty since it will immediately process all elements
+        select_auditor
+      end
+
+      def given_the_audit_buffer_contains_events
+        #deselecting an auditor will ensure the buffer can be filled since no messages will be processed
+        deselect_auditor
+        @test_flow_id = create_unique_test_id
+        notify_event(DEBUG_LEVEL, @test_flow_id, BUFFER_FILL_MESSAGE)
+        puts @test_flow_id
+      end
+
       def notify_audit
-        @previous_audit_event_entry = @iut.get_lastest_audit_entries
+        @previous_audit_event_entry = @iut.get_latest_audit_entries
         notify_event(@audit_level, @test_flow_id, @audit_event_message)
       end
 
       def receive_a_request
-        @previous_audit_event_entry = @iut.get_lastest_audit_entries
+        @previous_audit_event_entry = @iut.get_latest_audit_entries
         @correlation_identifier = create_unique_test_id
         start_flow_test_chain(@correlation_identifier)
       end
@@ -53,57 +66,73 @@ module ServiceComponent
         start_flow_test_chain(@correlation_identifier)
       end
 
+      def can_report_to_auditor
+        @previous_audit_event_entry = @iut.get_latest_audit_entries
+        select_auditor
+      end
 
+      def cannot_report_to_auditor
+        @previous_audit_event_entry = @iut.get_latest_audit_entries
+        deselect_auditor
+      end
 
       def has_been_notified?
-        @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_lastest_audit_entries)
+        @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries)
       end
 
       def has_audited_with_level?(level)
-        level.to_s == extract_level_from_audit_entry(@iut.get_lastest_audit_entries)
+        level.to_s == extract_level_from_audit_entry(@iut.get_latest_audit_entries)
       end
 
       def has_notified_with_message?(message)
-        message == extract_message_from_audit_entry(@iut.get_lastest_audit_entries)
+        message == extract_message_from_audit_entry(@iut.get_latest_audit_entries)
       end
 
       def has_notified_with_my_identifier?
-        @iut.environment["IDENTIFIER"] == extract_service_identifier_from_audit_entry(@iut.get_lastest_audit_entries)
+        @iut.environment["IDENTIFIER"] == extract_service_identifier_from_audit_entry(@iut.get_latest_audit_entries)
       end
 
       def has_notified_with_flow_identifier?
-        @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_lastest_audit_entries)
+        @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries)
       end
 
       def has_notified_with_new_flow_identifier?
-        extract_flow_identifier_from_audit_entry(@previous_audit_event_entry) != extract_flow_identifier_from_audit_entry(@iut.get_lastest_audit_entries)
+        extract_flow_identifier_from_audit_entry(@previous_audit_event_entry) != extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries)
       end
 
       def has_notified_with_flow_identifier_in_new_request?
-        (@test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_lastest_audit_entries)) and
-        (extract_message_from_audit_entry(@iut.get_lastest_audit_entries).include?('flow-test-action-2')) and
-        (extract_message_from_audit_entry(@iut.get_lastest_audit_entries).include?(@correlation_identifier))
+        (@test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries)) and
+        (extract_message_from_audit_entry(@iut.get_latest_audit_entries).include?('flow-test-action-2')) and
+        (extract_message_from_audit_entry(@iut.get_latest_audit_entries).include?(@correlation_identifier))
       end
 
       def has_notified_with_flow_identifier?
-        @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_lastest_audit_entries)
+        @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries)
       end
 
       def has_notified_with_timestamp?
-        ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS > (Time.now - Time.parse(extract_timestamp_from_audit_entry(@iut.get_lastest_audit_entries))).abs
+        ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS > (Time.now - Time.parse(extract_timestamp_from_audit_entry(@iut.get_latest_audit_entries))).abs
       end
 
       def has_notified_with_utc_timestamp?
-        Time.parse(extract_timestamp_from_audit_entry(@iut.get_lastest_audit_entries)).utc?
+        Time.parse(extract_timestamp_from_audit_entry(@iut.get_latest_audit_entries)).utc?
       end
 
-      def is_correctly_formatted?
-        not /(debug|info|warn|error|fatal),[^,]*,[^,]*,[^,]*,.*/.match(@iut.get_lastest_audit_entries).nil?
+      def is_correctly_formatted_as?(regular_expression)
+        not regular_expression.match(@iut.get_latest_audit_entries).nil?
       end
 
       def has_removed_the_oldest_event_from_the_buffer?
         select_auditor
-        not @iut.get_lastest_audit_entries(get_iut_buffer_size).include?("#{BUFFER_FILL_MESSAGE} 1\n")
+        not @iut.get_latest_audit_entries(get_iut_buffer_size).include?("#{BUFFER_FILL_MESSAGE} 1\n")
+      end
+
+      def did_report_anything?
+        @previous_audit_event_entry != @iut.get_latest_audit_entries
+      end
+
+      def reported_oldest_event_in_buffer?
+        @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries)
       end
 
       private

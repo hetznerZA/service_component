@@ -88,6 +88,14 @@ Given(/^the audit buffer is full$/) do
   @test.given_the_audit_buffer_is_full
 end
 
+Given(/^an empty buffer$/) do
+  @test.given_the_audit_buffer_is_empty
+end
+
+Given(/^a buffer with audit events$/) do
+  @test.given_the_audit_buffer_contains_events
+end
+
 
 
 
@@ -104,6 +112,14 @@ end
 
 When(/^the service component need to talk to another service$/) do
   @test.forward_request_to_another_service
+end
+
+When(/^I can report to the auditor$/) do
+  @test.can_report_to_auditor
+end
+
+When(/^I cannot report to the auditor$/) do
+  @test.cannot_report_to_auditor
 end
 
 
@@ -151,7 +167,8 @@ Then(/^the time I provide is in utc time$/) do
 end
 
 Then(/^the audit event is correctly formatted$/) do
-  expect(@test.is_correctly_formatted?).to eq(true)
+  regular_expression = /(debug|info|warn|error|fatal),[a-zA-Z\d_-]*,[a-f\d]{64},[\d]{4}-[\d]{2}-[\d]{2}T[\d]{2}:[\d]{2}:[\d]{2}.[\d]{3}Z,.*/
+  expect(@test.is_correctly_formatted_as?(regular_expression)).to eq(true)
 end
 
 Then(/^I default to 'debug' level$/) do
@@ -187,29 +204,42 @@ Then(/^I provide my identifier$/) do
 end
 
 Then(/^I provide the optional field$/) do
-  @test.has_notified_with_message?('[key:value] message with optional field')
+  expect(@test.has_notified_with_message?('[key:value] message with optional field')).to eq(true)
 end
 
 Then(/^I provide the empty optional field$/) do
-  @test.has_notified_with_message?('[key:] message with empty optional field')
+  expect(@test.has_notified_with_message?('[key:] message with empty optional field')).to eq(true)
 end
 
 Then(/^I provide no optional field$/) do
-  @test.has_notified_with_message?('message with no optional field')
+  expect(@test.has_notified_with_message?('message with no optional field')).to eq(true)
 end
 
 Then(/^I treat the option field as normal message text$/) do
-  @test.has_notified_with_message?('[[ message with invalid optional field')
+  expect(@test.has_notified_with_message?('[[ message with invalid optional field')).to eq(true)
 end
 
 Then(/^I provide the flow identifier$/) do
-  @test.has_notified_with_flow_identifier?
+  expect(@test.has_notified_with_flow_identifier?).to eq(true)
 end
 
 Then(/^I provide the message$/) do
-  @test.has_notified_with_message?('event message')
+  expect(@test.has_notified_with_message?(TEST_MESSAGE)).to eq(true)
+  #TODO see where this message is generated and abstract out
 end
 
 Then(/^I remove the oldest audit event from the buffer$/) do
-  @test.has_removed_the_oldest_event_from_the_buffer?
+  expect(@test.has_removed_the_oldest_event_from_the_buffer?).to eq(true)
+end
+
+Then(/^I do not report to auditor$/) do
+  expect(@test.did_report_anything?).to eq(false)
+end
+
+Then(/^I report the oldest audit event from the buffer$/) do
+  expect(@test.reported_oldest_event_in_buffer?).to eq(true)
+end
+
+Then(/^I do not remove the oldest audit event from the buffer$/) do
+  expect(@test.reported_oldest_event_in_buffer?).to eq(false)
 end

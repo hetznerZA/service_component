@@ -34,7 +34,7 @@ module ServiceComponent
         found.size > 0
       end
 
-      def get_lastest_audit_entries(lines = 1)
+      def get_latest_audit_entries(lines = 1)
         `tail -n #{lines} #{@messages_file}`
       end
 
