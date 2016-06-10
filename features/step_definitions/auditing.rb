@@ -5,6 +5,10 @@ INFO_LEVEL      = 'info'  unless defined? INFO_LEVEL;    INFO_LEVEL.freeze
 WARN_LEVEL      = 'warn'  unless defined? WARN_LEVEL;    WARN_LEVEL.freeze
 ERROR_LEVEL     = 'error' unless defined? ERROR_LEVEL;   ERROR_LEVEL.freeze
 FATAL_LEVEL     = 'fatal' unless defined? FATAL_LEVEL;   FATAL_LEVEL.freeze
+MESSAGE_WITH_OPTIONAL_FIELD         = '[key:value] message with optional field'  unless defined? MESSAGE_WITH_OPTIONAL_FIELD;         MESSAGE_WITH_OPTIONAL_FIELD.freeze
+MESSAGE_WITH_EMPTY_OPTIONAL_FIELD   = '[key:] message with empty optional field' unless defined? MESSAGE_WITH_EMPTY_OPTIONAL_FIELD;   MESSAGE_WITH_EMPTY_OPTIONAL_FIELD.freeze
+MESSAGE_WITH_NO_OPTIONAL_FIELD      = 'message with no optional field'           unless defined? MESSAGE_WITH_NO_OPTIONAL_FIELD;      MESSAGE_WITH_NO_OPTIONAL_FIELD.freeze
+MESSAGE_WITH_INVALID_OPTIONAL_FIELD = '[[ message with invalid optional field'   unless defined? MESSAGE_WITH_INVALID_OPTIONAL_FIELD; MESSAGE_WITH_INVALID_OPTIONAL_FIELD.freeze
 
 Given(/^an audit event$/) do
   @test.given_audit_message(TEST_MESSAGE)
@@ -53,19 +57,19 @@ Given(/^an auditing level 'fatal'$/) do
 end
 
 Given(/^an optional field$/) do
-  @test.given_audit_message('[key:value] message with optional field')
+  @test.given_audit_message(MESSAGE_WITH_OPTIONAL_FIELD)
 end
 
 Given(/^an empty optional field$/) do
-  @test.given_audit_message('[key:] message with empty optional field')
+  @test.given_audit_message(MESSAGE_WITH_EMPTY_OPTIONAL_FIELD)
 end
 
 Given(/^no optional field$/) do
-  @test.given_audit_message('message with no optional field')
+  @test.given_audit_message(MESSAGE_WITH_NO_OPTIONAL_FIELD)
 end
 
 Given(/^an invalid optional field$/) do
-  @test.given_audit_message('[[ message with invalid optional field')
+  @test.given_audit_message(MESSAGE_WITH_INVALID_OPTIONAL_FIELD)
 end
 
 Given(/^a flow identifier$/) do
@@ -204,19 +208,19 @@ Then(/^I provide my identifier$/) do
 end
 
 Then(/^I provide the optional field$/) do
-  expect(@test.has_notified_with_message?('[key:value] message with optional field')).to eq(true)
+  expect(@test.has_notified_with_message?(MESSAGE_WITH_OPTIONAL_FIELD)).to eq(true)
 end
 
 Then(/^I provide the empty optional field$/) do
-  expect(@test.has_notified_with_message?('[key:] message with empty optional field')).to eq(true)
+  expect(@test.has_notified_with_message?(MESSAGE_WITH_EMPTY_OPTIONAL_FIELD)).to eq(true)
 end
 
 Then(/^I provide no optional field$/) do
-  expect(@test.has_notified_with_message?('message with no optional field')).to eq(true)
+  expect(@test.has_notified_with_message?(MESSAGE_WITH_NO_OPTIONAL_FIELD)).to eq(true)
 end
 
 Then(/^I treat the option field as normal message text$/) do
-  expect(@test.has_notified_with_message?('[[ message with invalid optional field')).to eq(true)
+  expect(@test.has_notified_with_message?(MESSAGE_WITH_INVALID_OPTIONAL_FIELD)).to eq(true)
 end
 
 Then(/^I provide the flow identifier$/) do
@@ -225,7 +229,6 @@ end
 
 Then(/^I provide the message$/) do
   expect(@test.has_notified_with_message?(TEST_MESSAGE)).to eq(true)
-  #TODO see where this message is generated and abstract out
 end
 
 Then(/^I remove the oldest audit event from the buffer$/) do

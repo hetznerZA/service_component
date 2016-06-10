@@ -3,6 +3,9 @@ module ServiceComponent
     class SoarScAuditingOrchestrationProvider < BaseOrchestrationProvider
       ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS = 1 unless defined? ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS; ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS.freeze
       BUFFER_FILL_MESSAGE = "BufferFiller"       unless defined? BUFFER_FILL_MESSAGE;                    BUFFER_FILL_MESSAGE.freeze
+
+      # Given / Test setup methods
+
       def setup
         super
         select_auditor
@@ -47,6 +50,8 @@ module ServiceComponent
         notify_event(DEBUG_LEVEL, @test_flow_id, BUFFER_FILL_MESSAGE)
       end
 
+      # When / Test action methods
+
       def notify_audit
         @previous_audit_event_entry = @iut.get_latest_audit_entries
         notify_event(@audit_level, @test_flow_id, @audit_event_message)
@@ -72,6 +77,8 @@ module ServiceComponent
         @previous_audit_event_entry = @iut.get_latest_audit_entries
         deselect_auditor
       end
+
+      #Then / Test check methods
 
       def has_been_notified?
         @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries)
@@ -130,15 +137,11 @@ module ServiceComponent
 
       private
 
-
-
       def fill_audit_buffer
         for i in 1..get_iut_buffer_size do
           notify_event(@audit_level, @test_flow_id, "#{BUFFER_FILL_MESSAGE} #{i}")
         end
       end
-
-
 
       def notify_event(level, flow_id, data)
         parameters = { :operation => 'notify', :level => level, :flow_identifier => flow_id, :data => data.to_s }
