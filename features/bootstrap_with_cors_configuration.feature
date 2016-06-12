@@ -32,9 +32,9 @@ Scenario: Failure In BootStrapping With CORS Configuration
   And I indicate 'fail'
   And I notify 'failure in bootstrapping CORS configuration'
 
-Scenario: Unexpected Exception In BootStrapping With CORS Configuration
+Scenario: Unexpected Exception In BootStrapping With Configuration
   Given a valid CORS configuration
-  And I an unexpected occurrs
+  And an unexpected occurrs
   When I am bootstrapped
   Then I fail to bootstrap 
   And I indicate 'fail'
