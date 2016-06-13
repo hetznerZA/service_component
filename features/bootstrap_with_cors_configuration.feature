@@ -17,13 +17,6 @@ Scenario:  Invalid Configuration In BootStrapping With CORS
   And I indicate 'fail'
   And I notify 'invalid CORS configuration'
 
-Scenario: Missing Configuration in Bootstrapping with CORS
-  Given missing CORS configuration
-  When I am bootstrapping
-  Then I fail to bootstrap
-  And I indicate 'fail'
-  And I notify 'missing CORS configuration'
-
 Scenario: Failure In BootStrapping With CORS Configuration
   Given a valid CORS configuration
   And fail to apply the CORS configuration
