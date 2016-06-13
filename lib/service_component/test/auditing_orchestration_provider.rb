@@ -47,6 +47,7 @@ module ServiceComponent
 
       def given_the_audit_buffer_is_empty
         select_auditor #selecting an auditor will ensure the buffer is empty since it will immediately process all elements
+        sleep(1) #sleep ensures that the buffer is emptied before the test is run
       end
 
       def given_the_audit_buffer_contains_events
@@ -92,27 +93,32 @@ module ServiceComponent
       def notify_audit
         @previous_audit_event_entry = @iut.get_latest_audit_entries
         notify_event(@audit_level, @test_flow_id, @audit_event_message)
+        sleep(0.5)
       end
 
       def receive_a_request
         @previous_audit_event_entry = @iut.get_latest_audit_entries
         @correlation_identifier = create_unique_id
         start_flow_test_chain(@correlation_identifier,@test_flow_id)
+        sleep(0.5)
       end
 
       def forward_request_to_another_service
         @correlation_identifier = create_unique_id
         start_flow_test_chain(@correlation_identifier,@test_flow_id)
+        sleep(0.5)
       end
 
       def can_report_to_auditor
         @previous_audit_event_entry = @iut.get_latest_audit_entries
         select_auditor
+        sleep(2)
       end
 
       def cannot_report_to_auditor
         @previous_audit_event_entry = @iut.get_latest_audit_entries
         deselect_auditor
+        sleep(0)
       end
 
       #Then / Test check methods
@@ -161,10 +167,12 @@ module ServiceComponent
 
       def has_removed_the_oldest_event_from_the_buffer?
         select_auditor
+        sleep(2)
         not @iut.get_latest_audit_entries(get_iut_buffer_size).include?("#{BUFFER_FILL_MESSAGE} 1\n")
       end
 
       def did_report_anything?
+        sleep(1) #Sleep a bit to make sure a delay did not create a false positive
         @previous_audit_event_entry != @iut.get_latest_audit_entries
       end
 
@@ -242,7 +250,7 @@ module ServiceComponent
       end
 
       def get_iut_buffer_size
-        @iut.configuration['auditing']['buffer_size'].to_i
+        @iut.configuration['auditing']['queue_size'].to_i
       end
     end
   end
