@@ -14,12 +14,19 @@ module ServiceComponent
 
       def initialize(uri)
         @uri = uri
-        @messages_file = "#{ENV['SOAR_DIR']}/webrick.stdout"
+        @std_out_err_file = "#{ENV['SOAR_DIR']}/webrick.rackup.stdout"
+
         @environment_file = "#{ENV['SOAR_DIR']}/config/environment.yml"
-        @configuration_file = "#{ENV['SOAR_DIR']}/config/config.yml"
         @environment = load_file(@environment_file)
+        @original_environment = load_yaml_file(@environment_file)
+
+        @configuration_file = "#{ENV['SOAR_DIR']}/config/config.yml"
         @configuration = load_yaml_file(@configuration_file)
+        @original_configuration = @configuration
+
         @identifier = environment['IDENTIFIER']
+
+        @audit_events_file = "#{ENV['SOAR_DIR']}/#{@configuration['auditing']['auditors']['log4r']['file_name']}"
       end
 
       def identify(identifier)
@@ -27,17 +34,17 @@ module ServiceComponent
       end
 
       def clear_messages
-        File.delete(@messages_file) rescue nil
-        `touch #{@messages_file}`
+        File.delete(@std_out_err_file) rescue nil
+        `touch #{@std_out_err_file}`
       end
 
       def has_sent_notification?(message)
-        found = `grep '#{message}' #{@messages_file}`
+        found = `grep '#{message}' #{@std_out_err_file}`
         found.size > 0
       end
 
       def get_latest_audit_entries(lines = 1)
-        `tail -n #{lines} #{@messages_file}`
+        `tail -n #{lines} #{@audit_events_file}`
       end
 
       def bootstrap(environment)
@@ -72,8 +79,21 @@ module ServiceComponent
             attempts = attempts + 1
           end
         end
+        restore_configuration
+        restore_environment
+
         return nil if not success
         JSON.parse(response)
+      end
+
+      def restore_configuration
+        bootstrap_with_configuration(@original_configuration,@configuration_file)
+        puts "Restoring configuration file"
+      end
+
+      def restore_environment
+        bootstrap_with_environment(@original_environment,@environment_file)
+        puts "Restoring environment file"
       end
 
       def bootstrap_with_environment(environment, environment_file)
