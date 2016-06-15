@@ -16,25 +16,6 @@ module ServiceComponent
           }
       end
 
-      def given_configuration
-        @configuration =
-        {
-          'service_registry' => {
-            'freshness' =>  3600
-          },
-          'auditing' => {
-            'provider' =>  'AuditingProvider',
-            'nfrs' => {
-              'accessibility' =>  'local',
-              'privacy'       => 'not encrypted',
-              'reliability'   => 'instance',
-              'performance'   => 'high',
-              'buffer_size'   => '10'
-            }
-          }
-        }
-      end
-
       def has_received_notification?(message)
         return true if super(message)
         @iut.has_sent_notification?(message)

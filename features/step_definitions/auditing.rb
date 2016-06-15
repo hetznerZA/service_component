@@ -124,12 +124,24 @@ Given(/^an invalid auditor$/) do
   @test.given_invalid_auditor
 end
 
+Given(/^a valid auditor configuration$/) do
+  @test.given_valid_auditor
+end
+
+Given(/^an invalid auditor configuration$/) do
+  @test.given_invalid_auditor_configuration
+end
+
+Given(/^no auditor configuration$/) do
+  @test.given_no_auditor_configuation
+end
+
 Given(/^a valid auditing provider configuration$/) do
   @test.given_valid_auditing_provider_configuration
 end
 
 Given(/^an invalid auditing provider configuration$/) do
-  @test.given_invalid_auditing_provider_configuration
+  @test.given_invalid_auditing_provider
 end
 
 Given(/^no auditing provider configuration$/) do
@@ -288,31 +300,39 @@ end
 Then(/^I notify 'Failure initializing auditor'$/) do
   expect(@test.has_received_notification?('Failure initializing auditor')).to eq(true)
 end
-#
-# Then(/^I remember the auditing provider configuration$/) do
-#   pending # Write code here that turns the phrase above into concrete actions
-# end
-#
-# Then(/^I notify 'invalid auditing provider configuration'$/) do
-#   pending # Write code here that turns the phrase above into concrete actions
-# end
-#
-# Given(/^no auditing provider configuration$/) do
-#   pending # Write code here that turns the phrase above into concrete actions
-# end
-#
-# Then(/^I notify 'missing auditing provider configuration'$/) do
-#   pending # Write code here that turns the phrase above into concrete actions
-# end
-#
-# Then(/^I remember the auditing level$/) do
-#   pending # Write code here that turns the phrase above into concrete actions
-# end
-#
-# Then(/^I notify 'invalid auditing level'$/) do
-#   pending # Write code here that turns the phrase above into concrete actions
-# end
-#
-# Then(/^I notify 'missing auditing level'$/) do
-#   pending # Write code here that turns the phrase above into concrete actions
-# end
+
+Then(/^I remember the auditing provider configuration$/) do
+  expect(@test.has_remembered_auditing_provider_configuration?).to eq(true)
+end
+
+Then(/^I notify 'Invalid auditing provider configuration'$/) do
+  expect(@test.has_received_notification?('Invalid auditing provider configuration')).to eq(true)
+end
+
+Then(/^I notify 'Missing auditing provider configuration'$/) do
+  expect(@test.has_received_notification?('Missing auditing provider configuration')).to eq(true)
+end
+
+Then(/^I remember the auditing level$/) do
+  expect(@test.has_remembered_auditing_level?).to eq(true)
+end
+
+Then(/^I remember the auditor configuration$/) do
+  expect(@test.has_remembered_auditor_configuration?).to eq(true)
+end
+
+Then(/^I notify 'Invalid auditing level'$/) do
+  expect(@test.has_received_notification?('Invalid auditing level')).to eq(true)
+end
+
+Then(/^I notify 'Missing auditing level'$/) do
+  expect(@test.has_received_notification?('Missing auditing level')).to eq(true)
+end
+
+Then(/^I notify 'Invalid auditor configuration'$/) do
+  expect(@test.has_received_notification?('Invalid auditor configuration')).to eq(true)
+end
+
+Then(/^I notify 'Missing auditor configuration'$/) do
+  expect(@test.has_received_notification?('Missing auditor configuration')).to eq(true)
+end

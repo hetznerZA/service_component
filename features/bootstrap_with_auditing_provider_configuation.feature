@@ -13,13 +13,13 @@ Feature: Bootstrapping with auditing provider configuration including auditing l
   Scenario:
     Given an invalid auditing provider configuration
     When I am bootstrapped
-    Then I notify 'invalid auditing provider configuration'
+    Then I notify 'Invalid auditing provider configuration'
     And I do not complete bootstrap
 
   Scenario:
     Given no auditing provider configuration
     When I am bootstrapped
-    Then I notify 'missing auditing provider configuration'
+    Then I notify 'Missing auditing provider configuration'
     And I do not complete bootstrap
 
   Scenario:
@@ -31,11 +31,11 @@ Feature: Bootstrapping with auditing provider configuration including auditing l
   Scenario:
     Given an invalid auditing level
     When I am bootstrapped
-    Then I notify 'invalid auditing level'
+    Then I notify 'Invalid auditing level'
     And I do not complete bootstrap
 
   Scenario:
     Given no auditing level
     When I am bootstrapped
-    Then I notify 'missing auditing level'
+    Then I notify 'Missing auditing level'
     And I do not complete bootstrap

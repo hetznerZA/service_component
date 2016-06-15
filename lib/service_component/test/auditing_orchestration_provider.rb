@@ -74,12 +74,6 @@ module ServiceComponent
         # by default there will be a valid auditing provider configuration
       end
 
-      def given_invalid_auditing_provider_configuration
-        # specify an incorrect auditing level which will result in an auditing provider
-        # configuration failure
-        @iut.configuration['auditing']['level'] = 'wrong'
-      end
-
       def given_no_auditing_provider_configuration
         @iut.configuration['auditing'] = nil
       end
@@ -89,9 +83,15 @@ module ServiceComponent
       end
 
       def given_invalid_auditor
-        # remove all the auditors which will prevent the auditing provider from
-        # creating a valid auditor
-        @iut.configuration['auditing']['auditors'] = nil
+        @iut.configuration['auditing']['auditors'] = 'something that is not an auditor configuration'
+      end
+
+      def given_invalid_auditor_configuration
+        @iut.configuration['auditing']['auditors']['log4r']['class'] = 'InvalidLog4rClass'
+      end
+
+      def given_no_auditor_configuation
+        @iut.configuration['auditing']['auditors']['log4r'] = nil
       end
 
       def given_auditor_initialization_failure
@@ -99,8 +99,6 @@ module ServiceComponent
         # initialization failure
         @iut.configuration['auditing']['level'] = 'wrong'
       end
-
-
 
       # When / Test action methods
 
@@ -202,6 +200,18 @@ module ServiceComponent
       def have_initialized_auditor?
         notify_event(DEBUG_LEVEL, @test_flow_id, BUFFER_FILL_MESSAGE)
         did_report_anything?
+      end
+
+      def has_remembered_auditing_provider_configuration?
+        @iut.configuration['auditing'] == @bootstrap_status['data']['configuration']['auditing']
+      end
+
+      def has_remembered_auditing_level?
+        @iut.configuration['auditing']['level'] == @bootstrap_status['data']['configuration']['auditing']['level']
+      end
+
+      def has_remembered_auditor_configuration?
+        @iut.configuration['auditing']['auditors'] == @bootstrap_status['data']['configuration']['auditing']['auditors']
       end
 
       private
