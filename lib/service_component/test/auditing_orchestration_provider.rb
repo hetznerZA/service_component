@@ -70,6 +70,20 @@ module ServiceComponent
         @iut.configuration['auditing']['level'] = 'wrong'
       end
 
+      def given_valid_auditing_provider_configuration
+        # by default there will be a valid auditing provider configuration
+      end
+
+      def given_invalid_auditing_provider_configuration
+        # specify an incorrect auditing level which will result in an auditing provider
+        # configuration failure
+        @iut.configuration['auditing']['level'] = 'wrong'
+      end
+
+      def given_no_auditing_provider_configuration
+        @iut.configuration['auditing'] = nil
+      end
+
       def given_valid_auditor
         # by default there will be a valid auditor
       end
@@ -260,3 +274,5 @@ end
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Auditing service component actions", ServiceComponent::Test::SoarScAuditingOrchestrationProvider)
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Pluggable auditing providers",       ServiceComponent::Test::SoarScAuditingOrchestrationProvider)
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Pluggable auditors",                 ServiceComponent::Test::SoarScAuditingOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Bootstrapping with auditing provider configuration including auditing level", ServiceComponent::Test::SoarScAuditingOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Bootstrapping with auditor configuration",                                    ServiceComponent::Test::SoarScAuditingOrchestrationProvider)

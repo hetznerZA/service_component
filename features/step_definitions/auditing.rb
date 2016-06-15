@@ -124,6 +124,18 @@ Given(/^an invalid auditor$/) do
   @test.given_invalid_auditor
 end
 
+Given(/^a valid auditing provider configuration$/) do
+  @test.given_valid_auditing_provider_configuration
+end
+
+Given(/^an invalid auditing provider configuration$/) do
+  @test.given_invalid_auditing_provider_configuration
+end
+
+Given(/^no auditing provider configuration$/) do
+  @test.given_no_auditing_provider_configuration
+end
+
 When(/^I am asked to audit$/) do
   @test.notify_audit
 end
@@ -276,3 +288,31 @@ end
 Then(/^I notify 'Failure initializing auditor'$/) do
   expect(@test.has_received_notification?('Failure initializing auditor')).to eq(true)
 end
+#
+# Then(/^I remember the auditing provider configuration$/) do
+#   pending # Write code here that turns the phrase above into concrete actions
+# end
+#
+# Then(/^I notify 'invalid auditing provider configuration'$/) do
+#   pending # Write code here that turns the phrase above into concrete actions
+# end
+#
+# Given(/^no auditing provider configuration$/) do
+#   pending # Write code here that turns the phrase above into concrete actions
+# end
+#
+# Then(/^I notify 'missing auditing provider configuration'$/) do
+#   pending # Write code here that turns the phrase above into concrete actions
+# end
+#
+# Then(/^I remember the auditing level$/) do
+#   pending # Write code here that turns the phrase above into concrete actions
+# end
+#
+# Then(/^I notify 'invalid auditing level'$/) do
+#   pending # Write code here that turns the phrase above into concrete actions
+# end
+#
+# Then(/^I notify 'missing auditing level'$/) do
+#   pending # Write code here that turns the phrase above into concrete actions
+# end
