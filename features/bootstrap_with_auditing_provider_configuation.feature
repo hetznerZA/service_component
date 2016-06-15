@@ -23,19 +23,19 @@ Feature: Bootstrapping with auditing provider configuration including auditing l
     And I do not complete bootstrap
 
   Scenario:
-    Given a valid auditing level
+    Given a valid configured auditing level
     When I am bootstrapped
     Then I remember the auditing level
     And I complete bootstrap
 
   Scenario:
-    Given an invalid auditing level
+    Given an invalid configured auditing level
     When I am bootstrapped
     Then I notify 'Invalid auditing level'
     And I do not complete bootstrap
 
   Scenario:
-    Given no auditing level
+    Given no configured auditing level
     When I am bootstrapped
     Then I notify 'Missing auditing level'
     And I do not complete bootstrap

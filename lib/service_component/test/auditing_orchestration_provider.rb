@@ -78,6 +78,18 @@ module ServiceComponent
         @iut.configuration['auditing'] = nil
       end
 
+      def given_valid_configured_auditing_level
+        @iut.configuration['auditing']['level'] = 'debug'
+      end
+
+      def given_invalid_configured_auditing_level
+        @iut.configuration['auditing']['level'] = 'wrong'
+      end
+
+      def given_no_configured_auditing_level
+        @iut.configuration['auditing']['level'] = nil
+      end
+
       def given_valid_auditor
         # by default there will be a valid auditor
       end

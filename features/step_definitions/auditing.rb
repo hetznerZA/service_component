@@ -148,6 +148,18 @@ Given(/^no auditing provider configuration$/) do
   @test.given_no_auditing_provider_configuration
 end
 
+Given(/^a valid configured auditing level$/) do
+  @test.given_valid_configured_auditing_level
+end
+
+Given(/^an invalid configured auditing level$/) do
+  @test.given_invalid_configured_auditing_level
+end
+
+Given(/^no configured auditing level$/) do
+  @test.given_no_configured_auditing_level
+end
+
 When(/^I am asked to audit$/) do
   @test.notify_audit
 end
