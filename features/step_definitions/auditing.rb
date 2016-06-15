@@ -266,9 +266,13 @@ Then(/^I have an initialized auditing provider$/) do
 end
 
 Then(/^I notify 'Failure initializing auditing provider'$/) do
-  puts "Unable to test this since audit notifications are not operational in this state"
+  expect(@test.has_received_notification?('Failure initializing auditing provider')).to eq(true)
 end
 
 Then(/^I have an initialized auditor$/) do
   expect(@test.have_initialized_auditor?).to eq(true)
+end
+
+Then(/^I notify 'Failure initializing auditor'$/) do
+  expect(@test.has_received_notification?('Failure initializing auditor')).to eq(true)
 end

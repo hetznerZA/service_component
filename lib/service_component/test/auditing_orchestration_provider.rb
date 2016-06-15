@@ -57,33 +57,33 @@ module ServiceComponent
       end
 
       def given_valid_auditing_provider
-        #TODO
-        puts "Not done yet"
+        @iut.configuration['auditing']['provider'] = 'SoarScAuditingProvider'
       end
 
       def given_invalid_auditing_provider
-        #TODO
-        puts "Not done yet"
+        @iut.configuration['auditing']['provider'] = 'UnknownAuditingProvider'
       end
 
       def given_auditing_provider_initialization_failure
-        #TODO
-        puts "Not done yet"
+        # specify an incorrect auditing level which will result in an auditing provider
+        # initialization failure
+        @iut.configuration['auditing']['level'] = 'wrong'
       end
 
       def given_valid_auditor
-        #TODO
-        puts "Not done yet"
+        # by default there will be a valid auditor
       end
 
       def given_invalid_auditor
-        #TODO
-        puts "Not done yet"
+        # remove all the auditors which will prevent the auditing provider from
+        # creating a valid auditor
+        @iut.configuration['auditing']['auditors'] = nil
       end
 
       def given_auditor_initialization_failure
-        #TODO
-        puts "Not done yet"
+        # specify an incorrect auditing level which will result in an auditor
+        # initialization failure
+        @iut.configuration['auditing']['level'] = 'wrong'
       end
 
 
@@ -181,7 +181,8 @@ module ServiceComponent
       end
 
       def have_initialized_auditing_provider?
-        false
+        notify_event(DEBUG_LEVEL, @test_flow_id, BUFFER_FILL_MESSAGE)
+        did_report_anything?
       end
 
       def have_initialized_auditor?

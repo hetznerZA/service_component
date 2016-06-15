@@ -9,8 +9,8 @@ module ServiceComponent
 
       attr_reader :uri
       attr_reader :identifier
-      attr_reader :environment
-      attr_reader :configuration
+      attr_accessor :environment
+      attr_accessor :configuration
 
       def initialize(uri)
         @uri = uri
@@ -22,7 +22,8 @@ module ServiceComponent
 
         @configuration_file = "#{ENV['SOAR_DIR']}/config/config.yml"
         @configuration = load_yaml_file(@configuration_file)
-        @original_configuration = @configuration
+        @original_configuration = load_yaml_file(@configuration_file)
+
 
         @identifier = environment['IDENTIFIER']
 
@@ -56,6 +57,8 @@ module ServiceComponent
           return
         end
         bootstrap_with_environment(environment, @environment_file)
+        bootstrap_with_configuration(@configuration,@configuration_file)
+
         `cd #{soar_dir}&&./stop.sh`
         detail = get_status_detail
         return fail if detail.nil?
@@ -79,8 +82,11 @@ module ServiceComponent
             attempts = attempts + 1
           end
         end
+
+        #restore environment and configuration which needs a pause for it to be loaded
         restore_configuration
         restore_environment
+        sleep 2
 
         return nil if not success
         JSON.parse(response)
@@ -88,12 +94,10 @@ module ServiceComponent
 
       def restore_configuration
         bootstrap_with_configuration(@original_configuration,@configuration_file)
-        puts "Restoring configuration file"
       end
 
       def restore_environment
         bootstrap_with_environment(@original_environment,@environment_file)
-        puts "Restoring environment file"
       end
 
       def bootstrap_with_environment(environment, environment_file)
