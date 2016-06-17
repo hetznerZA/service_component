@@ -19,7 +19,7 @@ module ServiceComponent
         @std_out_err_file = "#{ENV['SOAR_DIR']}/webrick.rackup.stdout"
 
         @environment_file = "#{ENV['SOAR_DIR']}/config/environment.yml"
-        @environment = load_file(@environment_file)
+        @environment = load_yaml_file(@environment_file)
         @original_environment = load_yaml_file(@environment_file)
 
         @configuration_file = "#{ENV['SOAR_DIR']}/config/config.yml"
@@ -118,21 +118,15 @@ module ServiceComponent
       end
 
       def load_yaml_file(file_name)
-        YAML.load_file(file_name)
-      end
-
-      def load_file(file_name)
-        if File.exist?(file_name)
-          stringify_values(YAML.load_file(file_name))
-        else
-          {}
+        begin
+          if File.exist?(file_name)
+            YAML.load_file(file_name)
+          else
+            {}
+          end
+        rescue IOError, SystemCallError, Psych::Exception => ex
+          raise LoadError.new("Failed to load environment #{file_name} : #{ex}")
         end
-      rescue IOError, SystemCallError, Psych::Exception => ex
-        raise LoadError.new("Failed to load environment #{file_name} : #{ex}")
-      end
-
-      def stringify_values(hash)
-        Hash[hash.map{ |k, v| [k, v.to_s] }]
       end
     end
   end
