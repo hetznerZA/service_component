@@ -12,7 +12,7 @@ module ServiceComponent
       def setup
         super
         given_valid_service_identifier
-        select_auditor
+        select_default_auditor
       end
 
       def given_audit_message(message)
@@ -40,17 +40,17 @@ module ServiceComponent
       end
 
       def given_the_audit_buffer_is_full
-        deselect_auditor
+        select_rejecting_auditor
         fill_audit_buffer
       end
 
       def given_the_audit_buffer_is_empty
-        select_auditor #selecting an auditor will ensure the buffer is empty since it will immediately process all elements
+        select_default_auditor #selecting an auditor will ensure the buffer is empty since it will immediately process all elements
         sleep(1) #sleep ensures that the buffer is emptied before the test is run
       end
 
       def given_the_audit_buffer_contains_events
-        deselect_auditor #deselecting an auditor will ensure the buffer can be filled since no messages will be processed
+        select_rejecting_auditor #deselecting an auditor will ensure the buffer can be filled since no messages will be processed
         @test_flow_id = create_unique_id
         notify_event(DEBUG_LEVEL, @test_flow_id, BUFFER_FILL_MESSAGE)
       end
@@ -102,7 +102,7 @@ module ServiceComponent
       end
 
       def given_invalid_auditor_configuration
-        @iut.configuration['auditing']['auditors']['log4r']['class'] = 'InvalidLog4rClass'
+        @iut.configuration['auditing']['auditors']['log4r']['standard_stream'] = 'stdwrong'
       end
 
       def given_no_auditor_configuation
@@ -135,12 +135,12 @@ module ServiceComponent
 
       def can_report_to_auditor
         @previous_audit_event_entry = @iut.get_latest_audit_entries
-        select_auditor
+        select_default_auditor
       end
 
       def cannot_report_to_auditor
         @previous_audit_event_entry = @iut.get_latest_audit_entries
-        deselect_auditor
+        select_rejecting_auditor
       end
 
       #Then / Test check methods
@@ -191,13 +191,12 @@ module ServiceComponent
       end
 
       def has_removed_the_oldest_event_from_the_buffer?
-        select_auditor
+        select_default_auditor
         reported_oldest_event = busy_wait(2,0.1,true) { @iut.get_latest_audit_entries(get_iut_buffer_size).include?("#{BUFFER_FILL_MESSAGE} 1\n") }
         not reported_oldest_event
       end
 
       def did_report_anything?
-        #Use a busy wait to make sure checking this too quickly after the action did not create a false positive
         busy_wait(2,0.1,true) { @previous_audit_event_entry != @iut.get_latest_audit_entries }
       end
 
@@ -249,13 +248,13 @@ module ServiceComponent
         query_endpoint('audit-test/flow',parameters)
       end
 
-      def select_auditor
-        parameters = { :operation => 'select' }
+      def select_default_auditor
+        parameters = { :operation => 'select_default_auditor' }
         query_endpoint('audit-test/auditor',parameters)
       end
 
-      def deselect_auditor
-        parameters = { :operation => 'deselect' }
+      def select_rejecting_auditor
+        parameters = { :operation => 'select_rejecting_auditor' }
         query_endpoint('audit-test/auditor',parameters)
       end
 
