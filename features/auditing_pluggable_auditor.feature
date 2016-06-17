@@ -21,5 +21,3 @@ Scenario:
   When I am bootstrapped
   Then I do not complete bootstrap
   And I notify 'Failure initializing auditor'
-
-#TODO kyk na auditor tests in bootstrap

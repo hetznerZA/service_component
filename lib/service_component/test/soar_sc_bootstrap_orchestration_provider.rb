@@ -2,20 +2,7 @@ module ServiceComponent
   module Test
     class SoarScBootstrapOrchestrationProvider < BootstrapOrchestrationProvider
       def given_environment_configuration
-        # default valid environment already provided in the file
-        #TODO try to move this out so that it is defined only in the environment file.
-        @environment =
-          { 'RACK_ENV' => 'production',
-            'CAS_SERVER' => 'https://login.konsoleh.co.za/cas',
-            'IDENTIFIER' => 'iut.dev.auto-h.net',
-            'SERVICE_REGISTRY' => 'http://service-registry.auto-h.net:8080',
-            'CFGSRV_PROVIDER_ADDRESS' => 'https://vault.auto-h.net',
-            #CFGSRV_IDENTIFIER: 'service-identifier.dev.auto-h.net'
-            'CFGSRV_TOKEN' => 'TOKEN',
-            'CFGSRV_PROVIDER' => 'vault',
-            'SESSION_KEY' => 'uniquesessionkeyforsoarsc',
-            'SESSION_SECRET' => 'replacethiswithasessionsecretthatisstrongandsharedamongstallinstancesofthisapplication'
-          }
+        # default valid environment provided from the environment.yml file and loaded implicitly
       end
 
       def has_received_notification?(message)

@@ -10,7 +10,6 @@ module ServiceComponent
       # Given / Test setup methods
 
       def setup
-        given_environment_configuration
         super
         given_valid_service_identifier
         select_auditor

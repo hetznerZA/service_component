@@ -3,7 +3,6 @@ module ServiceComponent
     class BootstrapOrchestrationProvider < BaseOrchestrationProvider
       def bootstrap
         @iut.clear_messages
-        @iut.environment['IDENTIFIER'] = @service_identifier
         @bootstrap_status = @iut.bootstrap
       end
 

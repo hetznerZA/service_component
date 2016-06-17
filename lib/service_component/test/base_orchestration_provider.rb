@@ -11,17 +11,14 @@ module ServiceComponent
       end
 
       def given_valid_service_identifier
-        @service_identifier = @valid_service_identifier
         @iut.environment['IDENTIFIER'] = @valid_service_identifier
       end
 
       def given_invalid_service_identifier
-        @service_identifier = @invalid_service_identifier
         @iut.environment['IDENTIFIER'] = @invalid_service_identifier
       end
 
       def given_no_service_identifier
-        @service_identifier = @no_service_identifier
         @iut.environment['IDENTIFIER'] = @no_service_identifier
       end
 
@@ -66,10 +63,9 @@ module ServiceComponent
       private
 
       def setup_service_identifiers
-        @valid_service_identifier = 'iut.dev.auto-h.net'
+        @valid_service_identifier = @iut.environment["IDENTIFIER"] #the environment file contains the valid service idenfier
         @invalid_service_identifier = ""
         @no_service_identifier = nil
-        @service_identifier = @no_service_identifier
       end
     end
   end
