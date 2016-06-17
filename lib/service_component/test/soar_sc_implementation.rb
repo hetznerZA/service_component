@@ -5,6 +5,8 @@ require 'jsender'
 module ServiceComponent
   module Test
     class SoarScImplementation
+      IUT_URI = 'http://localhost:9393/status-detail' unless defined? IUT_URI; IUT_URI.freeze
+
       include Jsender
 
       attr_reader :uri
@@ -66,27 +68,32 @@ module ServiceComponent
       end
 
       def get_status_detail
-        success = false
-        attempts = 1
-        threshold = 5
+
         response = nil
-        while (not success) and (attempts <= threshold) do
+
+        success = BaseOrchestrationProvider::busy_wait(5,0.5,true) {
           begin
             printf "!"
-            status_detail_uri = 'http://localhost:9393/status-detail'
-            response = Net::HTTP.get(URI.parse(status_detail_uri))
-            success = true
+            response = Net::HTTP.get(URI.parse(IUT_URI))
+            true
           rescue
-            success = false
-            sleep 1
-            attempts = attempts + 1
+            false
           end
-        end
+        }
 
-        #restore environment and configuration which needs a pause for it to be loaded
+        #restore environment and configuration which needs a busy-wait pause
+        #to ensure the restoration is complete before continuing
         restore_configuration
         restore_environment
-        sleep 2
+        BaseOrchestrationProvider::busy_wait(5,0.5,true) {
+          begin
+            printf "!"
+            Net::HTTP.get(URI.parse(IUT_URI))
+            true
+          rescue
+            false
+          end
+        }
 
         return nil if not success
         JSON.parse(response)

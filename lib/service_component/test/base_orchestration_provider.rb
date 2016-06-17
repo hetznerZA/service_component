@@ -54,12 +54,20 @@ module ServiceComponent
           return true
         end
         @notifications.each do |notification|
-          #puts "COMPARING #{notification} with #{message}"
           return true if notification == message
         end
         false
       end
 
+      def self.busy_wait(check_timeout, check_interval, desired_result)
+        start_time = Time.now
+        while check_timeout > (Time.now - start_time) do
+          return desired_result if desired_result == yield
+          sleep(check_interval)
+        end
+        return false
+      end
+      
       private
 
       def setup_service_identifiers

@@ -286,7 +286,7 @@ Then(/^I remove the oldest audit event from the buffer$/) do
 end
 
 Then(/^I do not report to auditor$/) do
-  expect(@test.did_report_anything?).to eq(false)
+  expect(@test.did_not_report_anything?).to eq(true)
 end
 
 Then(/^I report the oldest audit event from the buffer$/) do

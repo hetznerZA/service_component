@@ -4,7 +4,7 @@ require "./lib/service_component/test/soar_sc_bootstrap_orchestration_provider"
 module ServiceComponent
   module Test
     class SoarScAuditingOrchestrationProvider < SoarScBootstrapOrchestrationProvider
-      ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS = 1 unless defined? ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS; ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS.freeze
+      ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS = 2 unless defined? ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS; ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS.freeze
       BUFFER_FILL_MESSAGE = "BufferFiller"       unless defined? BUFFER_FILL_MESSAGE;                    BUFFER_FILL_MESSAGE.freeze
 
       # Given / Test setup methods
@@ -120,58 +120,53 @@ module ServiceComponent
       def notify_audit
         @previous_audit_event_entry = @iut.get_latest_audit_entries
         notify_event(@audit_level, @test_flow_id, @audit_event_message)
-        sleep(0.5)
       end
 
       def receive_a_request
         @previous_audit_event_entry = @iut.get_latest_audit_entries
         @correlation_identifier = create_unique_id
         start_flow_test_chain(@correlation_identifier,@test_flow_id)
-        sleep(0.5)
       end
 
       def forward_request_to_another_service
         @correlation_identifier = create_unique_id
         start_flow_test_chain(@correlation_identifier,@test_flow_id)
-        sleep(0.5)
       end
 
       def can_report_to_auditor
         @previous_audit_event_entry = @iut.get_latest_audit_entries
         select_auditor
-        sleep(2)
       end
 
       def cannot_report_to_auditor
         @previous_audit_event_entry = @iut.get_latest_audit_entries
         deselect_auditor
-        sleep(0)
       end
 
       #Then / Test check methods
 
       def has_been_notified?
-        @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries)
+        busy_wait(2,0.1,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries) }
       end
 
       def has_audited_with_level?(level)
-        level.to_s == extract_level_from_audit_entry(@iut.get_latest_audit_entries)
+        busy_wait(2,0.1,true) { level.to_s == extract_level_from_audit_entry(@iut.get_latest_audit_entries) }
       end
 
       def has_notified_with_message?(message)
-        message == extract_message_from_audit_entry(@iut.get_latest_audit_entries)
+        busy_wait(2,0.1,true) { message == extract_message_from_audit_entry(@iut.get_latest_audit_entries) }
       end
 
       def has_notified_with_my_identifier?
-        @iut.environment["IDENTIFIER"] == extract_service_identifier_from_audit_entry(@iut.get_latest_audit_entries)
+        busy_wait(2,0.1,true) { @iut.environment["IDENTIFIER"] == extract_service_identifier_from_audit_entry(@iut.get_latest_audit_entries) }
       end
 
       def has_notified_with_flow_identifier?
-        @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries)
+        busy_wait(2,0.1,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries) }
       end
 
       def has_notified_with_new_flow_identifier?
-        extract_flow_identifier_from_audit_entry(@previous_audit_event_entry) != extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries)
+        busy_wait(2,0.1,true) { extract_flow_identifier_from_audit_entry(@previous_audit_event_entry) != extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries) }
       end
 
       def has_notified_with_flow_identifier_in_new_request?
@@ -181,11 +176,14 @@ module ServiceComponent
       end
 
       def has_notified_with_timestamp?
-        ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS > (Time.now - Time.parse(extract_timestamp_from_audit_entry(@iut.get_latest_audit_entries))).abs
+        busy_wait(2,0.1,true) {
+          timestamp_from_event = Time.parse(extract_timestamp_from_audit_entry(@iut.get_latest_audit_entries))
+          ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS > (Time.now - timestamp_from_event).abs
+        }
       end
 
       def has_notified_with_utc_timestamp?
-        Time.parse(extract_timestamp_from_audit_entry(@iut.get_latest_audit_entries)).utc?
+        busy_wait(2,0.1,true) { Time.parse(extract_timestamp_from_audit_entry(@iut.get_latest_audit_entries)).utc? }
       end
 
       def is_correctly_formatted_as?(regular_expression)
@@ -194,18 +192,21 @@ module ServiceComponent
 
       def has_removed_the_oldest_event_from_the_buffer?
         select_auditor
-        sleep(2)
-        not @iut.get_latest_audit_entries(get_iut_buffer_size).include?("#{BUFFER_FILL_MESSAGE} 1\n")
+        reported_oldest_event = busy_wait(2,0.1,true) { @iut.get_latest_audit_entries(get_iut_buffer_size).include?("#{BUFFER_FILL_MESSAGE} 1\n") }
+        not reported_oldest_event
       end
 
       def did_report_anything?
-        sleep(1) #Sleep a bit to make sure checking this too quickly after the action did not create a false negative
-        #TODO update with busy wait
-        @previous_audit_event_entry != @iut.get_latest_audit_entries
+        #Use a busy wait to make sure checking this too quickly after the action did not create a false positive
+        busy_wait(2,0.1,true) { @previous_audit_event_entry != @iut.get_latest_audit_entries }
+      end
+
+      def did_not_report_anything?
+        not did_report_anything?
       end
 
       def reported_oldest_event_in_buffer?
-        @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries)
+        busy_wait(2,0.1,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries) }
       end
 
       def have_initialized_auditing_provider?
@@ -292,6 +293,10 @@ module ServiceComponent
 
       def get_iut_buffer_size
         @iut.configuration['auditing']['queue_size'].to_i
+      end
+
+      def busy_wait(check_timeout, check_interval, desired_result)
+        BaseOrchestrationProvider::busy_wait(check_timeout, check_interval, desired_result) { yield }
       end
     end
   end
