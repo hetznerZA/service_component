@@ -3,8 +3,8 @@ module ServiceComponent
     class BootstrapOrchestrationProvider < BaseOrchestrationProvider
       def bootstrap
         @iut.clear_messages
-        @iut.identify(@service_identifier)
-        @bootstrap_status = @iut.bootstrap(@environment)
+        @iut.environment['IDENTIFIER'] = @service_identifier
+        @bootstrap_status = @iut.bootstrap
       end
 
       def has_completed_bootstrap?
@@ -16,7 +16,7 @@ module ServiceComponent
       end
 
       def has_remembered_service_identifier?
-        @service_identifier == @bootstrap_status['data']['environment']['IDENTIFIER']
+        @iut.environment['IDENTIFIER'] == @bootstrap_status['data']['environment']['IDENTIFIER']
       end
 
       def has_not_remembered_service_identifier?

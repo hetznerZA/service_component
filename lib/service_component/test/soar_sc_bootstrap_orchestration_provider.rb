@@ -2,6 +2,8 @@ module ServiceComponent
   module Test
     class SoarScBootstrapOrchestrationProvider < BootstrapOrchestrationProvider
       def given_environment_configuration
+        # default valid environment already provided in the file
+        #TODO try to move this out so that it is defined only in the environment file.
         @environment =
           { 'RACK_ENV' => 'production',
             'CAS_SERVER' => 'https://login.konsoleh.co.za/cas',

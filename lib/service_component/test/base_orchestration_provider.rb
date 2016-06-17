@@ -12,17 +12,17 @@ module ServiceComponent
 
       def given_valid_service_identifier
         @service_identifier = @valid_service_identifier
-        @environment['IDENTIFIER'] = @valid_service_identifier
+        @iut.environment['IDENTIFIER'] = @valid_service_identifier
       end
 
       def given_invalid_service_identifier
-        @service_identifier = @valid_service_identifier
-        @environment['IDENTIFIER'] = @invalid_service_identifier
+        @service_identifier = @invalid_service_identifier
+        @iut.environment['IDENTIFIER'] = @invalid_service_identifier
       end
 
       def given_no_service_identifier
-        @service_identifier = @valid_service_identifier
-        @environment['IDENTIFIER'] = @no_service_identifier
+        @service_identifier = @no_service_identifier
+        @iut.environment['IDENTIFIER'] = @no_service_identifier
       end
 
       def inject_iut(iut)

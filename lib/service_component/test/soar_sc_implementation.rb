@@ -24,14 +24,15 @@ module ServiceComponent
         @configuration = load_yaml_file(@configuration_file)
         @original_configuration = load_yaml_file(@configuration_file)
 
-
-        @identifier = environment['IDENTIFIER']
-
         @audit_events_file = "#{ENV['SOAR_DIR']}/#{@configuration['auditing']['auditors']['log4r']['file_name']}"
       end
 
-      def identify(identifier)
-        @identifier = identifier
+      def load_environment_file
+        @environment = load_file(@environment_file)
+      end
+
+      def load_configuration_file
+        @configuration = load_yaml_file(@configuration_file)
       end
 
       def clear_messages
@@ -48,15 +49,14 @@ module ServiceComponent
         `tail -n #{lines} #{@audit_events_file}`
       end
 
-      def bootstrap(environment)
-        #environment['IDENTIFIER'] = @identifier
+      def bootstrap
         soar_dir = ENV['SOAR_DIR']
         puts "NOTE: Run keep_running.sh in #{soar_dir} using SOAR_TECH=rackup"
         if (soar_dir.nil?) or (soar_dir.strip == '')
           puts "SOAR_DIR not defined"
           return
         end
-        bootstrap_with_environment(environment, @environment_file)
+        bootstrap_with_environment(@environment, @environment_file)
         bootstrap_with_configuration(@configuration,@configuration_file)
 
         `cd #{soar_dir}&&./stop.sh`

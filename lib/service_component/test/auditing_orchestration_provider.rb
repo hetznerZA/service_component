@@ -1,7 +1,6 @@
 require "./lib/service_component/test/bootstrap_orchestration_provider"
 require "./lib/service_component/test/soar_sc_bootstrap_orchestration_provider"
 
-
 module ServiceComponent
   module Test
     class SoarScAuditingOrchestrationProvider < SoarScBootstrapOrchestrationProvider
@@ -13,6 +12,7 @@ module ServiceComponent
       def setup
         given_environment_configuration
         super
+        given_valid_service_identifier
         select_auditor
       end
 
@@ -61,6 +61,10 @@ module ServiceComponent
       end
 
       def given_invalid_auditing_provider
+        @iut.configuration['auditing']['provider'] = 'UnknownAuditingProvider'
+      end
+
+      def given_invalid_auditing_provider_configuration
         @iut.configuration['auditing']['provider'] = 'UnknownAuditingProvider'
       end
 
@@ -196,7 +200,8 @@ module ServiceComponent
       end
 
       def did_report_anything?
-        sleep(1) #Sleep a bit to make sure a delay did not create a false positive
+        sleep(1) #Sleep a bit to make sure checking this too quickly after the action did not create a false negative
+        #TODO update with busy wait
         @previous_audit_event_entry != @iut.get_latest_audit_entries
       end
 

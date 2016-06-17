@@ -1,10 +1,10 @@
 TEST_MESSAGE    = 'Something' unless defined? TEST_MESSAGE;    TEST_MESSAGE.freeze
 NO_TEST_MESSAGE = ''          unless defined? NO_TEST_MESSAGE; NO_TEST_MESSAGE.freeze
-DEBUG_LEVEL     = 'debug' unless defined? DEBUG_LEVEL;   DEBUG_LEVEL.freeze
-INFO_LEVEL      = 'info'  unless defined? INFO_LEVEL;    INFO_LEVEL.freeze
-WARN_LEVEL      = 'warn'  unless defined? WARN_LEVEL;    WARN_LEVEL.freeze
-ERROR_LEVEL     = 'error' unless defined? ERROR_LEVEL;   ERROR_LEVEL.freeze
-FATAL_LEVEL     = 'fatal' unless defined? FATAL_LEVEL;   FATAL_LEVEL.freeze
+DEBUG_LEVEL     = 'debug'     unless defined? DEBUG_LEVEL;     DEBUG_LEVEL.freeze
+INFO_LEVEL      = 'info'      unless defined? INFO_LEVEL;      INFO_LEVEL.freeze
+WARN_LEVEL      = 'warn'      unless defined? WARN_LEVEL;      WARN_LEVEL.freeze
+ERROR_LEVEL     = 'error'     unless defined? ERROR_LEVEL;     ERROR_LEVEL.freeze
+FATAL_LEVEL     = 'fatal'     unless defined? FATAL_LEVEL;     FATAL_LEVEL.freeze
 MESSAGE_WITH_OPTIONAL_FIELD         = '[key:value] message with optional field'  unless defined? MESSAGE_WITH_OPTIONAL_FIELD;         MESSAGE_WITH_OPTIONAL_FIELD.freeze
 MESSAGE_WITH_EMPTY_OPTIONAL_FIELD   = '[key:] message with empty optional field' unless defined? MESSAGE_WITH_EMPTY_OPTIONAL_FIELD;   MESSAGE_WITH_EMPTY_OPTIONAL_FIELD.freeze
 MESSAGE_WITH_NO_OPTIONAL_FIELD      = 'message with no optional field'           unless defined? MESSAGE_WITH_NO_OPTIONAL_FIELD;      MESSAGE_WITH_NO_OPTIONAL_FIELD.freeze
@@ -141,7 +141,7 @@ Given(/^a valid auditing provider configuration$/) do
 end
 
 Given(/^an invalid auditing provider configuration$/) do
-  @test.given_invalid_auditing_provider
+  @test.given_invalid_auditing_provider_configuration
 end
 
 Given(/^no auditing provider configuration$/) do
