@@ -200,6 +200,10 @@ Then(/^I add the audit event to the buffer$/) do
   expect(@test.has_been_notified?).to eq(true)
 end
 
+Then(/^I do not add the audit event to the buffer$/) do
+  expect(@test.has_not_been_notified?).to eq(true)
+end
+
 Then(/^I notify 'Unknown auditing level'$/) do
   puts "Not testable at the moment"
 end

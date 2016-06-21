@@ -149,6 +149,10 @@ module ServiceComponent
         busy_wait(2,0.1,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries) }
       end
 
+      def has_not_been_notified?
+        not has_been_notified?
+      end
+
       def has_audited_with_level?(level)
         busy_wait(2,0.1,true) { level.to_s == extract_level_from_audit_entry(@iut.get_latest_audit_entries) }
       end
@@ -233,8 +237,11 @@ module ServiceComponent
       private
 
       def fill_audit_buffer
-        for i in 1..get_iut_buffer_size do
-          notify_event(@audit_level, @test_flow_id, "#{BUFFER_FILL_MESSAGE} #{i}")
+        # Need to create one more than the buffer size since the worker thread
+        # will also be buffering an audit event it is trying send to the auditor
+        events_to_create = get_iut_buffer_size + 1
+        for i in 1..events_to_create do
+          notify_event(@audit_level, create_unique_id, "#{BUFFER_FILL_MESSAGE} #{i}")
         end
       end
 

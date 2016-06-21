@@ -8,6 +8,7 @@ Feature: Auditing service component actions
     And a valid auditing level
     And a flow identifier
     When I am asked to audit
+    And I can report to the auditor
     Then I add the audit event to the buffer
 
   Scenario:
@@ -16,5 +17,5 @@ Feature: Auditing service component actions
     And a flow identifier
     And the audit buffer is full
     When I am asked to audit
-    Then I remove the oldest audit event from the buffer
-    And I add the audit event to the buffer
+    And I can report to the auditor
+    Then I do not add the audit event to the buffer
