@@ -240,22 +240,22 @@ module ServiceComponent
 
       def notify_event(level, flow_id, data)
         parameters = { :operation => 'notify', :level => level, :flow_identifier => flow_id, :data => data.to_s }
-        query_endpoint('audit-test/notify',parameters)
+        query_endpoint('soar_audit_test_service/notify',parameters)
       end
 
       def start_flow_test_chain(correlation_identifier, flow_identifier)
         parameters = { :operation => 'flow-test-action-1', :flow_identifier => flow_identifier, :correlation_identifier => correlation_identifier }
-        query_endpoint('audit-test/flow',parameters)
+        query_endpoint('soar_audit_test_service/flow',parameters)
       end
 
       def select_default_auditor
         parameters = { :operation => 'select_default_auditor' }
-        query_endpoint('audit-test/auditor',parameters)
+        query_endpoint('soar_audit_test_service/auditor',parameters)
       end
 
       def select_rejecting_auditor
         parameters = { :operation => 'select_rejecting_auditor' }
-        query_endpoint('audit-test/auditor',parameters)
+        query_endpoint('soar_audit_test_service/auditor',parameters)
       end
 
       def query_endpoint(resource,parameters)

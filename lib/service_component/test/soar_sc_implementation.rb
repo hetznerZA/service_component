@@ -5,8 +5,6 @@ require 'jsender'
 module ServiceComponent
   module Test
     class SoarScImplementation
-      IUT_URI = 'http://localhost:9393/status-detail' unless defined? IUT_URI; IUT_URI.freeze
-
       include Jsender
 
       attr_reader :uri
@@ -68,13 +66,13 @@ module ServiceComponent
       end
 
       def get_status_detail
-
+        status_detail_uri = "#{@uri}/status-detail"
         response = nil
 
         success = BaseOrchestrationProvider::busy_wait(5,0.5,true) {
           begin
             printf "!"
-            response = Net::HTTP.get(URI.parse(IUT_URI))
+            response = Net::HTTP.get(URI.parse(status_detail_uri))
             true
           rescue
             false
@@ -88,7 +86,7 @@ module ServiceComponent
         BaseOrchestrationProvider::busy_wait(5,0.5,true) {
           begin
             printf "!"
-            Net::HTTP.get(URI.parse(IUT_URI))
+            Net::HTTP.get(URI.parse(status_detail_uri))
             true
           rescue
             false
