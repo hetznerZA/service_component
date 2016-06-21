@@ -10,6 +10,8 @@ module ServiceComponent
       # Given / Test setup methods
 
       def setup
+        add_rejecting_auditor_configuration
+        bootstrap
         super
         given_valid_service_identifier
         select_default_auditor
@@ -235,6 +237,18 @@ module ServiceComponent
       end
 
       private
+
+      def add_rejecting_auditor_configuration
+        @iut.configuration['auditing']['auditors']['rejecting_test_auditor'] = {
+          'adaptor' => 'SoarAuditTestService::RejectingTestAuditor',
+          'nfrs' => {
+            'accessibility' => 'rejecting',
+            'privacy' => 'not encrypted',
+            'reliability' => 'instance',
+            'performance' => 'high'
+          }
+        }
+      end
 
       def fill_audit_buffer
         # Need to create one more than the buffer size since the worker thread
