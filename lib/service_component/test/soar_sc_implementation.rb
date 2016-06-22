@@ -45,8 +45,8 @@ module ServiceComponent
         found.size > 0
       end
 
-      def get_latest_audit_entries(lines = 1)
-        `tail -n #{lines} #{@audit_events_file}`
+      def get_latest_test_orchestrator_audit_entry(test_lines = 1)
+        `tail -n 100 #{@audit_events_file} | grep 'TEST_ORCHESTRATOR' | tail -#{test_lines}`
       end
 
       def bootstrap
@@ -69,7 +69,7 @@ module ServiceComponent
         status_detail_uri = "#{@uri}/status-detail"
         response = nil
 
-        success = BaseOrchestrationProvider::busy_wait(5,0.5,true) {
+        success = BaseOrchestrationProvider::busy_wait(5,true) {
           begin
             printf "!"
             response = Net::HTTP.get(URI.parse(status_detail_uri))
@@ -78,12 +78,13 @@ module ServiceComponent
             false
           end
         }
+        printf "\n"
 
         #restore environment and configuration which needs a busy-wait pause
         #to ensure the restoration is complete before continuing
         restore_configuration
         restore_environment
-        BaseOrchestrationProvider::busy_wait(5,0.5,true) {
+        BaseOrchestrationProvider::busy_wait(5,true) {
           begin
             printf "!"
             Net::HTTP.get(URI.parse(status_detail_uri))

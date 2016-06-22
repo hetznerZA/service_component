@@ -120,12 +120,12 @@ module ServiceComponent
       # When / Test action methods
 
       def notify_audit
-        @previous_audit_event_entry = @iut.get_latest_audit_entries
+        @previous_audit_event_entry = @iut.get_latest_test_orchestrator_audit_entry
         notify_event(@audit_level, @test_flow_id, @audit_event_message)
       end
 
       def receive_a_request
-        @previous_audit_event_entry = @iut.get_latest_audit_entries
+        @previous_audit_event_entry = @iut.get_latest_test_orchestrator_audit_entry
         @correlation_identifier = create_unique_id
         start_flow_test_chain(@correlation_identifier,@test_flow_id)
       end
@@ -136,19 +136,19 @@ module ServiceComponent
       end
 
       def can_report_to_auditor
-        @previous_audit_event_entry = @iut.get_latest_audit_entries
+        @previous_audit_event_entry = @iut.get_latest_test_orchestrator_audit_entry
         select_default_auditor
       end
 
       def cannot_report_to_auditor
-        @previous_audit_event_entry = @iut.get_latest_audit_entries
+        @previous_audit_event_entry = @iut.get_latest_test_orchestrator_audit_entry
         select_rejecting_auditor
       end
 
       #Then / Test check methods
 
       def has_been_notified?
-        busy_wait(2,0.1,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries) }
+        busy_wait(2,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry) }
       end
 
       def has_not_been_notified?
@@ -156,54 +156,54 @@ module ServiceComponent
       end
 
       def has_audited_with_level?(level)
-        busy_wait(2,0.1,true) { level.to_s == extract_level_from_audit_entry(@iut.get_latest_audit_entries) }
+        busy_wait(2,true) { level.to_s == extract_level_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry) }
       end
 
       def has_notified_with_message?(message)
-        busy_wait(2,0.1,true) { message == extract_message_from_audit_entry(@iut.get_latest_audit_entries) }
+        busy_wait(2,true) { "TEST_ORCHESTRATOR-#{message}" == extract_message_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry) }
       end
 
       def has_notified_with_my_identifier?
-        busy_wait(2,0.1,true) { @iut.environment["IDENTIFIER"] == extract_service_identifier_from_audit_entry(@iut.get_latest_audit_entries) }
+        busy_wait(2,true) { @iut.environment["IDENTIFIER"] == extract_service_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry) }
       end
 
       def has_notified_with_flow_identifier?
-        busy_wait(2,0.1,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries) }
+        busy_wait(2,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry) }
       end
 
       def has_notified_with_new_flow_identifier?
-        busy_wait(2,0.1,true) { extract_flow_identifier_from_audit_entry(@previous_audit_event_entry) != extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries) }
+        busy_wait(2,true) { extract_flow_identifier_from_audit_entry(@previous_audit_event_entry) != extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry) }
       end
 
       def has_notified_with_flow_identifier_in_new_request?
-        (@test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries)) and
-        (extract_message_from_audit_entry(@iut.get_latest_audit_entries).include?('flow-test-action-2')) and
-        (extract_message_from_audit_entry(@iut.get_latest_audit_entries).include?(@correlation_identifier))
+        (@test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry)) and
+        (extract_message_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry).include?('flow-test-action-2')) and
+        (extract_message_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry).include?(@correlation_identifier))
       end
 
       def has_notified_with_timestamp?
-        busy_wait(2,0.1,true) {
-          timestamp_from_event = Time.parse(extract_timestamp_from_audit_entry(@iut.get_latest_audit_entries))
+        busy_wait(2,true) {
+          timestamp_from_event = Time.parse(extract_timestamp_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry))
           ALLOWED_TIMESTAMP_DEVIATION_IN_SECONDS > (Time.now - timestamp_from_event).abs
         }
       end
 
       def has_notified_with_utc_timestamp?
-        busy_wait(2,0.1,true) { Time.parse(extract_timestamp_from_audit_entry(@iut.get_latest_audit_entries)).utc? }
+        busy_wait(2,true) { Time.parse(extract_timestamp_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry)).utc? }
       end
 
       def is_correctly_formatted_as?(regular_expression)
-        not regular_expression.match(@iut.get_latest_audit_entries).nil?
+        not regular_expression.match(@iut.get_latest_test_orchestrator_audit_entry).nil?
       end
 
       def has_removed_the_oldest_event_from_the_buffer?
         select_default_auditor
-        reported_oldest_event = busy_wait(2,0.1,true) { @iut.get_latest_audit_entries(get_iut_buffer_size).include?("#{BUFFER_FILL_MESSAGE} 1\n") }
+        reported_oldest_event = busy_wait(2,true) { @iut.get_latest_test_orchestrator_audit_entry(get_iut_buffer_size).include?("#{BUFFER_FILL_MESSAGE} 1\n") }
         not reported_oldest_event
       end
 
       def did_report_anything?
-        busy_wait(2,0.1,true) { @previous_audit_event_entry != @iut.get_latest_audit_entries }
+        busy_wait(2,true) { @previous_audit_event_entry != @iut.get_latest_test_orchestrator_audit_entry }
       end
 
       def did_not_report_anything?
@@ -211,7 +211,7 @@ module ServiceComponent
       end
 
       def reported_oldest_event_in_buffer?
-        busy_wait(2,0.1,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_audit_entries) }
+        busy_wait(2,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry) }
       end
 
       def have_initialized_auditing_provider?
@@ -260,12 +260,12 @@ module ServiceComponent
       end
 
       def notify_event(level, flow_id, data)
-        parameters = { :operation => 'notify', :level => level, :flow_identifier => flow_id, :data => data.to_s }
+        parameters = { :operation => 'notify', :level => level, :flow_identifier => flow_id, :data => "TEST_ORCHESTRATOR-#{data.to_s}" }
         query_endpoint('soar_audit_test_service/notify',parameters)
       end
 
       def start_flow_test_chain(correlation_identifier, flow_identifier)
-        parameters = { :operation => 'flow-test-action-1', :flow_identifier => flow_identifier, :correlation_identifier => correlation_identifier }
+        parameters = { :operation => 'flow-test-action-1', :flow_identifier => flow_identifier, :correlation_identifier => correlation_identifier, :data => "TEST_ORCHESTRATOR" }
         query_endpoint('soar_audit_test_service/flow',parameters)
       end
 
@@ -315,8 +315,8 @@ module ServiceComponent
         @iut.configuration['auditing']['queue_size'].to_i
       end
 
-      def busy_wait(check_timeout, check_interval, desired_result)
-        BaseOrchestrationProvider::busy_wait(check_timeout, check_interval, desired_result) { yield }
+      def busy_wait(check_timeout, desired_result)
+        BaseOrchestrationProvider::busy_wait(check_timeout, desired_result) { yield }
       end
     end
   end

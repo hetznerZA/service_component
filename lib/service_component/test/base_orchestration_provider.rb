@@ -59,7 +59,8 @@ module ServiceComponent
         false
       end
 
-      def self.busy_wait(check_timeout, check_interval, desired_result)
+      def self.busy_wait(check_timeout, desired_result)
+        check_interval = 0.1
         start_time = Time.now
         while check_timeout > (Time.now - start_time) do
           return desired_result if desired_result == yield
@@ -67,7 +68,7 @@ module ServiceComponent
         end
         return false
       end
-      
+
       private
 
       def setup_service_identifiers
