@@ -312,7 +312,7 @@ module ServiceComponent
       end
 
       def get_iut_buffer_size
-        @iut.configuration['auditing']['queue_size'].to_i
+        @iut.configuration['auditing']['queue_worker']['queue_size'].to_i
       end
 
       def busy_wait(check_timeout, desired_result)
