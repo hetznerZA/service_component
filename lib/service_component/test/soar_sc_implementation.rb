@@ -16,9 +16,10 @@ module ServiceComponent
         @uri = uri
         @std_out_err_file = "#{ENV['SOAR_DIR']}/webrick.rackup.stdout"
 
+        @environment_example_file = "#{ENV['SOAR_DIR']}/config/environment.yml.example"
         @environment_file = "#{ENV['SOAR_DIR']}/config/environment.yml"
-        @environment = load_yaml_file(@environment_file)
-        @original_environment = load_yaml_file(@environment_file)
+        @environment = load_yaml_file(@environment_example_file)
+        @original_environment = load_yaml_file(@environment_example_file)
 
         @configuration_file = "#{ENV['SOAR_DIR']}/config/config.yml"
         @configuration = load_yaml_file(@configuration_file)
