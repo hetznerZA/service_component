@@ -14,5 +14,9 @@ module ServiceComponent
 end
 
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Bootstrapping with a service identifier", ServiceComponent::Test::SoarScBootstrapOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Bootstrapping with CORS configuration", ServiceComponent::Test::SoarScBootstrapOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Ensuring CORS configuration applies", ServiceComponent::Test::SoarScBootstrapOrchestrationProvider)
 
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("production", "Bootstrapping with a service identifier", ServiceComponent::Test::SoarScBootstrapOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("production", "Bootstrapping with CORS configuration", ServiceComponent::Test::SoarScBootstrapOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("production", "Ensuring CORS configuration applies", ServiceComponent::Test::SoarScBootstrapOrchestrationProvider)
