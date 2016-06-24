@@ -22,8 +22,8 @@ module ServiceComponent
         @original_environment = load_yaml_file(@environment_example_file)
 
         @configuration_file = "#{ENV['SOAR_DIR']}/config/config.yml"
-        @configuration = load_yaml_file(@configuration_file)
-        @original_configuration = load_yaml_file(@configuration_file)
+        @configuration = get_status_detail['configuration']
+        @original_configuration = get_status_detail['configuration']
 
         @audit_events_file = "#{ENV['SOAR_DIR']}/#{@configuration['auditing']['auditors']['log4r']['file_name']}"
       end
