@@ -14,40 +14,18 @@ cp tfa/jewels/*.zip $SOAR_DIR/jewels
 cd $SOAR_DIR
 jewels/inject_jewel.sh $TEST_SERVICE
 
-# echo "Installing ruby and gems of SOAR_SC"
-# cd $SOAR_DIR
-# rvm use jruby-9.0.4.0
-# gem install bundle
-# bundle install
-#
-#
-# echo "Installing ruby and gems of service_component"
-# cd $SERVICE_COMPONENT_DIR
-# rvm use ruby-2.3.0
-# gem install bundle
-# bundle install
-
-
 echo "Starting keep_running of soar_sc"
-cd $SOAR_DIR
-rvm use jruby-9.0.4.0
-cd ..
 cd $SOAR_DIR
 export SOAR_TECH=rackup
 export RACK_ENV=development
 ./soar_tech.sh
-rvm use jruby-9.0.4.0
-gem install bundle
-bundle install
+rvm use . && gem install bundle && bundle
 ./keep_running.sh > /dev/null 2>&1 &
+
+echo "Sleeping for 10 seconds to ensure soar_sc starts up the first time before tests are run"
+sleep 10
 
 echo "Running service component BDD tests"
 cd $SERVICE_COMPONENT_DIR
-rvm use ruby-2.3.0
-cd ..
-cd $SERVICE_COMPONENT_DIR
-rvm use ruby-2.3.0
-gem install bundle
-bundle install
-export TEST_ORCHESTRATION_PROVIDER=tfa
-bundle exec cucumber features/bootstrap_with_audit* features/bootstrap_with_service_identifier.feature features/auditing_*
+rvm use . && gem install bundle && bundle
+TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/bootstrap_with_audit* features/bootstrap_with_service_identifier.feature features/auditing_*
