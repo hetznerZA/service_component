@@ -58,7 +58,7 @@ module ServiceComponent
       end
 
       def given_valid_auditing_provider
-        #@iut.configuration['auditing']['provider'] = 'SoarScAuditingProvider'
+        @iut.configuration['auditing']['provider'] = 'SoarScAuditingProvider'
       end
 
       def given_invalid_auditing_provider
