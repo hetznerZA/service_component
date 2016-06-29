@@ -5,6 +5,7 @@ export SERVICE_COMPONENT_DIR=/soar_testing/service_component
 
 echo "Starting keep_running of soar_sc"
 cd $SOAR_DIR
+cp config/environment.yml.example config/environment.yml
 export SOAR_TECH=rackup
 export RACK_ENV=development
 ./soar_tech.sh
