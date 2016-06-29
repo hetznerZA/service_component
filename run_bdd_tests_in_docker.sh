@@ -22,9 +22,6 @@ export RACK_ENV=development
 rvm use . && gem install bundle && bundle
 ./keep_running.sh > /dev/null 2>&1 &
 
-echo "Sleeping for 10 seconds to ensure soar_sc starts up the first time before tests are run"
-sleep 10
-
 echo "Running service component BDD tests"
 cd $SERVICE_COMPONENT_DIR
 rvm use . && gem install bundle && bundle
