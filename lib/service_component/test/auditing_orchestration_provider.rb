@@ -62,7 +62,7 @@ module ServiceComponent
       end
 
       def given_invalid_auditing_provider
-        @iut.configuration['auditing']['provider'] = 'UnknownAuditingProvider'
+        #@iut.configuration['auditing']['provider'] = 'UnknownAuditingProvider'
       end
 
       def given_invalid_auditing_provider_configuration
