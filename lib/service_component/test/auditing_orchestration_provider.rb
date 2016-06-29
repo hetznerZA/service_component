@@ -229,13 +229,11 @@ module ServiceComponent
       end
 
       def has_remembered_auditing_level?
-        #@iut.configuration['auditing']['level'] == @bootstrap_status['data']['configuration']['auditing']['level']
-        false
+        @iut.configuration['auditing']['level'] == @bootstrap_status['data']['configuration']['auditing']['level']
       end
 
       def has_remembered_auditor_configuration?
-        #@iut.configuration['auditing']['auditors'] == @bootstrap_status['data']['configuration']['auditing']['auditors']
-        false
+        @iut.configuration['auditing']['auditors'] == @bootstrap_status['data']['configuration']['auditing']['auditors']
       end
 
       private
