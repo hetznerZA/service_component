@@ -62,7 +62,7 @@ module ServiceComponent
       end
 
       def given_invalid_auditing_provider
-        #@iut.configuration['auditing']['provider'] = 'UnknownAuditingProvider'
+        @iut.configuration['auditing']['provider'] = 'UnknownAuditingProvider'
       end
 
       def given_invalid_auditing_provider_configuration
@@ -229,11 +229,13 @@ module ServiceComponent
       end
 
       def has_remembered_auditing_level?
-        @iut.configuration['auditing']['level'] == @bootstrap_status['data']['configuration']['auditing']['level']
+        #@iut.configuration['auditing']['level'] == @bootstrap_status['data']['configuration']['auditing']['level']
+        false
       end
 
       def has_remembered_auditor_configuration?
-        @iut.configuration['auditing']['auditors'] == @bootstrap_status['data']['configuration']['auditing']['auditors']
+        #@iut.configuration['auditing']['auditors'] == @bootstrap_status['data']['configuration']['auditing']['auditors']
+        false
       end
 
       private
