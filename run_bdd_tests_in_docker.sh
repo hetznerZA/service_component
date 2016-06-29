@@ -2,17 +2,6 @@
 
 export SOAR_DIR=/soar_testing/soar_sc
 export SERVICE_COMPONENT_DIR=/soar_testing/service_component
-export AUDIT_TEST_SERVICE_DIR=/soar_testing/soar_audit_test_service
-
-echo "Injecting Audit test service jewel"
-cd $AUDIT_TEST_SERVICE_DIR
-export TEST_SERVICE=soar_audit_test_service
-cd $AUDIT_TEST_SERVICE_DIR/tfa/jewels/$TEST_SERVICE
-zip -rq ../$TEST_SERVICE.zip *
-cd $AUDIT_TEST_SERVICE_DIR
-cp tfa/jewels/*.zip $SOAR_DIR/jewels
-cd $SOAR_DIR
-jewels/inject_jewel.sh $TEST_SERVICE
 
 echo "Starting keep_running of soar_sc"
 cd $SOAR_DIR
