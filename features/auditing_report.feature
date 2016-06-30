@@ -5,18 +5,22 @@ Feature: Auditing service component actions
 
   Scenario:
     Given an audit event
+    And a valid auditing level
+    And a flow identifier
     When I am asked to audit
     Then I notify an auditing provider of the audit event
 
   Scenario:
     Given an audit event
-    And an audit level
+    And an auditing level 'debug'
+    And a flow identifier
     When I am asked to audit
     Then I notify an auditing provider of the audit event
-    And I provide the audit level
+    And I provide the 'debug' auditing level
 
   Scenario:
     Given an audit event
+    And a valid auditing level
     And a flow identifier
     When I am asked to audit
     Then I notify an auditing provider of the audit event
@@ -24,13 +28,8 @@ Feature: Auditing service component actions
 
   Scenario:
     Given an audit event
-    And a timestamp
-    When I am asked to audit
-    Then I notify an auditing provider of the audit event
-    And I provide the timestamp
-
-  Scenario:
-    Given an audit event
+    And a valid auditing level
+    And a flow identifier
     And a message
     When I am asked to audit
     Then I notify an auditing provider of the audit event

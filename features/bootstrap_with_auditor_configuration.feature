@@ -13,11 +13,11 @@ Feature: Bootstrapping with auditor configuration
   Scenario:
     Given an invalid auditor configuration
     When I am bootstrapped
-    Then I notify 'invalid auditor configuration'
+    Then I notify 'Invalid auditor configuration'
     And I do not complete bootstrap
 
   Scenario:
     Given no auditor configuration
     When I am bootstrapped
-    Then I notify 'missing auditor configuration'
+    Then I notify 'Missing auditor configuration'
     And I do not complete bootstrap

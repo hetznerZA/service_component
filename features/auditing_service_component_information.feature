@@ -5,5 +5,6 @@ Feature: Auditing service component actions
 
   Scenario:
     Given an audit event
+    And an auditing level 'debug'
     When I am asked to audit
-    Then I provide my identifier in the audit event
+    Then I provide my identifier

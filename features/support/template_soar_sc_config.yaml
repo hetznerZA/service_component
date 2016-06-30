@@ -1,0 +1,24 @@
+service_registry:
+  freshness: 3600
+auditing:
+  provider: AuditingProvider
+  auditors:
+    log4r:
+      nfrs:
+        accessibility: local
+        privacy      : not encrypted
+        reliability  : instance
+        performance  : high
+      file: webrick.stdout
+    logstash:
+      nfrs:
+        accessibility: centralized
+        privacy      : not encrypted
+        reliability  : high
+        performance  : networked
+  default_nfrs:
+    accessibility: local
+    privacy: not encrypted
+    reliability: instance
+    performance: high
+  buffer_size: 10

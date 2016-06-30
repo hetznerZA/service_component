@@ -5,29 +5,16 @@ Feature: Auditing service component actions
 
   Scenario:
     Given an audit event
-    And a valid time
+    And a valid auditing level
+    And a flow identifier
     When I am asked to audit
     Then I notify an auditing provider of the audit event
     And I provide the time
 
   Scenario:
     Given an audit event
-    And a valid time
+    And a valid auditing level
+    And a flow identifier
     When I am asked to audit
     Then I notify an auditing provider of the audit event
     And I provide the time as utc time
-
-  Scenario:
-    Given an audit event
-    And a valid time
-    When I am asked to audit
-    Then I notify an auditing provider of the audit event
-    And the time I provide is in utc time
-
-  Scenario:
-    Given an audit event
-    And a invalid time
-    When I am asked to audit
-    Then I notify an auditing provider of the audit event
-    And I provide the current utc time
-    And I notify 'invalid time'

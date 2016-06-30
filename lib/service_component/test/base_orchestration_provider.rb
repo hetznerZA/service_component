@@ -11,15 +11,15 @@ module ServiceComponent
       end
 
       def given_valid_service_identifier
-        @service_identifier = @valid_service_identifier
+        @iut.environment['IDENTIFIER'] = @valid_service_identifier
       end
 
       def given_invalid_service_identifier
-        @service_identifier = @invalid_service_identifier
+        @iut.environment['IDENTIFIER'] = @invalid_service_identifier
       end
 
       def given_no_service_identifier
-        @service_identifier = @no_service_identifier
+        @iut.environment['IDENTIFIER'] = @no_service_identifier
       end
 
       def inject_iut(iut)
@@ -54,19 +54,27 @@ module ServiceComponent
           return true
         end
         @notifications.each do |notification|
-          #puts "COMPARING #{notification} with #{message}"
           return true if notification == message
         end
         false
       end
 
+      def self.busy_wait(check_timeout, desired_result)
+        check_interval = 0.1
+        start_time = Time.now
+        while check_timeout > (Time.now - start_time) do
+          return desired_result if desired_result == yield
+          sleep(check_interval)
+        end
+        return false
+      end
+
       private
 
       def setup_service_identifiers
-        @valid_service_identifier = 'iut.dev.auto-h.net'
+        @valid_service_identifier = @iut.environment["IDENTIFIER"] #the environment file contains the valid service idenfier
         @invalid_service_identifier = ""
         @no_service_identifier = nil
-        @service_identifier = @no_service_identifier
       end
     end
   end
