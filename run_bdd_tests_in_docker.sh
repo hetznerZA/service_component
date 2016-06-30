@@ -27,7 +27,7 @@ export KEEP_RUNNING_PID=$!
 
 echo "Running service component BDD tests"
 cd $SERVICE_COMPONENT_DIR
-rvm use . && gem install bundle && bundle
+rvm use . && gem install bundler && bundle
 TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/bootstrap_with_audit* features/bootstrap_with_service_identifier.feature features/auditing_*
 TEST_EXIT_CODE=$?
 
