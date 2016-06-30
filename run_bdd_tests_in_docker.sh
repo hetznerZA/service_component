@@ -20,14 +20,14 @@ cp config/environment.yml.example config/environment.yml
 export SOAR_TECH=rackup
 export RACK_ENV=development
 ./soar_tech.sh
-rvm . && bundle
+rvm use . && bundle
 
 ./keep_running.sh > /dev/null 2>&1 &
 export KEEP_RUNNING_PID=$!
 
 echo "Running service component BDD tests"
 cd $SERVICE_COMPONENT_DIR
-rvm use . && bundle
+rvm use . && gem install bundle && bundle
 TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/bootstrap_with_audit* features/bootstrap_with_service_identifier.feature features/auditing_*
 TEST_EXIT_CODE=$?
 
