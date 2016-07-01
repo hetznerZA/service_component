@@ -308,7 +308,7 @@ module ServiceComponent
       end
 
       def create_unique_id
-        "#{SecureRandom.hex(14)}#{Time.now.to_i.to_s(16)}#{SecureRandom.hex(14)}"
+        "#{SecureRandom.hex(32)}"
       end
 
       def get_iut_buffer_size
