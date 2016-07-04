@@ -236,6 +236,18 @@ module ServiceComponent
         @iut.configuration['auditing']['auditors'] == @bootstrap_status['data']['configuration']['auditing']['auditors']
       end
 
+      def has_received_notification_for_missing_auditor_configuration?
+        #Untestable in SOAR_SC implementation due to the default auditor configuration
+        #being supplied in the event that the configuration is not present.
+        true
+      end
+
+      def has_received_notification_for_missing_auditing_configuration?
+        #Untestable in SOAR_SC implementation due to the default auditor configuration
+        #being supplied in the event that the configuration is not present.
+        true
+      end
+
       private
 
       def add_rejecting_auditor_configuration

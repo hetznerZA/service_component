@@ -326,7 +326,7 @@ Then(/^I notify 'Invalid auditing provider configuration'$/) do
 end
 
 Then(/^I notify 'Missing auditing provider configuration'$/) do
-  puts 'Missing auditing provider configuration untestable since we have default values'
+  expect(@test.has_received_notification_for_missing_auditing_configuration?).to eq(true)
 end
 
 Then(/^I remember the auditing level$/) do
@@ -350,5 +350,5 @@ Then(/^I notify 'Invalid auditor configuration'$/) do
 end
 
 Then(/^I notify 'Missing auditor configuration'$/) do
-  expect(@test.has_received_notification?('Missing auditor configuration')).to eq(true)
+  expect(@test.has_received_notification_for_missing_auditor_configuration?).to eq(true)
 end
