@@ -9,7 +9,7 @@ auditing:
         privacy      : not encrypted
         reliability  : instance
         performance  : high
-      file: webrick.stdout
+      file: soar_sc.log
     logstash:
       nfrs:
         accessibility: centralized

@@ -14,7 +14,7 @@ module ServiceComponent
 
       def initialize(uri)
         @uri = uri
-        @std_out_err_file = "#{ENV['SOAR_DIR']}/webrick.rackup.stdout"
+        @std_out_err_file = "#{ENV['SOAR_DIR']}/soar_sc.log"
 
         @environment_example_file = "#{ENV['SOAR_DIR']}/config/environment.yml.example"
         @environment_file = "#{ENV['SOAR_DIR']}/config/environment.yml"
