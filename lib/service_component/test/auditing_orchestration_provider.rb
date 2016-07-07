@@ -252,7 +252,7 @@ module ServiceComponent
 
       def add_rejecting_auditor_configuration
         @iut.configuration['auditing']['auditors']['rejecting_test_auditor'] = {
-          'adaptor' => 'SoarAuditTestService::RejectingTestAuditor',
+          'adaptor' => 'ServiceComponent::RejectingTestAuditor',
           'nfrs' => {
             'accessibility' => 'rejecting',
             'privacy' => 'not encrypted',
@@ -273,22 +273,22 @@ module ServiceComponent
 
       def notify_event(level, flow_id, data)
         parameters = { :operation => 'notify', :level => level, :flow_identifier => flow_id, :data => "TEST_ORCHESTRATOR-#{data.to_s}" }
-        query_endpoint('soar_audit_test_service/notify',parameters)
+        query_endpoint('service_component/notify',parameters)
       end
 
       def start_flow_test_chain(correlation_identifier, flow_identifier)
         parameters = { :operation => 'flow-test-action-1', :flow_identifier => flow_identifier, :correlation_identifier => correlation_identifier, :data => "TEST_ORCHESTRATOR" }
-        query_endpoint('soar_audit_test_service/flow',parameters)
+        query_endpoint('service_component/flow',parameters)
       end
 
       def select_default_auditor
         parameters = { :operation => 'select_default_auditor' }
-        query_endpoint('soar_audit_test_service/auditor',parameters)
+        query_endpoint('service_component/auditor',parameters)
       end
 
       def select_rejecting_auditor
         parameters = { :operation => 'select_rejecting_auditor' }
-        query_endpoint('soar_audit_test_service/auditor',parameters)
+        query_endpoint('service_component/auditor',parameters)
       end
 
       def query_endpoint(resource,parameters)

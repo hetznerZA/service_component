@@ -1,6 +1,5 @@
 architecture: 1.1.24
 path: /service_component
 view: soar_sc
-controller: lib/web/controllers/audit_test.rb
-controller: lib/web/controllers/service_registry_test.rb
-model: lib/web/models/audit_test.rb
+controller: lib/web/controllers/service_component_test_services.rb
+model: lib/web/models/service_component_test_services.rb
