@@ -1,0 +1,18 @@
+To run the test suite against the Test Frame Architecture prototype (this directory):
+
+Prepare the environment:
+
+o check out a local copy of the SOAR architecture
+o set the SOAR_DIR environment variable to point to your local copy:
+o Modify the SOAR run.sh and comment out the CFGSRV_IDENTIFIER entry. Now SOAR will use config/config.yml
+
+Inject the TFA into SOAR:
+o cd tfa/jewels/
+o zip soar_audit_test_service/* service_component.zip
+o cp tfa/jewels/*.zip $SOAR_DIR/jewels
+o cd $SOAR_DIR
+o jewels/extract_jewel.sh status
+./run.sh
+
+Run the tests:
+SOAR_DIR=/Users/ernstv/Documents/hetzner/recipe_rack_web_service TEST_ORCHESTRATION_PROVIDER=tfa rake test

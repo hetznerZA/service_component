@@ -1,0 +1,5 @@
+architecture: 1.1.24
+path: /service_component
+view: soar_sc
+controller: lib/web/controllers/audit_test.rb
+model: lib/web/models/audit_test.rb

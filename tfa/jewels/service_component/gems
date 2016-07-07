@@ -1,0 +1,1 @@
+gem 'service_component', "./service_component"
