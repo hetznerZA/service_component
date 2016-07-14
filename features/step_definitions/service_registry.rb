@@ -41,7 +41,7 @@ end
 
 
 When(/^determining authorization for the service$/) do
-  @test.when_determining_authorization_for_the_service
+  @test.determine_authorization_for_the_service
 end
 
 
@@ -54,7 +54,7 @@ Then(/^the client has the full suite of service registry functionality$/) do
 end
 
 Then(/^I ask the service registry for the service policy name$/) do
-  expect(@test.i_ask_the_service_registry_for_the_service_policy_name).to eq(true)
+  expect(@test.has_asked_the_service_registry_for_the_service_policy_name).to eq(true)
 end
 
 Then(/^I notify 'Missing service registry client'$/) do

@@ -50,6 +50,16 @@ module ServiceComponent
         `tail -n 100 #{@audit_events_file} | grep 'TEST_ORCHESTRATOR' | tail -#{test_lines}`
       end
 
+      def has_audit_entry_with_message_and_flow_id?(message,flow_id)
+        lines = get_audit_entries_with_flow_id(flow_id)
+        return true if lines.include?(message)
+        return false
+      end
+
+      def get_audit_entries_with_flow_id(flow_id)
+        `tail -n 100 #{@audit_events_file} | grep '#{flow_id}'`
+      end
+
       def bootstrap
         soar_dir = ENV['SOAR_DIR']
         puts "NOTE: Run keep_running.sh in #{soar_dir} using SOAR_TECH=rackup"

@@ -11,13 +11,13 @@ echo "Cleaning all repos involved in testing in preparation for jewel injection"
 #cd $BASE_DIR/service_component && git checkout . && git clean -fdx
 
 echo "Import soar_audit_test_service to audit related testing"
-cd $BASE_DIR/service_component && ./import.sh
+#cd $BASE_DIR/service_component && ./import.sh
 
 echo "Starting keep_running of soar_sc"
 cd $SOAR_DIR
 cp config/environment.yml.example config/environment.yml
 export SOAR_TECH=rackup
-export RACK_ENV=development
+export RACK_ENV=production
 ./soar_tech.sh
 rvm use . && bundle
 
@@ -27,7 +27,7 @@ export KEEP_RUNNING_PID=$!
 echo "Running service component BDD tests"
 cd $SERVICE_COMPONENT_DIR
 rvm use . && gem install bundler && bundle
-TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/service_registry*
+TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/service_registry_policy.feature
 #features/bootstrap_with_audit* features/bootstrap_with_service_identifier.feature features/auditing_*
 TEST_EXIT_CODE=$?
 
