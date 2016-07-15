@@ -7,11 +7,11 @@ export SOAR_DIR=$BASE_DIR/soar_sc
 export SERVICE_COMPONENT_DIR=$BASE_DIR/service_component
 
 echo "Cleaning all repos involved in testing in preparation for jewel injection"
-#cd $BASE_DIR/soar_sc && git checkout . && git clean -fdx
+cd $BASE_DIR/soar_sc && git checkout . && git clean -fdx
 #cd $BASE_DIR/service_component && git checkout . && git clean -fdx
 
 echo "Import soar_audit_test_service to audit related testing"
-#cd $BASE_DIR/service_component && ./import.sh
+cd $BASE_DIR/service_component && ./import.sh
 
 echo "Starting keep_running of soar_sc"
 cd $SOAR_DIR
@@ -29,8 +29,6 @@ echo "Running service component BDD tests"
 cd $SERVICE_COMPONENT_DIR
 rvm use . && gem install bundler && bundle
 TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/bootstrap_with_audit* features/bootstrap_with_service_identifier.feature features/auditing_* features/service_registry_*
-#TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/service_registry_policy.feature
-#TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/service_registry_*
 TEST_EXIT_CODE=$?
 
 echo "Stopping keep_running script and soar_sc service instance"
