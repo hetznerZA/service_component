@@ -15,6 +15,7 @@ echo "Import soar_audit_test_service to audit related testing"
 
 echo "Starting keep_running of soar_sc"
 cd $SOAR_DIR
+git checkout config/config.yml
 cp config/environment.yml.example config/environment.yml
 export SOAR_TECH=rackup
 export RACK_ENV=production
@@ -27,14 +28,15 @@ export KEEP_RUNNING_PID=$!
 echo "Running service component BDD tests"
 cd $SERVICE_COMPONENT_DIR
 rvm use . && gem install bundler && bundle
-TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/service_registry_policy.feature
-#features/bootstrap_with_audit* features/bootstrap_with_service_identifier.feature features/auditing_*
+TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/bootstrap_with_audit* features/bootstrap_with_service_identifier.feature features/auditing_* features/service_registry_*
+#TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/service_registry_policy.feature
+#TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/service_registry_*
 TEST_EXIT_CODE=$?
 
 echo "Stopping keep_running script and soar_sc service instance"
 kill $KEEP_RUNNING_PID
 $SOAR_DIR/stop.sh
 
-echo "Cleanly exit"
+echo "Exiting with status code $TEST_EXIT_CODE"
 cd $BASE_DIR
 exit $TEST_EXIT_CODE

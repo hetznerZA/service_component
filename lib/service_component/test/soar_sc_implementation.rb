@@ -72,6 +72,12 @@ module ServiceComponent
 
         `cd #{soar_dir}&&./stop.sh`
         detail = get_status_detail
+
+        #after we got the status detail we know the service is running. Now we restore_configuration
+        #the environment and configuration files to be ready for the next test.
+        restore_configuration
+        restore_environment
+
         return fail if detail.nil?
         success_data(detail)
       end
@@ -90,20 +96,6 @@ module ServiceComponent
           end
         }
         printf "\n"
-
-        #restore environment and configuration which needs a busy-wait pause
-        #to ensure the restoration is complete before continuing
-        restore_configuration
-        restore_environment
-        BaseOrchestrationProvider::busy_wait(5,true) {
-          begin
-            printf "!"
-            Net::HTTP.get(URI.parse(status_detail_uri))
-            true
-          rescue
-            false
-          end
-        }
 
         return nil if not success
         JSON.parse(response)

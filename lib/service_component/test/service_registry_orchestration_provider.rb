@@ -15,22 +15,21 @@ module ServiceComponent
       end
 
       def given_a_service_registry_client_provider
-        #TODO does this work?
-        credentials = { 'username' => 'uddi', 'password' => 'uddi' }
+        #implicit since by default there will be a service registry client provider
       end
 
       def given_no_service_registry_client_provider
-        #break the configuration that will result in no service registry client provider
-        @iut.configuration['service_registry']['freshness'] = 'not_a_number'
+        remove_service_registry_client
       end
 
       def given_a_service_registry_client_initialization_failure
         #initialization failure by creating an incorrect configuration
-        @iut.configuration['service_registry']['freshness'] = 'not_a_number'
+        @iut.environment['SERVICE_REGISTRY'] = 'not\a\uri'
       end
 
       def given_a_request_for_a_service
         #request is setup as a collection of other aspects right before the request.
+        @test_id = create_unique_id
       end
 
       def given_a_policy_for_the_service_exists
@@ -51,26 +50,22 @@ module ServiceComponent
 
       def given_a_failure
         #simulate a failure by setting the service registry to an invalid uri
-        @iut.environment['SERVICE_REGISTRY'] = 'http://invalid-uri.auto-h.net:8080'
+        @iut.environment['SERVICE_REGISTRY'] = 'not!a!uri'
       end
 
 
       def determine_authorization_for_the_service
         @test_service = "architectural-test-service-with-#{@policy_registration_state}-#{@policy_existance_state}-policy"
-        #@iut.environment['IDENTIFIER'] = "service_component.dev.auto-h.net"
-
-        bootstrap #bootstrap will result in the configuration being picked up before any other testing
-
-        @test_id = create_unique_id
+        bootstrap
         hit_endpoint_requiring_authorization(@test_service,@test_id)
       end
 
-      def i_have_an_initialized_service_registry_client
-        false
+      def has_an_initialized_service_registry_client
+        @iut.has_audit_entry_with_message_and_flow_id?('Using registry at',get_startup_flow_identifier)
       end
 
       def the_client_has_the_full_suite_of_service_registry_functionality
-        false
+        @iut.has_audit_entry_with_message_and_flow_id?('Using registry at',get_startup_flow_identifier)
       end
 
       def has_asked_the_service_registry_for_the_service_policy_name
@@ -86,6 +81,11 @@ module ServiceComponent
 
       def busy_wait(check_timeout, desired_result)
         BaseOrchestrationProvider::busy_wait(check_timeout, desired_result) { yield }
+      end
+
+      def remove_service_registry_client
+        parameters = { :operation => 'remove-service-registry-client' }
+        query_endpoint('service-registry-client-controller',parameters)
       end
 
       def query_last_flow_identifier_from_policy

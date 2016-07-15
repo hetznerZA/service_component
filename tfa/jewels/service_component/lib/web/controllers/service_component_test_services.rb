@@ -41,8 +41,8 @@ module SoarSc
 
       class ServiceRegistryTestController < ConfiguredController
         def serve(request)
-          if request['operation'] == 'notify' then
-            SoarSc::auditing.send(request['level'].to_s,request['data'].to_s,request.params['flow_identifier'].to_s)
+          if request['operation'] == 'remove-service-registry-client' then
+            SoarSc::service_registry = nil
           end
           [200, ""]
         end

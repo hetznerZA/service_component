@@ -72,3 +72,9 @@
           http_code, body = SoarSc::Web::Controllers::PolicyIsAnyoneController.new(@configuration).serve(request)
           SoarSc::Web::Views::JSON.render(http_code, body)
         end
+
+        add_unsigned_unauthorized_route('/service-registry-client-controller',
+          "Test service that provides an endpoint which can modify the service registry client") do |request|
+          http_code, body = SoarSc::Web::Controllers::ServiceRegistryTestController.new(@configuration).serve(request)
+          SoarSc::Web::Views::JSON.render(http_code, body)
+        end
