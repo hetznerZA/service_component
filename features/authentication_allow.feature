@@ -14,5 +14,3 @@ Feature: Allowing authenticated access
     And a request
     When I am asked whether the request has authenticated
     Then I respond true
-
-

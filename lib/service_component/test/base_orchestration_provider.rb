@@ -22,6 +22,9 @@ module ServiceComponent
         @iut.environment['IDENTIFIER'] = @no_service_identifier
       end
 
+      def given_a_request
+      end
+
       def inject_iut(iut)
         @iut = iut
       end

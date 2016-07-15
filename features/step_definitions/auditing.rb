@@ -76,10 +76,6 @@ Given(/^a flow identifier$/) do
   @test.given_flow_identifier
 end
 
-Given(/^a request$/) do
-  @test.given_request_message(TEST_MESSAGE)
-end
-
 Given(/^the request has no flow identifier$/) do
   @test.given_request_without_flow_identifier
 end
