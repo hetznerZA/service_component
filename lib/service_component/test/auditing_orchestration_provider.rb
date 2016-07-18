@@ -72,11 +72,11 @@ module ServiceComponent
       def given_auditing_provider_initialization_failure
         # specify an incorrect auditing level which will result in an auditing provider
         # initialization failure
-        @iut.configuration['auditing']['level'] = 'wrong'
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'level' => 'wrong'}})
       end
 
       def given_valid_auditing_provider_configuration
-        # by default there will be a valid auditing provider configuration
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'provider' => 'SoarScAuditingProvider'}})
       end
 
       def given_no_auditing_provider_configuration
@@ -84,15 +84,15 @@ module ServiceComponent
       end
 
       def given_valid_configured_auditing_level
-        @iut.configuration['auditing']['level'] = 'debug'
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'level' => 'debug'}})
       end
 
       def given_invalid_configured_auditing_level
-        @iut.configuration['auditing']['level'] = 'wrong'
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'level' => 'wrong'}})
       end
 
       def given_no_configured_auditing_level
-        @iut.configuration['auditing']['level'] = nil
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'level' => nil }})
       end
 
       def given_valid_auditor
@@ -104,17 +104,17 @@ module ServiceComponent
       end
 
       def given_invalid_auditor_configuration
-        @iut.configuration['auditing']['auditors']['log4r']['standard_stream'] = 'stdwrong'
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'auditors' => { 'log4r' => { 'standard_stream' => 'stdwrong' }}}})
       end
 
       def given_no_auditor_configuation
-        @iut.configuration['auditing']['auditors']['log4r'] = nil
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'auditors' => { 'log4r' => nil }}})
       end
 
       def given_auditor_initialization_failure
         # specify an incorrect auditing level which will result in an auditor
         # initialization failure
-        @iut.configuration['auditing']['level'] = 'wrong'
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'level' => 'wrong'}})
       end
 
       # When / Test action methods
@@ -225,7 +225,7 @@ module ServiceComponent
       end
 
       def has_remembered_auditing_provider_configuration?
-        @iut.configuration['auditing'] == @bootstrap_status['data']['configuration']['auditing']
+        'SoarScAuditingProvider' == @bootstrap_status['data']['configuration']['auditing']['provider']
       end
 
       def has_remembered_auditing_level?
@@ -233,7 +233,7 @@ module ServiceComponent
       end
 
       def has_remembered_auditor_configuration?
-        @iut.configuration['auditing']['auditors'] == @bootstrap_status['data']['configuration']['auditing']['auditors']
+        @iut.configuration['auditing']['auditors']['rejecting_test_auditor'] == @bootstrap_status['data']['configuration']['auditing']['auditors']['rejecting_test_auditor']
       end
 
       def has_received_notification_for_missing_auditor_configuration?
@@ -251,6 +251,8 @@ module ServiceComponent
       private
 
       def add_rejecting_auditor_configuration
+        @iut.configuration['auditing'] = {} if not @iut.configuration['auditing']
+        @iut.configuration['auditing']['auditors'] = {} if not @iut.configuration['auditing']['auditors']
         @iut.configuration['auditing']['auditors']['rejecting_test_auditor'] = {
           'adaptor' => 'ServiceComponent::RejectingTestAuditor',
           'nfrs' => {
@@ -324,11 +326,21 @@ module ServiceComponent
       end
 
       def get_iut_buffer_size
-        @iut.configuration['auditing']['queue_worker']['queue_size'].to_i
+        @bootstrap_status['data']['configuration']['auditing']['queue_worker']['queue_size'].to_i
       end
 
       def busy_wait(check_timeout, desired_result)
         BaseOrchestrationProvider::busy_wait(check_timeout, desired_result) { yield }
+      end
+
+      def recurse_merge(a,b)
+        a.merge(b) do |_,x,y|
+          if (x.is_a?(Hash) && y.is_a?(Hash)) then
+            recurse_merge(x,y)
+          else
+            x
+          end
+        end
       end
     end
   end

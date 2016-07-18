@@ -20,12 +20,14 @@ module ServiceComponent
         @environment_file = "#{ENV['SOAR_DIR']}/config/environment.yml"
         @environment = load_yaml_file(@environment_example_file)
         @original_environment = load_yaml_file(@environment_example_file)
+        @environment.delete('CAS_SERVER')
+        @original_environment.delete('CAS_SERVER')
 
         @configuration_file = "#{ENV['SOAR_DIR']}/config/config.yml"
-        @configuration = get_status_detail['configuration']
-        @original_configuration = get_status_detail['configuration']
+        @configuration = load_yaml_file(@configuration_file)
+        @original_configuration = load_yaml_file(@configuration_file)
 
-        @audit_events_file = "#{ENV['SOAR_DIR']}/#{@configuration['auditing']['auditors']['log4r']['file_name']}"
+        @audit_events_file = "#{ENV['SOAR_DIR']}/soar_sc.log"
       end
 
       def load_environment_file
@@ -86,7 +88,7 @@ module ServiceComponent
         status_detail_uri = "#{@uri}/status-detail"
         response = nil
 
-        success = BaseOrchestrationProvider::busy_wait(5,true) {
+        success = BaseOrchestrationProvider::busy_wait(4,true) {
           begin
             printf "!"
             response = Net::HTTP.get(URI.parse(status_detail_uri))

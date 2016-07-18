@@ -33,7 +33,10 @@ module SoarSc
           SoarSc::auditing.debug("#{request['data'].to_s}-#{request['operation'].to_s}-#{request['correlation_identifier'].to_s}",request.params['flow_identifier'].to_s)
           if request['operation'] == 'flow-test-action-1' then
             request['operation'] = 'flow-test-action-2'
-            SoarSc::router.route(request)
+
+            unauthenticated_meta = SoarSc::Web::UnauthenticatedRouterMeta.new(SoarSc::configuration)
+            unauthenticated_router = SoarSc::Web::BaseRouter.new(unauthenticated_meta)
+            unauthenticated_router.route(request)
           end
           [200, ""]
         end
