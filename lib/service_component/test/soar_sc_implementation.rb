@@ -5,12 +5,17 @@ require 'jsender'
 module ServiceComponent
   module Test
     class SoarScImplementation
+      USER     = 'dev' unless defined? USER;     USER.freeze
+      PASSWORD = 'dev' unless defined? PASSWORD; PASSWORD.freeze
+
       include Jsender
 
       attr_reader :uri
       attr_reader :identifier
       attr_accessor :environment
       attr_accessor :configuration
+      attr_reader :username
+      attr_reader :password
 
       def initialize(uri)
         @uri = uri
@@ -22,6 +27,8 @@ module ServiceComponent
         @original_environment = load_yaml_file(@environment_example_file)
         @environment.delete('CAS_SERVER')
         @original_environment.delete('CAS_SERVER')
+        @environment['BASIC_AUTH_USER'] = USER
+        @environment['BASIC_AUTH_PASSWORD'] = PASSWORD
 
         @configuration_file = "#{ENV['SOAR_DIR']}/config/config.yml"
         @configuration = load_yaml_file(@configuration_file)
@@ -91,16 +98,27 @@ module ServiceComponent
         success = BaseOrchestrationProvider::busy_wait(4,true) {
           begin
             printf "!"
-            response = Net::HTTP.get(URI.parse(status_detail_uri))
+            response = query_endpoint('status-detail',{})
+            printf "Error response code #{response.code}" unless response.code.to_s == '200'
             true
           rescue
             false
           end
         }
         printf "\n"
-
         return nil if not success
-        JSON.parse(response)
+        JSON.parse(response.body)
+      end
+
+      def query_endpoint(resource, parameters = {}, user = USER, password = PASSWORD)
+        require 'uri'
+        require 'net/http'
+        uri = URI.parse("#{@uri}/#{resource}")
+        uri.query = URI.encode_www_form( parameters )
+        http = Net::HTTP.new(uri.host, uri.port)
+        request = Net::HTTP::Get.new(uri.request_uri)
+        request.basic_auth(user, password)
+        http.request(request)
       end
 
       def restore_configuration

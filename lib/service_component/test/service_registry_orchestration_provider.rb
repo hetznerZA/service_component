@@ -57,7 +57,8 @@ module ServiceComponent
       def determine_authorization_for_the_service
         @test_service = "architectural-test-service-with-#{@policy_registration_state}-#{@policy_existance_state}-policy"
         bootstrap
-        hit_endpoint_requiring_authorization(@test_service,@test_id)
+        puts "result from hit_endpoint_requiring_authorization is #{hit_endpoint_requiring_authorization(@test_service,@test_id)}"
+        puts "Test id for this run is #{@test_id}"
       end
 
       def has_an_initialized_service_registry_client
@@ -89,7 +90,7 @@ module ServiceComponent
       end
 
       def query_last_flow_identifier_from_policy
-        result = JSON.parse(query_endpoint('authorization-policy-is-anyone/get_latest_flow_identifier', {}))
+        result = JSON.parse(query_endpoint('authorization-policy-is-anyone/get_latest_flow_identifier', {}).body)
         result['last_flow_identifier']
       end
 
@@ -99,11 +100,7 @@ module ServiceComponent
       end
 
       def query_endpoint(resource,parameters)
-        require 'uri'
-        uri = URI.parse("#{@iut.uri}/#{resource}")
-        uri.query = URI.encode_www_form( parameters )
-        require 'net/http'
-        Net::HTTP.get(uri)
+        @iut.query_endpoint(resource,parameters)
       end
 
       def create_unique_id

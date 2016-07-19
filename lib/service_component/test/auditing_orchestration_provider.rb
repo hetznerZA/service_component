@@ -294,11 +294,7 @@ module ServiceComponent
       end
 
       def query_endpoint(resource,parameters)
-        require 'uri'
-        uri = URI.parse("#{@iut.uri}/#{resource}")
-        uri.query = URI.encode_www_form( parameters )
-        require 'net/http'
-        Net::HTTP.get(uri)
+        @iut.query_endpoint(resource,parameters)
       end
 
       def extract_level_from_audit_entry(audit_entry)
