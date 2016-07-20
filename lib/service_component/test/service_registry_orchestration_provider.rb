@@ -57,8 +57,6 @@ module ServiceComponent
       def determine_authorization_for_the_service
         @test_service = "architectural-test-service-with-#{@policy_registration_state}-#{@policy_existance_state}-policy"
         bootstrap
-        puts "result from hit_endpoint_requiring_authorization is #{hit_endpoint_requiring_authorization(@test_service,@test_id)}"
-        puts "Test id for this run is #{@test_id}"
       end
 
       def has_an_initialized_service_registry_client
