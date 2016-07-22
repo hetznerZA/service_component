@@ -14,6 +14,8 @@ module ServiceComponent
       attr_reader :identifier
       attr_accessor :environment
       attr_accessor :configuration
+      attr_accessor :environment_example_file
+      attr_accessor :environment_file
       attr_reader :username
       attr_reader :password
 
@@ -69,6 +71,10 @@ module ServiceComponent
         `tail -n 100 #{@audit_events_file} | grep '#{flow_id}'`
       end
 
+      def force_failure_reading_the_environment_file
+        @force_failure_reading_the_environment_file = true
+      end
+
       def bootstrap
         soar_dir = ENV['SOAR_DIR']
         puts "NOTE: Run keep_running.sh in #{soar_dir} using SOAR_TECH=rackup"
@@ -76,7 +82,14 @@ module ServiceComponent
           puts "SOAR_DIR not defined"
           return
         end
-        bootstrap_with_environment(@environment, @environment_file)
+
+        if @force_failure_reading_the_environment_file
+          File.delete(@environment_file) rescue nil
+          @force_failure_reading_the_environment_file = false
+        else
+          bootstrap_with_environment(@environment, @environment_file)
+        end
+
         bootstrap_with_configuration(@configuration,@configuration_file)
 
         `cd #{soar_dir}&&./stop.sh`
