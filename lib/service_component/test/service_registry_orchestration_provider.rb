@@ -85,21 +85,16 @@ module ServiceComponent
 
       def remove_service_registry_client
         parameters = { :operation => 'remove-service-registry-client' }
-        query_endpoint('service-registry-client-controller',parameters)
+        @iut.query_endpoint(resource: 'service-registry-client-controller',parameters: parameters)
       end
 
       def query_last_flow_identifier_from_policy
-        result = JSON.parse(query_endpoint('authorization-policy-is-anyone/get_latest_flow_identifier', {}).body)
+        result = JSON.parse(@iut.query_endpoint(resource: 'authorization-policy-is-anyone/get_latest_flow_identifier', parameters: {}).body)
         result['last_flow_identifier']
       end
 
       def hit_endpoint_requiring_authorization(test_service,test_id)
-        parameters = { :flow_identifier => test_id }
-        query_endpoint(test_service,parameters)
-      end
-
-      def query_endpoint(resource,parameters)
-        @iut.query_endpoint(resource,parameters)
+        @iut.query_endpoint(resource: test_service, parameters: { :flow_identifier => test_id })
       end
 
       def create_unique_id

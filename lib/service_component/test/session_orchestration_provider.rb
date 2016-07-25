@@ -12,6 +12,7 @@ module ServiceComponent
         super
         given_sessions_are_used
         given_a_session_client
+        given_a_valid_session_key
       end
 
       def given_a_session_client
@@ -19,16 +20,24 @@ module ServiceComponent
       end
 
       def given_a_session
-        #implicitly provided by the iut
+        #make sure we are bootstrapped and hit an endpoint to get a cookie so that we can use it later as a valid session
+        bootstrap
+        @session_cookie = @iut.query_endpoint(resource: 'architectural-test-service-with-registered-existing-policy')['Set-Cookie']
+        @cookie_test_message = decode_set_cookie(@session_cookie)['test_message']
+      end
+
+      def given_a_invalid_session
+        #make sure we are bootstrapped and hit an endpoint to get a cookie, make a modification and save it so that we can use it later as an invalid session
+        given_a_session
+        zero_cookie_signature
       end
 
       def receive_a_request
         bootstrap #bootstrap the service component to ensure the environment for the test has been incorporated.
-        @response_to_request = @iut.query_endpoint('architectural-test-service-with-registered-existing-policy')
+        @response_to_request = @iut.query_endpoint(resource: 'architectural-test-service-with-registered-existing-policy', cookie: @session_cookie)
       end
 
       def this_service_component_must_not_be_less_compliant_than_rack?
-        # byebug
         cookie_data = decode_set_cookie(@response_to_request['Set-Cookie'])
         cookie_data['rfc6265_provider'] == 'Rack::Session::Abstract::SessionHash'
       end
@@ -37,29 +46,18 @@ module ServiceComponent
         @response_to_request['Set-Cookie'].nil?
       end
 
-      def the_session_integrity_is_verified?
-        false
-        #byebug
+      def service_component_enables_verification_of_the_session_integrity?
+        #check that there is a 40 character signature as expected
+        retrieve_signature_from_set_cookie(@response_to_request['Set-Cookie']).length == 40
+      end
 
-        # crypt = ActiveSupport::MessageEncryptor.new(@iut.environment['SESSION_SECRET'])                       # => #<ActiveSupport::MessageEncryptor ...>
-        # encrypted_data = crypt.encrypt_and_sign('my secret data')              # => "NlFBTTMwOUV5UlA1QlNEN2xkY2d6eThYWWh..."
-        # crypt.decrypt_and_verify(encrypted_data)                               # => "my secret data"
-        #
-        # cookie = @response_to_request['Set-Cookie']
-        # unescaped_cookie_value = cookie.split('--').first.split('=')[1]
-        # escaped_cookie_value = CGI.escape(unescaped_cookie_value).gsub("%0A", "")
-        # cookie_signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA1.new, @iut.environment['SESSION_SECRET'], escaped_cookie_value.gsub("%3D", "="))
-        #
-        #
-        #
-        # verifier = ActiveSupport::MessageVerifier.new(@iut.environment['SESSION_SECRET'], 'SHA1')
-        # verifier.verify(session)
+      def the_session_integrity_is_verified?
+        JSON.parse(@response_to_request.body)['returned_session_test_message'] == @cookie_test_message
       end
 
       def session_interactions_are_persisted_using_the_key?
         @response_to_request['Set-Cookie'].include?('a_unique_session_key_for_testing')
       end
-
 
       private
 
@@ -72,6 +70,16 @@ module ServiceComponent
         Rack::Session::Cookie::Base64::Marshal.new.decode(URI.unescape(base64data))
       end
 
+      def retrieve_signature_from_set_cookie(cookie)
+        cookie.split('--').last.split("\;").first
+      end
+
+      def zero_cookie_signature
+        cookie_portion_before_signature = @session_cookie.split('--').first
+        cookie_portion_signature_plus_trail = @session_cookie.split('--').last
+        cookie_portion_signature_plus_trail = cookie_portion_signature_plus_trail.sub(/^.{40}/, "#{SecureRandom.hex(20)}")
+        @session_cookie = "#{cookie_portion_before_signature}--#{cookie_portion_signature_plus_trail}"
+      end
     end
   end
 end

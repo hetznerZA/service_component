@@ -294,7 +294,7 @@ module ServiceComponent
       end
 
       def query_endpoint(resource,parameters)
-        @iut.query_endpoint(resource,parameters)
+        @iut.query_endpoint(resource: resource, parameters: parameters)
       end
 
       def extract_level_from_audit_entry(audit_entry)

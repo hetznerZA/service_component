@@ -66,7 +66,7 @@ module ServiceComponent
       end
 
       def given_session_key_is_invalid
-        @iut.environment['SESSION_KEY'] = ';'
+        @iut.environment['SESSION_KEY'] = 'something_with_()_which_is_invalid'
       end
 
       def given_session_secret_is_invalid

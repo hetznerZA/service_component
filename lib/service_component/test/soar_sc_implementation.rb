@@ -85,6 +85,7 @@ module ServiceComponent
 
         if @force_failure_reading_the_environment_file
           File.delete(@environment_file) rescue nil
+          `echo 'junk' > #{@environment_file}`
           @force_failure_reading_the_environment_file = false
         else
           bootstrap_with_environment(@environment, @environment_file)
@@ -111,7 +112,7 @@ module ServiceComponent
         success = BaseOrchestrationProvider::busy_wait(4,true) {
           begin
             printf "!"
-            response = query_endpoint('status-detail',{})
+            response = query_endpoint(resource: 'status-detail')
             printf "Error response code #{response.code}" unless response.code.to_s == '200'
             true
           rescue
@@ -123,7 +124,7 @@ module ServiceComponent
         JSON.parse(response.body)
       end
 
-      def query_endpoint(resource, parameters = {}, user = USER, password = PASSWORD)
+      def query_endpoint(resource: '/', parameters: {}, user: USER, password: PASSWORD, cookie: nil)
         require 'uri'
         require 'net/http'
         uri = URI.parse("#{@uri}/#{resource}")
@@ -131,6 +132,7 @@ module ServiceComponent
         http = Net::HTTP.new(uri.host, uri.port)
         request = Net::HTTP::Get.new(uri.request_uri)
         request.basic_auth(user, password)
+        request['Cookie'] = cookie if cookie
         http.request(request)
       end
 

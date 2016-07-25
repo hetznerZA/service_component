@@ -81,3 +81,10 @@ Feature: Session support
     And a session
     When the service component receives a request
     Then session integrity is verified
+
+  Scenario:
+    Given sessions are used
+    And a request
+    And an invalid session
+    When the service component receives a request
+    Then session integrity verification fails

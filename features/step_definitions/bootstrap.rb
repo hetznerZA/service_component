@@ -130,8 +130,8 @@ Then(/^I can extract the session secret from the environment file$/) do
   expect(@test.can_extract_the_session_secret_from_the_environment_file).to eq(true)
 end
 
-Then(/^I notify 'failure retrieving environment from file'$/) do
-  expect(@test.has_received_notification?('failure retrieving environment from file')).to eq(true)
+Then(/^I notify 'Failure retrieving environment from file'$/) do
+  expect(@test.has_received_notification?('Failure retrieving environment from file')).to eq(true)
 end
 
 Then(/^I remember the execution environment indicator$/) do

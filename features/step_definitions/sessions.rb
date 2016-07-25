@@ -6,6 +6,10 @@ Given(/^a session$/) do
   @test.given_a_session
 end
 
+Given(/^an invalid session$/) do
+  @test.given_a_invalid_session
+end
+
 Given(/^sessions use is undefined$/) do
   @test.given_sessions_use_is_undefined
 end
@@ -83,7 +87,15 @@ Then(/^I notify 'Invalid session secret'$/) do
 end
 
 Then(/^the service component enables verification of the session integrity$/) do
+  expect(@test.service_component_enables_verification_of_the_session_integrity?).to eq(true)
+end
+
+Then(/^session integrity is verified/) do
   expect(@test.the_session_integrity_is_verified?).to eq(true)
+end
+
+Then(/^session integrity verification fails$/) do
+  expect(@test.the_session_integrity_is_verified?).to eq(false)
 end
 
 Then(/^session interactions are persisted using the key$/) do
