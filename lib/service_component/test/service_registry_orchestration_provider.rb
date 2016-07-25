@@ -49,14 +49,15 @@ module ServiceComponent
       end
 
       def given_a_failure
-        #simulate a failure by setting the service registry to an invalid uri
-        @iut.environment['SERVICE_REGISTRY'] = 'not!a!uri'
+        #simulate a failure by setting the policy we will use to a nonexisting entry
+        @policy_existance_state = 'nonexisting'
       end
 
 
       def determine_authorization_for_the_service
         @test_service = "architectural-test-service-with-#{@policy_registration_state}-#{@policy_existance_state}-policy"
         bootstrap
+        hit_endpoint_requiring_authorization(@test_service,@test_id)
       end
 
       def has_an_initialized_service_registry_client

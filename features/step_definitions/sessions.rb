@@ -2,6 +2,10 @@ Given(/^a session client$/) do
   @test.given_a_session_client
 end
 
+Given(/^a session$/) do
+  @test.given_a_session
+end
+
 Given(/^sessions use is undefined$/) do
   @test.given_sessions_use_is_undefined
 end
@@ -18,28 +22,28 @@ Given(/^sessions are used$/) do
   @test.given_sessions_are_used
 end
 
-Given(/^no session key is present$/) do
-  @test.given_no_session_key_is_present
+Given(/^no session key$/) do
+  @test.given_no_session_key
 end
 
-Given(/^no session secret is present$/) do
-  @test.given_no_session_secret_is_present
+Given(/^no session secret$/) do
+  @test.given_no_session_secret
 end
 
-Given(/^session key is invalid$/) do
+Given(/^an invalid session key$/) do
   @test.given_session_key_is_invalid
 end
 
-Given(/^session secret is invalid$/) do
+Given(/^an invalid session secret$/) do
   @test.given_session_secret_is_invalid
 end
 
-Given(/^a session secret$/) do
+Given(/^a valid session secret$/) do
   @test.given_a_session_secret
 end
 
-Given(/^a unique session key$/) do
-  @test.given_a_unique_session_key
+Given(/^a valid session key$/) do
+  @test.given_a_valid_session_key
 end
 
 Then(/^this service component must not be less compliant to RFC 6265 than https:\/\/github\.com\/rack$/) do
@@ -78,8 +82,8 @@ Then(/^I notify 'Invalid session secret'$/) do
   expect(@test.has_received_notification?('Invalid session secret')).to eq(true)
 end
 
-Then(/^the session is encrypted using the secret$/) do
-  expect(@test.the_session_is_encrypted_using_the_secret?).to eq(true)
+Then(/^the service component enables verification of the session integrity$/) do
+  expect(@test.the_session_integrity_is_verified?).to eq(true)
 end
 
 Then(/^session interactions are persisted using the key$/) do

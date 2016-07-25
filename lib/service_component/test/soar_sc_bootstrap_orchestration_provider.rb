@@ -57,11 +57,11 @@ module ServiceComponent
         @iut.environment['USE_SESSIONS'] = 'true'
       end
 
-      def given_no_session_key_is_present
+      def given_no_session_key
         @iut.environment['SESSION_KEY'] = nil
       end
 
-      def given_no_session_secret_is_present
+      def given_no_session_secret
         @iut.environment['SESSION_SECRET'] = nil
       end
 
@@ -77,8 +77,24 @@ module ServiceComponent
         @iut.environment['SESSION_SECRET'] = "#{SecureRandom.hex(16)}" #create 32 byte secret string
       end
 
-      def given_a_unique_session_key
+      def given_a_valid_session_key
         @iut.environment['SESSION_KEY'] = 'a_unique_session_key_for_testing'
+      end
+
+      def given_a_valid_an_execution_environment_indicator
+        @iut.environment['RACK_ENV'] = 'debug'
+      end
+
+      def given_an_invalid_execution_environment_indicator
+        @iut.environment['RACK_ENV'] = 'strange_environment'
+      end
+
+      def given_no_execution_environment_indicator
+        @iut.environment['RACK_ENV'] = nil
+      end
+
+      def has_remembered_the_execution_environment_indicator
+        can_extract_the_execution_environment_indicator_from_the_environment_file
       end
 
       def can_extract_the_service_identifier_from_the_environment_file
@@ -129,6 +145,8 @@ ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Bootstrapping with CORS configuration", ServiceComponent::Test::SoarScBootstrapOrchestrationProvider)
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Ensuring CORS configuration applies", ServiceComponent::Test::SoarScBootstrapOrchestrationProvider)
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Bootstrapping with environment configuration file", ServiceComponent::Test::SoarScBootstrapOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Bootstrapping with environment configuration", ServiceComponent::Test::SoarScBootstrapOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Bootstrapping with an execution environment indicator", ServiceComponent::Test::SoarScBootstrapOrchestrationProvider)
 
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("production", "Bootstrapping with a service identifier", ServiceComponent::Test::SoarScBootstrapOrchestrationProvider)
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("production", "Bootstrapping with CORS configuration", ServiceComponent::Test::SoarScBootstrapOrchestrationProvider)

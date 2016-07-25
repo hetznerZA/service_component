@@ -2,6 +2,7 @@ require 'json'
 require "./lib/service_component/test/bootstrap_orchestration_provider"
 require "./lib/service_component/test/soar_sc_bootstrap_orchestration_provider"
 require 'active_support'
+require 'rack'
 
 module ServiceComponent
   module Test
@@ -9,28 +10,34 @@ module ServiceComponent
 
       def setup
         super
+        given_sessions_are_used
+        given_a_session_client
       end
 
       def given_a_session_client
-        #TODO
+        #implicitly provided by the iut
+      end
+
+      def given_a_session
+        #implicitly provided by the iut
       end
 
       def receive_a_request
-        #bootstrap the service component to ensure the environment for the test has been incorporated.
-        bootstrap
-
+        bootstrap #bootstrap the service component to ensure the environment for the test has been incorporated.
         @response_to_request = @iut.query_endpoint('architectural-test-service-with-registered-existing-policy')
       end
 
       def this_service_component_must_not_be_less_compliant_than_rack?
-        false
+        # byebug
+        cookie_data = decode_set_cookie(@response_to_request['Set-Cookie'])
+        cookie_data['rfc6265_provider'] == 'Rack::Session::Abstract::SessionHash'
       end
 
       def a_session_is_not_used_when_servicing_the_request?
         @response_to_request['Set-Cookie'].nil?
       end
 
-      def the_session_is_encrypted_using_the_secret?
+      def the_session_integrity_is_verified?
         false
         #byebug
 
@@ -60,8 +67,14 @@ module ServiceComponent
         BaseOrchestrationProvider::busy_wait(check_timeout, desired_result) { yield }
       end
 
+      def decode_set_cookie(cookie)
+        base64data = cookie.split('--').first.split('=')[1]
+        Rack::Session::Cookie::Base64::Marshal.new.decode(URI.unescape(base64data))
+      end
+
     end
   end
 end
 
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Session support", ServiceComponent::Test::SessionOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Bootstrapping with session configuration", ServiceComponent::Test::SessionOrchestrationProvider)

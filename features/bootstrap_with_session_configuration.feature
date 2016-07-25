@@ -14,23 +14,27 @@ Feature: Bootstrapping with session configuration
   Scenario:
     Given an invalid session key
     And a valid session secret
-    Then I notify 'invalid session key'
+    When I am bootstrapped
+    Then I notify 'Invalid session key'
     And I do not complete bootstrap
 
   Scenario:
     Given no session key
     And a valid session secret
-    Then I notify 'missing session key'
+    When I am bootstrapped
+    Then I notify 'Missing session key'
     And I do not complete bootstrap
 
   Scenario:
-    Given an valid session key
+    Given a valid session key
     And an invalid session secret
-    Then I notify 'invalid session secret'
+    When I am bootstrapped
+    Then I notify 'Invalid session secret'
     And I do not complete bootstrap
 
   Scenario:
     Given a valid session key
     And no session secret
-    Then I notify 'missing session secret'
+    When I am bootstrapped
+    Then I notify 'Missing session secret'
     And I do not complete bootstrap

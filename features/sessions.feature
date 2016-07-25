@@ -6,6 +6,7 @@ Feature: Session support
   Scenario:
     Given a session client
     And a request
+    When the service component receives a request
     Then this service component must not be less compliant to RFC 6265 than https://github.com/rack
 
   Scenario:
@@ -34,28 +35,28 @@ Feature: Session support
 
   Scenario:
     Given sessions are used
-    And no session key is present
+    And no session key
     When I am bootstrapped
     Then I notify 'Missing session key'
     And I do not complete bootstrap
 
   Scenario:
     Given sessions are used
-    And no session secret is present
+    And no session secret
     When I am bootstrapped
     Then I notify 'Missing session secret'
     And I do not complete bootstrap
 
   Scenario:
     Given sessions are used
-    And session key is invalid
+    And an invalid session key
     When I am bootstrapped
     Then I notify 'Invalid session key'
     And I do not complete bootstrap
 
   Scenario:
     Given sessions are used
-    And session secret is invalid
+    And an invalid session secret
     When I am bootstrapped
     Then I notify 'Invalid session secret'
     And I do not complete bootstrap
@@ -63,13 +64,20 @@ Feature: Session support
   Scenario:
     Given sessions are used
     And a request
-    And a session secret
+    And a valid session secret
     When the service component receives a request
-    Then the session is encrypted using the secret
+    Then the service component enables verification of the session integrity
 
   Scenario:
     Given sessions are used
     And a request
-    And a unique session key
+    And a valid session key
     When the service component receives a request
     Then session interactions are persisted using the key
+
+  Scenario:
+    Given sessions are used
+    And a request
+    And a session
+    When the service component receives a request
+    Then session integrity is verified
