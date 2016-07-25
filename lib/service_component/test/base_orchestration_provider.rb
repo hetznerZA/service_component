@@ -10,7 +10,7 @@ module ServiceComponent
         setup_service_identifiers
       end
 
-      def given_valid_service_identifier
+      def given_valid_service_identifier_in_environment_file
         @iut.environment['IDENTIFIER'] = @valid_service_identifier
       end
 

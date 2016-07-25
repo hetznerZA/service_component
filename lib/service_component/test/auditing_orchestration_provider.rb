@@ -13,7 +13,7 @@ module ServiceComponent
         add_rejecting_auditor_configuration
         bootstrap
         super
-        given_valid_service_identifier
+        given_valid_service_identifier_in_environment_file
         select_default_auditor
       end
 

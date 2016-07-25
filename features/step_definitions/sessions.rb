@@ -43,11 +43,11 @@ Given(/^an invalid session secret$/) do
 end
 
 Given(/^a valid session secret$/) do
-  @test.given_a_session_secret
+  @test.given_a_session_secret_in_environment_file
 end
 
 Given(/^a valid session key$/) do
-  @test.given_a_valid_session_key
+  @test.given_a_valid_session_key_in_environment_file
 end
 
 Then(/^this service component must not be less compliant to RFC 6265 than https:\/\/github\.com\/rack$/) do

@@ -1,5 +1,5 @@
 Given(/^a valid service identifier$/) do
-  @test.given_valid_service_identifier
+  @test.given_valid_service_identifier_in_environment_file
 end
 
 Given(/^an environment configuration$/) do
@@ -43,7 +43,7 @@ Given(/^the environment file is placed in an expected location$/) do
 end
 
 Given(/^a service identifier present in the environment file$/) do
-  @test.given_valid_service_identifier
+  @test.given_valid_service_identifier_in_environment_file
 end
 
 Given(/^a service registry URI present in the environment file$/) do
@@ -71,11 +71,11 @@ Given(/^a configuration service provider present in the environment file$/) do
 end
 
 Given(/^a session key present in the environment file$/) do
-  @test.given_a_valid_session_key
+  @test.given_a_valid_session_key_in_environment_file
 end
 
 Given(/^a session secret present in the environment file$/) do
-  @test.given_a_session_secret
+  @test.given_a_session_secret_in_environment_file
 end
 
 Given(/^a failure reading the environment file$/) do
@@ -92,6 +92,46 @@ end
 
 Given(/^no execution environment indicator$/) do
   @test.given_no_execution_environment_indicator
+end
+
+Given(/^an environment$/) do
+  @test.given_an_environment
+end
+
+Given(/^a service identifier present in the environment$/) do
+  @test.given_a_service_identifier_present_in_the_environment
+end
+
+Given(/^a service registry URI present in the environment$/) do
+  @test.given_a_service_registry_uri_present_in_the_environment
+end
+
+Given(/^an authentication service URI present in the environment$/) do
+  @test.given_an_authentication_service_uri_present_in_the_environment
+end
+
+Given(/^an execution environment indicator present in the environment$/) do
+  @test.given_an_execution_environment_indicator_present_in_the_environment
+end
+
+Given(/^a configuration service URI present in the environment$/) do
+  @test.given_a_configuration_service_uri_present_in_the_environment
+end
+
+Given(/^a configuration service token present in the environment$/) do
+  @test.given_a_configuration_service_token_present_in_the_environment
+end
+
+Given(/^a configuration service provider present in the environment$/) do
+  @test.given_a_configuration_service_provider_present_in_the_environment
+end
+
+Given(/^a session key present in the environment$/) do
+  @test.given_a_valid_session_key_in_environment
+end
+
+Given(/^a session secret present in the environment$/) do
+  @test.given_a_session_secret_in_environment
 end
 
 Then(/^I can extract the service identifier from the environment file$/) do
@@ -144,4 +184,40 @@ end
 
 Then(/^I notify 'missing execution environment indicator'$/) do
   expect(@test.has_received_notification?('missing execution environment indicator')).to eq(true)
+end
+
+Then(/^I can extract the service identifier from the environment$/) do
+  expect(@test.can_extract_the_service_identifier_from_the_environment).to eq(true)
+end
+
+Then(/^I can extract the service registry URI from the environment$/) do
+  expect(@test.can_extract_the_service_registry_uri_from_the_environment).to eq(true)
+end
+
+Then(/^I can extract the authentication service URI from the environment$/) do
+  expect(@test.can_extract_the_authentication_service_uri_from_the_environment).to eq(true)
+end
+
+Then(/^I can extract the execution environment indicator from the environment$/) do
+  expect(@test.can_extract_the_execution_environment_indicator_from_the_environment).to eq(true)
+end
+
+Then(/^I can extract the configuration service URI from the environment$/) do
+  expect(@test.can_extract_the_configuration_service_uri_from_the_environment).to eq(true)
+end
+
+Then(/^I can extract the configuration service token from the environment$/) do
+  expect(@test.can_extract_the_configuration_service_token_from_the_environment).to eq(true)
+end
+
+Then(/^I can extract the configuration service provider from the environment$/) do
+  expect(@test.can_extract_the_configuration_service_provider_from_the_environment).to eq(true)
+end
+
+Then(/^I can extract the session key from the environment$/) do
+  expect(@test.can_extract_the_session_key_from_the_environment).to eq(true)
+end
+
+Then(/^I can extract the session secret from the environment$/) do
+  expect(@test.can_extract_the_session_secret_from_the_environment).to eq(true)
 end

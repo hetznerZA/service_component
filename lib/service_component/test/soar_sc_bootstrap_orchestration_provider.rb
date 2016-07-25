@@ -5,6 +5,48 @@ module ServiceComponent
         # default valid environment provided from the environment.yml file and loaded implicitly
       end
 
+      def given_an_environment
+        # default valid environment provided from the environment.yml file and loaded implicitly
+      end
+
+      def given_a_service_identifier_present_in_the_environment
+        given_valid_service_identifier_in_environment_file
+      end
+
+      def given_a_service_registry_uri_present_in_the_environment
+        given_a_service_registry_uri_present_in_the_environment_file
+      end
+
+      def given_an_authentication_service_uri_present_in_the_environment
+        given_an_authentication_service_uri_present_in_the_environment_file
+      end
+
+      def given_an_execution_environment_indicator_present_in_the_environment
+        given_an_execution_environment_indicator_present_in_the_environment_file
+      end
+
+      def given_a_configuration_service_uri_present_in_the_environment
+        given_a_configuration_service_uri_present_in_the_environment_file
+      end
+
+      def given_a_configuration_service_token_present_in_the_environment
+        given_a_configuration_service_token_present_in_the_environment_file
+      end
+
+      def given_a_configuration_service_provider_present_in_the_environment
+        given_a_configuration_service_provider_present_in_the_environment_file
+      end
+
+      def given_a_valid_session_key_in_environment
+        given_a_valid_session_key_in_environment_file
+      end
+
+      def given_a_session_secret_in_environment
+        given_a_session_secret_in_environment_file
+      end
+
+
+
       def given_an_environment_file
         @iut.environment_example_file = "#{ENV['SOAR_DIR']}/config/environment.yml.example"
       end
@@ -73,11 +115,11 @@ module ServiceComponent
         @iut.environment['SESSION_SECRET'] = 'too_short'
       end
 
-      def given_a_session_secret
+      def given_a_session_secret_in_environment_file
         @iut.environment['SESSION_SECRET'] = "#{SecureRandom.hex(16)}" #create 32 byte secret string
       end
 
-      def given_a_valid_session_key
+      def given_a_valid_session_key_in_environment_file
         @iut.environment['SESSION_KEY'] = 'a_unique_session_key_for_testing'
       end
 
@@ -95,6 +137,42 @@ module ServiceComponent
 
       def has_remembered_the_execution_environment_indicator
         can_extract_the_execution_environment_indicator_from_the_environment_file
+      end
+
+      def can_extract_the_service_identifier_from_the_environment
+        can_extract_the_service_identifier_from_the_environment_file
+      end
+
+      def can_extract_the_service_registry_uri_from_the_environment
+        can_extract_the_service_registry_uri_from_the_environment_file
+      end
+
+      def can_extract_the_authentication_service_uri_from_the_environment
+        can_extract_the_authentication_service_uri_from_the_environment_file
+      end
+
+      def can_extract_the_execution_environment_indicator_from_the_environment
+        can_extract_the_execution_environment_indicator_from_the_environment_file
+      end
+
+      def can_extract_the_configuration_service_uri_from_the_environment
+        can_extract_the_configuration_service_uri_from_the_environment_file
+      end
+
+      def can_extract_the_configuration_service_token_from_the_environment
+        can_extract_the_configuration_service_token_from_the_environment_file
+      end
+
+      def can_extract_the_configuration_service_provider_from_the_environment
+        can_extract_the_configuration_service_provider_from_the_environment_file
+      end
+
+      def can_extract_the_session_key_from_the_environment
+        can_extract_the_session_key_from_the_environment_file
+      end
+
+      def can_extract_the_session_secret_from_the_environment
+        can_extract_the_session_secret_from_the_environment_file
       end
 
       def can_extract_the_service_identifier_from_the_environment_file

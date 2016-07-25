@@ -12,7 +12,7 @@ module ServiceComponent
         super
         given_sessions_are_used
         given_a_session_client
-        given_a_valid_session_key
+        given_a_valid_session_key_in_environment_file
       end
 
       def given_a_session_client
