@@ -167,7 +167,8 @@ module ServiceComponent
 
       def has_retrieved_configuration_from_the_configuration_service_only
         (@bootstrap_status['data']['configuration']['local_only_test_configuration_entry'].nil?) and
-        (@bootstrap_status['data']['configuration']['test_configuration_entry'] == 'sourced_from_configuration_service')
+        (@bootstrap_status['data']['configuration']['remote_only_test_configuration_entry'] == 'sourced_from_remote_configuration_service') and
+        (@bootstrap_status['data']['configuration']['test_configuration_entry'] == 'sourced_from_remote_configuration_service')
       end
 
       def has_remembered_the_execution_environment_indicator
