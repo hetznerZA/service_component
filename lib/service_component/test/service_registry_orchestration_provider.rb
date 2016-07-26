@@ -106,3 +106,4 @@ end
 
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Service registry client providing full suite of service registry functionality", ServiceComponent::Test::SoarScServiceRegistryOrchestrationProvider)
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Policy lookup",                                                                  ServiceComponent::Test::SoarScServiceRegistryOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Finding service URIs",                                                           ServiceComponent::Test::SoarScServiceRegistryOrchestrationProvider)
