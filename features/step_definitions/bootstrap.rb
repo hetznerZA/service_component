@@ -70,6 +70,10 @@ Given(/^a configuration service token present in the environment file$/) do
   @test.given_a_configuration_service_token_present_in_the_environment_file
 end
 
+Given(/^a configuration service identifier present$/) do
+  @test.given_a_configuration_service_identifier_present
+end
+
 Given(/^a configuration service provider present in the environment file$/) do
   @test.given_a_configuration_service_provider_present_in_the_environment_file
 end
@@ -136,6 +140,26 @@ end
 
 Given(/^a session secret present in the environment$/) do
   @test.given_a_session_secret_in_environment
+end
+
+Given(/^a valid configuration service URI$/) do
+  @test.given_a_valid_configuration_service_URI
+end
+
+Given(/^a valid configuration service token$/) do
+  @test.given_a_valid_configuration_service_token
+end
+
+Given(/^the configuration service token is appropriate for my configuration$/) do
+  @test.given_the_configuration_service_token_is_appropriate_for_my_configuration
+end
+
+Given(/^a valid configuration file$/) do
+  @test.given_a_valid_configuration_file
+end
+
+Given(/^the configuration file is placed in an expected location$/) do
+  @test.given_the_configuration_file_is_placed_in_an_expected_location
 end
 
 Then(/^I can extract the service identifier from the environment file$/) do
@@ -224,4 +248,8 @@ end
 
 Then(/^I can extract the session secret from the environment$/) do
   expect(@test.can_extract_the_session_secret_from_the_environment).to eq(true)
+end
+
+Then(/^I retrieve my configuration from the configuration service only$/) do
+  expect(@test.has_retrieved_configuration_from_the_configuration_service_only).to eq(true)
 end

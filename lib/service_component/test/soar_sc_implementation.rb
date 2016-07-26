@@ -14,6 +14,7 @@ module ServiceComponent
       attr_reader :identifier
       attr_accessor :environment
       attr_accessor :configuration
+      attr_accessor :configuration_file
       attr_accessor :environment_example_file
       attr_accessor :environment_file
       attr_reader :username

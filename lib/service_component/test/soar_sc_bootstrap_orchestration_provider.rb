@@ -49,8 +49,6 @@ module ServiceComponent
         given_a_session_secret_in_environment_file
       end
 
-
-
       def given_an_environment_file
         @iut.environment_example_file = "#{ENV['SOAR_DIR']}/config/environment.yml.example"
       end
@@ -76,11 +74,15 @@ module ServiceComponent
       end
 
       def given_a_configuration_service_token_present_in_the_environment_file
-        @iut.environment['CFGSRV_TOKEN'] = 'TOKEN'
+        @iut.environment['CFGSRV_TOKEN'] = "#{ENV['CFGSRV_TOKEN_TEST_TOKEN']}"
       end
 
       def given_a_configuration_service_provider_present_in_the_environment_file
         @iut.environment['CFGSRV_PROVIDER'] = 'vault'
+      end
+
+      def given_a_configuration_service_identifier_present
+        @iut.environment['CFGSRV_IDENTIFIER'] = 'soar-sc-architecture-test-service.dev.auto-h.net'
       end
 
       def given_a_failure_reading_the_environment_file
@@ -137,6 +139,35 @@ module ServiceComponent
 
       def given_no_execution_environment_indicator
         @iut.environment['RACK_ENV'] = nil
+      end
+
+      def given_a_valid_configuration_service_URI
+        given_a_configuration_service_uri_present_in_the_environment_file
+      end
+
+      def given_a_valid_configuration_service_token
+        given_a_configuration_service_token_present_in_the_environment_file
+      end
+
+      def given_the_configuration_service_token_is_appropriate_for_my_configuration
+        #tested implicitly by attempting to access the configuration using the token during bootstrap.
+      end
+
+      def given_a_valid_configuration_file
+        #implicitly provided by soar_sc and used by the test orchestrator
+
+        #add entries to configuration file that we will use later to test against
+        @iut.configuration['test_configuration_entry'] = 'sourced_from_local_config_file'
+        @iut.configuration['local_only_test_configuration_entry'] = 'exist'
+      end
+
+      def given_the_configuration_file_is_placed_in_an_expected_location
+        @iut.configuration_file = "#{ENV['SOAR_DIR']}/config/config.yml"
+      end
+
+      def has_retrieved_configuration_from_the_configuration_service_only
+        (@bootstrap_status['data']['configuration']['local_only_test_configuration_entry'].nil?) and
+        (@bootstrap_status['data']['configuration']['test_configuration_entry'] == 'sourced_from_configuration_service')
       end
 
       def has_remembered_the_execution_environment_indicator
