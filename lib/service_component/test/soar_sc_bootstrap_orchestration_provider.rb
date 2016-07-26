@@ -1,6 +1,10 @@
 module ServiceComponent
   module Test
     class SoarScBootstrapOrchestrationProvider < BootstrapOrchestrationProvider
+      def given_environment_can_be_loaded_from_system_process
+        @iut.environment_can_be_loaded_from_system_process?
+      end
+
       def given_environment_configuration
         # default valid environment provided from the environment.yml file and loaded implicitly
       end

@@ -39,6 +39,16 @@ module ServiceComponent
         @audit_events_file = "#{ENV['SOAR_DIR']}/soar_sc.log"
       end
 
+      def environment_can_be_loaded_from_system_process?
+        require 'json'
+        result = `curl http://soar-ci.dev.auto-h.net:8080/view/SOAR/job/soar-environment/api/json?pretty=true`
+        data = JSON.parse(result)
+        url = data['builds'].first['url'] + "api/json?pretty=true"
+        result = `curl #{url}`
+        data = JSON.parse(result)
+        data['result'] == "SUCCESS" 
+      end
+
       def load_environment_file
         @environment = load_file(@environment_file)
       end

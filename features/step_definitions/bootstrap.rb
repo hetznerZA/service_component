@@ -6,6 +6,10 @@ Given(/^an environment configuration$/) do
   @test.given_environment_configuration
 end
 
+Given(/^environment can be loaded from system process$/) do
+  expect(@test.given_environment_can_be_loaded_from_system_process).to eq(true)
+end
+
 When(/^I am bootstrapped$/) do
   @test.bootstrap
 end
