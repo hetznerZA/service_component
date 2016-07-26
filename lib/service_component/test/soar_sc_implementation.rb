@@ -46,7 +46,7 @@ module ServiceComponent
         url = data['builds'].first['url'] + "api/json?pretty=true"
         result = `curl #{url}`
         data = JSON.parse(result)
-        data['result'] == "SUCCESS" 
+        data['result'] == "SUCCESS"
       end
 
       def load_environment_file
@@ -132,6 +132,27 @@ module ServiceComponent
         printf "\n"
         return nil if not success
         JSON.parse(response.body)
+      end
+
+      def attempt_graceful_shutdown
+
+        puts `ps aux | grep rackup | grep -v grep`
+
+        puts 'Sending kill signal'
+        `KILL_SIGNAL=INT #{ENV['SOAR_DIR']}/stop.sh`
+
+        success = BaseOrchestrationProvider::busy_wait(10,true) {
+          rackup_processes = `ps aux | grep rackup | grep -v grep | tr -s ' ' ' ' | cut -d ' ' -f2`
+          0 == rackup_processes.length
+        }
+
+        puts 'Graceful shutdown complete' if success
+
+        #Shutdown forcibly if this failed.
+        if not success
+          puts 'Unable to gracefully shutdown, do it forcibly'
+          `KILL_SIGNAL=9 #{ENV['SOAR_DIR']}/stop.sh`
+        end
       end
 
       def query_endpoint(resource: '/', parameters: {}, user: USER, password: PASSWORD, cookie: nil)

@@ -145,6 +145,15 @@ module ServiceComponent
         select_rejecting_auditor
       end
 
+      def cannot_report_to_any_auditor
+        @previous_audit_event_entry = @iut.get_latest_test_orchestrator_audit_entry
+        select_rejecting_auditor
+      end
+
+      def attempt_graceful_shutdown
+        @iut.attempt_graceful_shutdown
+      end
+
       #Then / Test check methods
 
       def has_been_notified?
@@ -212,6 +221,15 @@ module ServiceComponent
 
       def reported_oldest_event_in_buffer?
         busy_wait(2,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry) }
+      end
+
+      def has_reported_the_buffer_to_the_auditor?
+        busy_wait(2,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry) }
+      end
+
+      def has_reported_the_buffer_to_standard_error_stream?
+        #since both the stderr stream and the auditing entries are piped to the same log file, we can simply check the log file
+        has_reported_the_buffer_to_the_auditor?
       end
 
       def have_initialized_auditing_provider?

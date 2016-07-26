@@ -22,12 +22,13 @@ Feature: Auditing service component actions
 
   Scenario:
     Given a buffer with audit events
-    When a shutdown is initiated
-    And I can report to the auditor
+    When I can report to the auditor
+    And a shutdown is initiated
     Then I report the buffer to the auditor
 
   Scenario:
     Given a buffer with audit events
-    When a shutdown is initiated
-    And I cannot report to any auditor
-    Then I report the buffer to standard error stream
+    When I cannot report to any auditor
+    And a shutdown is initiated
+    Then I notify 'flushing to stderr'
+    And I report the buffer to standard error stream

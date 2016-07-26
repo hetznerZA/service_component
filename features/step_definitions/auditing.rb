@@ -177,11 +177,11 @@ When(/^I cannot report to the auditor$/) do
 end
 
 When(/^I cannot report to any auditor$/) do
-  @test.cannot_report_to_auditor # Until we implement a hook shutdown to flush audit entries
+  @test.cannot_report_to_any_auditor
 end
 
 When(/^a shutdown is initiated$/) do
-  pending # Until we implement a hook shutdown to flush audit entries
+  @test.attempt_graceful_shutdown
 end
 
 
@@ -358,10 +358,14 @@ Then(/^I notify 'Missing auditor configuration'$/) do
   expect(@test.has_received_notification_for_missing_auditor_configuration?).to eq(true)
 end
 
+Then(/^I notify 'flushing to stderr'$/) do
+  expect(@test.has_received_notification?('flushing to stderr')).to eq(true)
+end
+
 Then(/^I report the buffer to the auditor$/) do
-  pending # Until we implement a hook shutdown to flush audit entries
+  expect(@test.has_reported_the_buffer_to_the_auditor?).to eq(true)
 end
 
 Then(/^I report the buffer to standard error stream$/) do
-  pending # Until we implement a hook shutdown to flush audit entries
+  expect(@test.has_reported_the_buffer_to_standard_error_stream?).to eq(true)
 end
