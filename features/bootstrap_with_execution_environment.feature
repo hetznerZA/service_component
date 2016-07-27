@@ -5,7 +5,7 @@ Feature: Bootstrapping with an execution environment indicator
   With an execution environment indicator
 
   Scenario:
-    Given a valid an execution environment indicator  (puts keep runnning pass debug...)
+    Given a valid an execution environment indicator
     When I am bootstrapped
     Then I remember the execution environment indicator
     And I complete bootstrap
@@ -13,11 +13,11 @@ Feature: Bootstrapping with an execution environment indicator
   Scenario:
     Given an invalid execution environment indicator
     When I am bootstrapped
-    Then I notify 'invalid execution environment indicator'  (.run.sh with fail)
+    Then I notify 'invalid execution environment indicator'
     And I do not complete bootstrap
 
   Scenario:
     Given no execution environment indicator
     When I am bootstrapped
-    Then I notify 'missing execution environment indicator'  (.run.sh with fail)
+    Then I notify 'missing execution environment indicator'
     And I do not complete bootstrap
