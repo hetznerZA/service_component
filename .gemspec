@@ -27,6 +27,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'byebug'
   spec.add_development_dependency "soar_auditing_provider", "~> 0.7.0"
   spec.add_development_dependency "soar_auditing_format", "~> 0.0.5"
+  spec.add_development_dependency 'activesupport', '~> 5.0'
+  spec.add_development_dependency 'rack', '~> 1.6.4'
 
   spec.add_dependency 'jsender'
 

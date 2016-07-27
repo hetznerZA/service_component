@@ -1,4 +1,4 @@
-export SERVICE_COMPONENT=service_component
+export SERVICE_COMPONENT=$1
 export SOAR_DIR=../soar_sc
 export SERVICE_COMPONENT_DIR=$(pwd)
 cd $SERVICE_COMPONENT_DIR/tfa/jewels/$SERVICE_COMPONENT

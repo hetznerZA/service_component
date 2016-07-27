@@ -54,25 +54,11 @@ module SoarSc
           reponse_body['returned_session_test_message'] = request.env['rack.session'][:test_message]
           request.env['rack.session'][:test_message]="Hello test suite"
           request.env['rack.session'][:rfc6265_provider]=request.env['rack.session'].class.to_s
-          
+
           [200, reponse_body.to_json]
         end
       end
 
-      class PolicyIsAnyoneController < ConfiguredController
-        def serve(request)
-          subject_identifier = request.params['subject_identifier']
-          policy = SoarSc::Authorization::AuthorizationPolicyIsAnyone.new
-          result = policy.authorize(subject_identifier)
-          SoarSc::Web::Models::PolicyIsAnyoneModel.last_flow_identifier = request.params['flow_identifier']
-          [200, result.to_json]
-        end
-
-        def get_latest_flow_identifier(request)
-          result = { 'last_flow_identifier' => SoarSc::Web::Models::PolicyIsAnyoneModel.last_flow_identifier}
-          [200, result.to_json]
-        end
-      end
     end
   end
 end

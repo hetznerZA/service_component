@@ -1,0 +1,5 @@
+architecture: 1.2.0
+path: /policy_is_anyone
+view: soar_sc
+controller: lib/web/controllers/policy_is_anyone.rb
+model: lib/web/models/policy_is_anyone.rb
