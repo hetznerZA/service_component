@@ -8,9 +8,7 @@ Given(/^a service registry client provider$/) do
 end
 
 Given(/^no service registry client provider$/) do
-  puts "Unable to test this at present"
-  pending
-  #@test.given_no_service_registry_client_provider
+  @test.given_no_service_registry_client_provider
 end
 
 Given(/^a service registry client initialization failure$/) do

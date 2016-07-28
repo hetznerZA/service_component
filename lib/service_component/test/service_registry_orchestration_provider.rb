@@ -19,7 +19,8 @@ module ServiceComponent
       end
 
       def given_no_service_registry_client_provider
-        remove_service_registry_client
+        puts "unable to test this in soar_sc since it is always available, forcing failure via an initilization failure"
+        given_a_service_registry_client_initialization_failure
       end
 
       def given_a_service_registry_client_initialization_failure
