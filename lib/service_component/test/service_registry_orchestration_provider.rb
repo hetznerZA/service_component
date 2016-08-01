@@ -70,12 +70,14 @@ module ServiceComponent
       end
 
       def has_asked_the_service_registry_for_the_service_policy_name
-        #We know that the soar_sc instance reached out or attempted to reach out to the service registry
-        #if any of the following error notifications occurred or if the policy itself was requested successfully
-        @iut.has_audit_entry_with_message_and_flow_id?('Could not find policy',@test_id) ||
-        @iut.has_audit_entry_with_message_and_flow_id?('No policy associated with service',@test_id) ||
-        @iut.has_audit_entry_with_message_and_flow_id?('Could not retrieve policy for service',@test_id) ||
-        query_last_flow_identifier_from_policy == @test_id
+        busy_wait(2,true) {
+          #We know that the soar_sc instance reached out or attempted to reach out to the service registry
+          #if any of the following error notifications occurred or if the policy itself was requested successfully
+          @iut.has_audit_entry_with_message_and_flow_id?('Could not find policy',@test_id) ||
+          @iut.has_audit_entry_with_message_and_flow_id?('No policy associated with service',@test_id) ||
+          @iut.has_audit_entry_with_message_and_flow_id?('Could not retrieve policy for service',@test_id) ||
+          query_last_flow_identifier_from_policy == @test_id
+        }
       end
 
       private

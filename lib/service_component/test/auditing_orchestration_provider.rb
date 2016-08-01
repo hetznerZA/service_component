@@ -58,7 +58,7 @@ module ServiceComponent
       end
 
       def given_valid_auditing_provider
-        @iut.configuration['auditing']['provider'] = 'SoarScAuditingProvider'
+        @iut.configuration['auditing']['provider'] = 'SoarAuditingProvider::AuditingProvider'
       end
 
       def given_invalid_auditing_provider
@@ -76,7 +76,7 @@ module ServiceComponent
       end
 
       def given_valid_auditing_provider_configuration
-        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'provider' => 'SoarScAuditingProvider'}})
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'provider' => 'SoarAuditingProvider::AuditingProvider'}})
       end
 
       def given_no_auditing_provider_configuration
@@ -112,9 +112,9 @@ module ServiceComponent
       end
 
       def given_auditor_initialization_failure
-        # specify an incorrect auditing level which will result in an auditor
+        # specify an invalid auditor configuration which will result in an auditor
         # initialization failure
-        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'level' => 'wrong'}})
+        given_invalid_auditor_configuration
       end
 
       # When / Test action methods
@@ -185,9 +185,11 @@ module ServiceComponent
       end
 
       def has_notified_with_flow_identifier_in_new_request?
-        (@test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry)) and
-        (extract_message_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry).include?('flow-test-action-2')) and
-        (extract_message_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry).include?(@correlation_identifier))
+        busy_wait(2,true) {
+          (@test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry)) and
+          (extract_message_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry).include?('flow-test-action-2')) and
+          (extract_message_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry).include?(@correlation_identifier))
+        }
       end
 
       def has_notified_with_timestamp?
@@ -243,7 +245,7 @@ module ServiceComponent
       end
 
       def has_remembered_auditing_provider_configuration?
-        'SoarScAuditingProvider' == @bootstrap_status['data']['configuration']['auditing']['provider']
+        'SoarAuditingProvider::AuditingProvider' == @bootstrap_status['data']['configuration']['auditing']['provider']
       end
 
       def has_remembered_auditing_level?
@@ -332,7 +334,10 @@ module ServiceComponent
       end
 
       def extract_message_from_audit_entry(audit_entry)
-        audit_entry.split(',')[4].delete!("\n") unless audit_entry.nil?
+        message = nil
+        message = audit_entry.split(',')[4] unless audit_entry.nil?
+        message.delete!("\n") unless message.nil?
+        message
       end
 
       def create_unique_id

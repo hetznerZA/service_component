@@ -55,15 +55,15 @@ Then(/^this service component must not be less compliant to RFC 6265 than https:
 end
 
 Then(/^I notify 'Undefined USE_SESSIONS value'$/) do
-  expect(@test.has_received_notification?('Undefined USE_SESSIONS value')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Undefined USE_SESSIONS value')).to eq(true)
 end
 
 Then(/^I notify 'Invalid USE_SESSIONS value'$/) do
-  expect(@test.has_received_notification?('Invalid USE_SESSIONS value')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Invalid USE_SESSIONS value')).to eq(true)
 end
 
 Then(/^I notify 'Not using sessions'$/) do
-  expect(@test.has_received_notification?('Not using sessions')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Not using sessions')).to eq(true)
 end
 
 Then(/^a session is not used when servicing the request$/) do
@@ -71,19 +71,19 @@ Then(/^a session is not used when servicing the request$/) do
 end
 
 Then(/^I notify 'Missing session key'$/) do
-  expect(@test.has_received_notification?('Missing session key')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Missing session key')).to eq(true)
 end
 
 Then(/^I notify 'Missing session secret'$/) do
-  expect(@test.has_received_notification?('Missing session secret')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Missing session secret')).to eq(true)
 end
 
 Then(/^I notify 'Invalid session key'$/) do
-  expect(@test.has_received_notification?('Invalid session key')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Invalid session key')).to eq(true)
 end
 
 Then(/^I notify 'Invalid session secret'$/) do
-  expect(@test.has_received_notification?('Invalid session secret')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Invalid session secret')).to eq(true)
 end
 
 Then(/^the service component enables verification of the session integrity$/) do

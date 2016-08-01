@@ -82,6 +82,13 @@ module ServiceComponent
         `tail -n 100 #{@audit_events_file} | grep '#{flow_id}'`
       end
 
+      def audit_entry_with_message_exist?(message)
+        BaseOrchestrationProvider::busy_wait(4,true) {
+          grep_result = `tail -n 100 #{@audit_events_file} | grep '#{message}'`
+          grep_result.length > 0
+        }
+      end
+
       def force_failure_reading_the_environment_file
         @force_failure_reading_the_environment_file = true
       end

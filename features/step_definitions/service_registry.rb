@@ -63,17 +63,17 @@ Then(/^I notify 'Missing service registry client'$/) do
 end
 
 Then(/^I notify 'Service registry client failure'$/) do
-  expect(@test.has_received_notification?('Service registry client failure')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Service registry client failure')).to eq(true)
 end
 
 Then(/^I notify 'Could not find policy'$/) do
-  expect(@test.has_received_notification?('Could not find policy')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Could not find policy')).to eq(true)
 end
 
 Then(/^I notify 'No policy associated with service'$/) do
-  expect(@test.has_received_notification?('No policy associated with service')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('No policy associated with service')).to eq(true)
 end
 
 Then(/^I notify 'Could not retrieve policy for service'$/) do
-  expect(@test.has_received_notification?('Could not retrieve policy for service')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Could not retrieve policy for service')).to eq(true)
 end
