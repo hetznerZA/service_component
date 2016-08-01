@@ -185,7 +185,7 @@ module ServiceComponent
       end
 
       def has_notified_with_flow_identifier_in_new_request?
-        busy_wait(2,true) {
+        busy_wait(4,true) {
           (@test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry)) and
           (extract_message_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry).include?('flow-test-action-2')) and
           (extract_message_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry).include?(@correlation_identifier))
@@ -222,7 +222,7 @@ module ServiceComponent
       end
 
       def reported_oldest_event_in_buffer?
-        busy_wait(2,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry) }
+        busy_wait(4,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry) }
       end
 
       def has_reported_the_buffer_to_the_auditor?
