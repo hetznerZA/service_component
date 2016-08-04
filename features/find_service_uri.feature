@@ -2,7 +2,7 @@ Feature: Finding service URIs
   As a service component
   In order to make requests to appropriate services
   I want to find service URIs
-  
+
   Scenario:
     Given a service name
     And the service is registered in the service registry
@@ -55,7 +55,7 @@ Feature: Finding service URIs
     When I am asked to find service URIs for that service
     Then I do not cache nil
     And I return nil
-    And I notify 'failure to look up service in service registry'
+    And I notify 'Failure to look up service in service registry'
 
   Scenario:
     Given a service name
