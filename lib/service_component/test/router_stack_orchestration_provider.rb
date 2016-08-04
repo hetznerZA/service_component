@@ -21,5 +21,6 @@ module ServiceComponent
   end
 end
 
-ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Verifying signed requests", ServiceComponent::Test::RouterStackOrchestrationProvider)
-ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Routing stack",             ServiceComponent::Test::RouterStackOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Verifying signed requests",       ServiceComponent::Test::RouterStackOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Routing stack",                   ServiceComponent::Test::RouterStackOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Routing requests to controllers", ServiceComponent::Test::RouterStackOrchestrationProvider)

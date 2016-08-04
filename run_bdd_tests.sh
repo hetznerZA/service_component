@@ -1,4 +1,5 @@
 #!/bin/bash
+source ~/.rvm/scripts/rvm
 
 #This script must be run from the parent folder of the soar_sc, service_component repo folders
 export BASE_DIR=$(pwd)
@@ -30,9 +31,16 @@ export KEEP_RUNNING_PID=$!
 echo "Running service component BDD tests"
 cd $SERVICE_COMPONENT_DIR
 rvm use . && gem install bundler && bundle
-#TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/*
+
+#All tests that are currently green
 TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/auditing_* features/bootstrap_with_aud* features/bootstrap_with_env* features/bootstrap_with_service_identifier.feature features/se*
-#TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/se*
+
+#All tests
+#TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/*
+
+#Single test for development work
+#TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/find_service_uri.feature
+
 TEST_EXIT_CODE=$?
 
 echo "Stopping keep_running script and soar_sc service instance"

@@ -11,6 +11,14 @@ class Hash
   end
 end
 
+# After do
+#   puts "after code"
+# end
+#
+# Before do
+#   puts "before code"
+# end
+
 module ServiceComponent
   module Test
     class SoarScServiceRegistryOrchestrationProvider < SoarScBootstrapOrchestrationProvider
@@ -168,7 +176,7 @@ module ServiceComponent
       def has_returned_cached_value
         returned_value = @service_registry_query_result['service_registry_response']
         (FIRST_ACCESS_POINT == returned_value) and
-        (@service_registry_query_result['service_registry_meta']['cache_key_value_pairs'].include?(returned_value))
+        (@service_registry_query_result['service_registry_meta']['cache_key_value_pairs'].to_s.include?(returned_value))
       end
 
       def has_asked_the_services_for_their_functional_status
