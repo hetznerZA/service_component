@@ -14,9 +14,9 @@ end
 module ServiceComponent
   module Test
     class SoarScServiceRegistryOrchestrationProvider < SoarScBootstrapOrchestrationProvider
-      FIRST_ACCESS_POINT  = 'http://localhost:9393/architectural-test-service-access-point-1/' unless defined? FIRST_ACCESS_POINT;  FIRST_ACCESS_POINT.freeze
-      SECOND_ACCESS_POINT = 'http://localhost:9393/architectural-test-service-access-point-2/' unless defined? SECOND_ACCESS_POINT; SECOND_ACCESS_POINT.freeze
-
+      FIRST_ACCESS_POINT     = 'http://localhost:9393/architectural-test-service-access-point-1/'              unless defined? FIRST_ACCESS_POINT;     FIRST_ACCESS_POINT.freeze
+      SECOND_ACCESS_POINT    = 'http://localhost:9393/architectural-test-service-access-point-2/'              unless defined? SECOND_ACCESS_POINT;    SECOND_ACCESS_POINT.freeze
+      UNREACHED_ACCESS_POINT = 'http://unreachable:9393/architectural-test-service-access-point-unreachable/'  unless defined? UNREACHED_ACCESS_POINT; UNREACHED_ACCESS_POINT.freeze
       def setup
         super
         bootstrap
@@ -129,7 +129,9 @@ module ServiceComponent
         @test_search_for_service = build_service_name_for_test_search
         parameters = { :operation => mode,
                        :service   => @test_search_for_service }
+        start_time = Time.now
         @service_registry_query_result = @iut.query_endpoint(resource: 'service-registry-client-command-and-control', parameters: parameters)
+        @query_answer_time = Time.now - start_time
         @service_registry_query_result = JSON.parse(@service_registry_query_result.body)
       end
 
@@ -184,13 +186,14 @@ module ServiceComponent
         @service_registry_query_result['service_registry_meta']['cache_key_value_pairs'].grep(/service_uris.*/).empty?
       end
 
-      def has_answered_in_less_than(time_in_seconds)
-        false
+      def has_not_updated_the_cache_based_on_functional_status
+        #Make sure we did not lose the unreachable access point.
+        @service_registry_query_result['service_registry_meta']['cache_key_value_pairs'].to_s.include?(UNREACHED_ACCESS_POINT)
       end
 
-
-
-
+      def has_answered_in_less_than(time_in_seconds)
+        @query_answer_time < time_in_seconds.to_i
+      end
 
       def has_an_initialized_service_registry_client
         @iut.has_audit_entry_with_message_and_flow_id?('Using registry at',get_startup_flow_identifier)

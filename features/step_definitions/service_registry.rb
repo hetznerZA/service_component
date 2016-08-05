@@ -173,3 +173,7 @@ end
 Then(/^I answer in no more than (\d+) seconds$/) do |arg1|
   expect(@test.has_answered_in_less_than(arg1)).to eq(true)
 end
+
+Then(/^I do not update the cache based on functional status$/) do
+  expect(@test.has_not_updated_the_cache_based_on_functional_status).to eq(true)
+end

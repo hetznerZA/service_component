@@ -33,7 +33,7 @@ cd $SERVICE_COMPONENT_DIR
 rvm use . && gem install bundler && bundle
 
 #All tests that are currently green
-TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/auditing_* features/bootstrap_with_aud* features/bootstrap_with_env* features/bootstrap_with_service_identifier.feature features/se*
+TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/auditing_* features/bootstrap_with_aud* features/bootstrap_with_env* features/bootstrap_with_service_identifier.feature features/f* features/s*
 
 #All tests
 #TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/*
