@@ -50,6 +50,6 @@ service_name = 'architectural-test-service-registered-with-2-uris'
 
 service_name = 'architectural-test-service-registered-with-2-uris-some-unreachable'
 @services.register_service( {'name' => service_name, 'description' => 'Test service with 2 access point uris but one unreachable' })
-@services.add_service_uri(service_name, 'http://localhost:9393/architectural-test-service-access-point-unreachable/')
+@services.add_service_uri(service_name, 'http://unreachable:9393/architectural-test-service-access-point-unreachable/')
 @services.add_service_uri(service_name, 'http://localhost:9393/architectural-test-service-access-point-2/')
 @associations.associate_service_with_domain_perspective(service_name, 'testing')
