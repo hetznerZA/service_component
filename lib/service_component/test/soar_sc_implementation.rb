@@ -93,6 +93,14 @@ module ServiceComponent
         @force_failure_reading_the_environment_file = true
       end
 
+      def force_failure_reading_the_configuration_file
+        @force_failure_reading_the_configuration_file = true
+      end
+
+      def force_invalid_configuration_file
+        @force_invalid_configuration_file = true
+      end
+
       def bootstrap
         soar_dir = ENV['SOAR_DIR']
         puts "NOTE: Run keep_running.sh in #{soar_dir} using SOAR_TECH=rackup"
@@ -109,7 +117,13 @@ module ServiceComponent
           bootstrap_with_environment(@environment, @environment_file)
         end
 
-        bootstrap_with_configuration(@configuration,@configuration_file)
+        if @force_invalid_configuration_file
+          File.delete(@configuration_file) rescue nil
+          `echo 'junk' > #{@configuration_file}`
+          @force_invalid_configuration_file = false
+        else
+          bootstrap_with_configuration(@configuration,@configuration_file)
+        end
 
         `cd #{soar_dir}&&./stop.sh`
         detail = get_status_detail

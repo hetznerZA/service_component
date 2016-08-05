@@ -170,6 +170,6 @@ Then(/^I do not cache$/) do
   expect(@test.has_not_cached).to eq(true)
 end
 
-Then(/^I do not answer in less than (\d+) seconds$/) do |arg1|
-  expect(@test.has_not_answered_in_less_than(arg1)).to eq(true)
+Then(/^I answer in no more than (\d+) seconds$/) do |arg1|
+  expect(@test.has_answered_in_less_than(arg1)).to eq(true)
 end

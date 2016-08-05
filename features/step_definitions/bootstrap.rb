@@ -162,6 +162,18 @@ Given(/^the configuration file is placed in an expected location$/) do
   @test.given_the_configuration_file_is_placed_in_an_expected_location
 end
 
+Given(/^no configuration service$/) do
+  @test.given_no_configuration_service
+end
+
+Given(/^an invalid configuration file$/) do
+  @test.given_an_invalid_configuration_file
+end
+
+Given(/^a failure reading the configuration file$/) do
+  @test.given_a_failure_reading_the_configuration_file
+end
+
 Then(/^I can extract the service identifier from the environment file$/) do
   expect(@test.can_extract_the_service_identifier_from_the_environment_file).to eq(true)
 end
@@ -252,4 +264,16 @@ end
 
 Then(/^I retrieve my configuration from the configuration service only$/) do
   expect(@test.has_retrieved_configuration_from_the_configuration_service_only).to eq(true)
+end
+
+Then(/^I retrieve my configuration from the file$/) do
+  expect(@test.has_retrieved_configuration_from_the_file).to eq(true)
+end
+
+Then(/^I notify 'Invalid configuration file'$/) do
+  expect(@test.has_received_notification?('Invalid configuration file')).to eq(true)
+end
+
+Then(/^I notify 'Failure retrieving configuration from file'$/) do
+  expect(@test.has_received_notification?('Failure retrieving configuration from file')).to eq(true)
 end

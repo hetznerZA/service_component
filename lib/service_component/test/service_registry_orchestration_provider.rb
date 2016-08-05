@@ -184,7 +184,7 @@ module ServiceComponent
         @service_registry_query_result['service_registry_meta']['cache_key_value_pairs'].grep(/service_uris.*/).empty?
       end
 
-      def has_not_answered_in_less_than(time_in_seconds)
+      def has_answered_in_less_than(time_in_seconds)
         false
       end
 

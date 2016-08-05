@@ -165,10 +165,28 @@ module ServiceComponent
         @iut.configuration_file = "#{ENV['SOAR_DIR']}/config/config.yml"
       end
 
+      def given_no_configuration_service
+        #@iut.environment['CFGSRV_IDENTIFIER'] = nil
+      end
+
+      def given_an_invalid_configuration_file
+        @iut.force_invalid_configuration_file
+      end
+
+      def given_a_failure_reading_the_configuration_file
+        #place the configuration file in the wrong location to force this failure
+        File.delete("#{ENV['SOAR_DIR']}/config/config.yml") rescue nil
+        @iut.configuration_file = "#{ENV['SOAR_DIR']}/config/invalid-config-location.yml"
+      end
+
       def has_retrieved_configuration_from_the_configuration_service_only
         (@bootstrap_status['data']['configuration']['local_only_test_configuration_entry'].nil?) and
         (@bootstrap_status['data']['configuration']['remote_only_test_configuration_entry'] == 'sourced_from_remote_configuration_service') and
         (@bootstrap_status['data']['configuration']['test_configuration_entry'] == 'sourced_from_remote_configuration_service')
+      end
+
+      def has_retrieved_configuration_from_the_file
+        not @bootstrap_status['data']['configuration']['local_only_test_configuration_entry'].nil?
       end
 
       def has_remembered_the_execution_environment_indicator
