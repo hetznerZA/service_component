@@ -22,10 +22,6 @@ module ServiceComponent
         bootstrap
       end
 
-      def given_a_valid_service_registry_uri
-        @iut.environment['SERVICE_REGISTRY'] = 'http://service-registry.auto-h.net:8080'
-      end
-
       def given_a_service_registry_client_provider
         #implicit since by default there will be a service registry client provider
       end

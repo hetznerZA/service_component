@@ -13,11 +13,11 @@ Feature: Bootstrapping with a service registry
   Scenario:
     Given an invalid service registry URI
     When I am bootstrapped
-    Then I notify 'invalid service registry URI'
+    Then I notify 'invalid URI'
     And I do not complete bootstrap
 
   Scenario:
     Given no service registry URI
     When I am bootstrapped
-    Then I notify 'missing service registry URI'
-    And I do not complete bootstrap    
+    Then I notify 'Missing service registry URI'
+    And I do not complete bootstrap

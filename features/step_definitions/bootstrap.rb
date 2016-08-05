@@ -38,6 +38,14 @@ Given(/^no service identifier$/) do
   @test.given_no_service_identifier
 end
 
+Given(/^an invalid service registry URI$/) do
+  @test.given_invalid_service_registry_uri
+end
+
+Given(/^no service registry URI$/) do
+  @test.given_no_service_registry_uri
+end
+
 Given(/^an environment file$/) do
   @test.given_an_environment_file
 end
@@ -276,4 +284,16 @@ end
 
 Then(/^I notify 'Failure retrieving configuration from file'$/) do
   expect(@test.has_received_notification?('Failure retrieving configuration from file')).to eq(true)
+end
+
+Then(/^I remember the service registry URI$/) do
+  expect(@test.has_remembered_service_registry_uri).to eq(true)
+end
+
+Then(/^I notify 'invalid URI'$/) do
+  expect(@test.has_received_notification?('invalid URI')).to eq(true)
+end
+
+Then(/^I notify 'Missing service registry URI'$/) do
+  expect(@test.has_received_notification?('Missing service registry URI')).to eq(true)
 end

@@ -61,6 +61,18 @@ module ServiceComponent
         @iut.environment['SERVICE_REGISTRY'] = 'http://service-registry.auto-h.net:8080'
       end
 
+      def given_a_valid_service_registry_uri
+        @iut.environment['SERVICE_REGISTRY'] = 'http://service-registry.auto-h.net:8080'
+      end
+
+      def given_invalid_service_registry_uri
+        @iut.environment['SERVICE_REGISTRY'] = 'not\a\uri'
+      end
+
+      def given_no_service_registry_uri
+        @iut.environment['SERVICE_REGISTRY'] = nil
+      end
+
       def given_an_authentication_service_uri_present_in_the_environment_file
         @iut.environment['CAS_SERVER'] = 'https://login.konsoleh.co.za/cas'
       end
@@ -191,6 +203,10 @@ module ServiceComponent
 
       def has_remembered_the_execution_environment_indicator
         can_extract_the_execution_environment_indicator_from_the_environment_file
+      end
+
+      def has_remembered_service_registry_uri
+        can_extract_the_service_registry_uri_from_the_environment_file
       end
 
       def can_extract_the_service_identifier_from_the_environment
