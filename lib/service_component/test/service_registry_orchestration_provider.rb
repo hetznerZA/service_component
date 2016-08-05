@@ -11,14 +11,6 @@ class Hash
   end
 end
 
-# After do
-#   puts "after code"
-# end
-#
-# Before do
-#   puts "before code"
-# end
-
 module ServiceComponent
   module Test
     class SoarScServiceRegistryOrchestrationProvider < SoarScBootstrapOrchestrationProvider
@@ -99,16 +91,16 @@ module ServiceComponent
       end
 
       def given_i_have_cached_the_answer_before
-        @request_service_is_cached = true
+        ask_for_service_uri('find_first_service_uri')
       end
 
       def given_i_have_not_cached_the_answer_before
-        @request_service_is_cached = false
+        #implicit. Simply do not do request and it wont be cached.
       end
 
       def given_a_service_registry_failure
-        @iut.environment['SERVICE_REGISTRY'] = 'http://invalid-service-registry.auto-h.net:8080'
-        bootstrap
+        #Modify the uri inside the service registry to point to an invalid service registry uri.  All future requests will fail.
+        create_failure_in_service_registry_client
       end
 
       def given_some_of_the_access_points_are_unreachable
@@ -180,11 +172,12 @@ module ServiceComponent
       end
 
       def has_asked_the_services_for_their_functional_status
-        false
+        audit_entry_with_message_exist?('matched /status')
       end
 
       def has_returned_the_service_uri_for_which_the_best_functional_status_was_obtained
-        false
+        FIRST_ACCESS_POINT == @service_registry_query_result['service_registry_response'] or
+        SECOND_ACCESS_POINT == @service_registry_query_result['service_registry_response']
       end
 
       def has_not_cached
@@ -224,9 +217,9 @@ module ServiceComponent
         BaseOrchestrationProvider::busy_wait(check_timeout, desired_result) { yield }
       end
 
-      def remove_service_registry_client
-        parameters = { :operation => 'remove-service-registry-client' }
-        @iut.query_endpoint(resource: 'service-registry-client-controller',parameters: parameters)
+      def create_failure_in_service_registry_client
+        parameters = { :operation => 'create-failure-in-service-registry-client' }
+        @iut.query_endpoint(resource: 'service-registry-client-command-and-control',parameters: parameters)
       end
 
       def query_last_flow_identifier_from_policy

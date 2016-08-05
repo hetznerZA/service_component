@@ -7,8 +7,10 @@ module SoarSc
         def serve(request)
           reponse_body = {}
 
-          if request['operation'] == 'remove-service-registry-client' then
-            SoarSc::service_registry = nil
+          if request['operation'] == 'create-failure-in-service-registry-client' then
+            SoarSc::service_registry.instance_variable_get(:@broker).base_uri = 'http://invalid-service-registry.net'
+            puts '----- Disabling service registry lookups -----'
+            puts "Service Registry URI is now #{SoarSc::service_registry.instance_variable_get(:@broker).base_uri}"
             return [200, reponse_body.to_json]
           end
 
