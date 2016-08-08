@@ -6,6 +6,7 @@ module ServiceComponent
   module Test
     class BaseOrchestrationProvider
       def setup
+        @iut.set_execution_environment('development')
         @notifications = []
         setup_service_identifiers
       end

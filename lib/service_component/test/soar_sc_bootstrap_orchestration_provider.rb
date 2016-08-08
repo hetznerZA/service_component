@@ -80,7 +80,7 @@ module ServiceComponent
       end
 
       def given_an_execution_environment_indicator_present_in_the_environment_file
-        @iut.environment['RACK_ENV'] = 'development'
+        @iut.environment['RACK_ENV'] = VALID_EXECUTION_ENVIRONMENT
       end
 
       def given_a_configuration_service_uri_present_in_the_environment_file
@@ -302,7 +302,7 @@ module ServiceComponent
       end
 
       def can_extract_the_execution_environment_indicator_from_the_environment_file
-        'debug' == @bootstrap_status['data']['environment']['RACK_ENV']
+        VALID_EXECUTION_ENVIRONMENT == @bootstrap_status['data']['environment']['RACK_ENV']
       end
 
       def can_extract_the_configuration_service_uri_from_the_environment_file

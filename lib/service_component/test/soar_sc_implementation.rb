@@ -102,7 +102,11 @@ module ServiceComponent
       end
 
       def set_execution_environment(execution_environment)
-        `echo '#{execution_environment}' > #{ENV['SOAR_DIR']}/keep_running_execution_environment`
+        @desired_execution_environment = execution_environment
+      end
+
+      def remove_execution_environment
+        File.delete("#{ENV['SOAR_DIR']}/keep_running_execution_environment") rescue nil
       end
 
       def bootstrap
@@ -112,6 +116,8 @@ module ServiceComponent
           puts "SOAR_DIR not defined"
           return
         end
+
+        `echo '#{@desired_execution_environment}' > #{ENV['SOAR_DIR']}/keep_running_execution_environment` if @desired_execution_environment
 
         if @force_failure_reading_the_environment_file
           File.delete(@environment_file) rescue nil
@@ -136,6 +142,7 @@ module ServiceComponent
         #the environment and configuration files to be ready for the next test.
         restore_configuration
         restore_environment
+        remove_execution_environment
 
         return fail if detail.nil?
         success_data(detail)

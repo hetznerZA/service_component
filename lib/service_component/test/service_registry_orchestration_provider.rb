@@ -19,6 +19,7 @@ module ServiceComponent
       UNREACHED_ACCESS_POINT = 'http://unreachable:9393/architectural-test-service-access-point-unreachable/'  unless defined? UNREACHED_ACCESS_POINT; UNREACHED_ACCESS_POINT.freeze
       def setup
         super
+        @iut.set_execution_environment('production')
         bootstrap
       end
 
