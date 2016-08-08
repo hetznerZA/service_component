@@ -1,6 +1,8 @@
 module ServiceComponent
   module Test
     class SoarScBootstrapOrchestrationProvider < BootstrapOrchestrationProvider
+      VALID_EXECUTION_ENVIRONMENT = "development" unless defined? VALID_EXECUTION_ENVIRONMENT; VALID_EXECUTION_ENVIRONMENT.freeze
+
       def given_environment_can_be_loaded_from_system_process
         @iut.environment_can_be_loaded_from_system_process?
       end
@@ -172,15 +174,15 @@ module ServiceComponent
       end
 
       def given_a_valid_an_execution_environment_indicator
-        @iut.environment['RACK_ENV'] = 'debug'
+        @iut.set_execution_environment(VALID_EXECUTION_ENVIRONMENT)
       end
 
       def given_an_invalid_execution_environment_indicator
-        @iut.environment['RACK_ENV'] = 'strange_environment'
+        @iut.set_execution_environment('strange_environment')
       end
 
       def given_no_execution_environment_indicator
-        @iut.environment['RACK_ENV'] = nil
+        @iut.set_execution_environment(nil)
       end
 
       def given_a_valid_configuration_service_URI
@@ -237,7 +239,7 @@ module ServiceComponent
       end
 
       def has_remembered_the_execution_environment_indicator
-        can_extract_the_execution_environment_indicator_from_the_environment_file
+        VALID_EXECUTION_ENVIRONMENT == @bootstrap_status['data']['environment']['RACK_ENV']
       end
 
       def has_remembered_the_session_configuration

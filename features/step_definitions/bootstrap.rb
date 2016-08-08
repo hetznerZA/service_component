@@ -254,12 +254,12 @@ Then(/^I remember the execution environment indicator$/) do
   expect(@test.has_remembered_the_execution_environment_indicator).to eq(true)
 end
 
-Then(/^I notify 'invalid execution environment indicator'$/) do
-  expect(@test.has_received_notification?('invalid execution environment indicator')).to eq(true)
+Then(/^I notify 'Invalid execution environment indicator'$/) do
+  expect(@test.has_received_notification?('Invalid execution environment indicator')).to eq(true)
 end
 
-Then(/^I notify 'missing execution environment indicator'$/) do
-  expect(@test.has_received_notification?('missing execution environment indicator')).to eq(true)
+Then(/^I notify 'Missing execution environment indicator'$/) do
+  expect(@test.has_received_notification?('Missing execution environment indicator')).to eq(true)
 end
 
 Then(/^I remember the session configuration$/) do

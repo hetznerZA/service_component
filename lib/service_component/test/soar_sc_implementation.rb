@@ -101,6 +101,10 @@ module ServiceComponent
         @force_invalid_configuration_file = true
       end
 
+      def set_execution_environment(execution_environment)
+        `echo '#{execution_environment}' > #{ENV['SOAR_DIR']}/keep_running_execution_environment`
+      end
+
       def bootstrap
         soar_dir = ENV['SOAR_DIR']
         puts "NOTE: Run keep_running.sh in #{soar_dir} using SOAR_TECH=rackup"

@@ -13,11 +13,11 @@ Feature: Bootstrapping with an execution environment indicator
   Scenario:
     Given an invalid execution environment indicator
     When I am bootstrapped
-    Then I notify 'invalid execution environment indicator'
+    Then I notify 'Invalid execution environment indicator'
     And I do not complete bootstrap
 
   Scenario:
     Given no execution environment indicator
     When I am bootstrapped
-    Then I notify 'missing execution environment indicator'
+    Then I notify 'Missing execution environment indicator'
     And I do not complete bootstrap
