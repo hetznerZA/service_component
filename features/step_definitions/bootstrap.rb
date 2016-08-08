@@ -182,6 +182,34 @@ Given(/^a failure reading the configuration file$/) do
   @test.given_a_failure_reading_the_configuration_file
 end
 
+Given(/^an invalid configuration service URI$/) do
+  @test.given_an_invalid_configuration_service_uri
+end
+
+Given(/^no configuration service URI$/) do
+  @test.given_no_configuration_service_uri
+end
+
+Given(/^no configuration file$/) do
+  @test.given_no_configuration_file
+end
+
+Given(/^a configuration service token string with a length of less than (\d+) characters$/) do |arg1|
+  @test.given_an_invalid_configuration_service_token(arg1)
+end
+
+Given(/^no configuration service token$/) do
+  @test.given_no_configuration_service_token
+end
+
+Given(/^the configuration service token is not appropriate for my configuration$/) do
+  @test.given_the_configuration_service_token_is_not_appropriate_for_my_configuration
+end
+
+Given(/^a failure retrieving my configuration$/) do
+  @test.given_a_failure_retrieving_my_configuration
+end
+
 Then(/^I can extract the service identifier from the environment file$/) do
   expect(@test.can_extract_the_service_identifier_from_the_environment_file).to eq(true)
 end
@@ -232,6 +260,10 @@ end
 
 Then(/^I notify 'missing execution environment indicator'$/) do
   expect(@test.has_received_notification?('missing execution environment indicator')).to eq(true)
+end
+
+Then(/^I remember the session configuration$/) do
+  expect(@test.has_remembered_the_session_configuration).to eq(true)
 end
 
 Then(/^I can extract the service identifier from the environment$/) do
@@ -296,4 +328,32 @@ end
 
 Then(/^I notify 'Missing service registry URI'$/) do
   expect(@test.has_received_notification?('Missing service registry URI')).to eq(true)
+end
+
+Then(/^I retrieve my configuration$/) do
+  expect(@test.has_retrieved_my_configuration).to eq(true)
+end
+
+Then(/^I notify 'invalid configuration service URI'$/) do
+  expect(@test.has_received_notification?('invalid configuration service URI')).to eq(true)
+end
+
+Then(/^I notify 'missing configuration service URI'$/) do
+  expect(@test.has_received_notification?('missing configuration service URI')).to eq(true)
+end
+
+Then(/^I notify 'invalid configuration service token'$/) do
+  expect(@test.has_received_notification?('invalid configuration service token')).to eq(true)
+end
+
+Then(/^I notify 'missing configuration service token'$/) do
+  expect(@test.has_received_notification?('missing configuration service token')).to eq(true)
+end
+
+Then(/^I notify 'incorrect configuration service token'$/) do
+  expect(@test.has_received_notification?('incorrect configuration service token')).to eq(true)
+end
+
+Then(/^I notify 'failure retrieving configuration'$/) do
+  expect(@test.has_received_notification?('failure retrieving configuration')).to eq(true)
 end

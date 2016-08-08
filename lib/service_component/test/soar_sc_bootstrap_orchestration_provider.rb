@@ -141,6 +141,36 @@ module ServiceComponent
         @iut.environment['SESSION_KEY'] = 'a_unique_session_key_for_testing'
       end
 
+      def given_an_invalid_configuration_service_uri
+        @iut.environment['CFGSRV_PROVIDER_ADDRESS'] = 'not\a\valid\uri'
+      end
+
+      def given_no_configuration_service_uri
+        @iut.environment.delete('CFGSRV_PROVIDER_ADDRESS')
+      end
+
+      def given_no_configuration_file
+        puts "TODO - not implemented yet"
+      end
+
+      def given_an_invalid_configuration_service_token(minimum_valid_length)
+        @iut.environment['CFGSRV_TOKEN'] = "0" * (minimum_valid_length.to_i-1)
+      end
+
+      def given_no_configuration_service_token
+        @iut.environment.delete('CFGSRV_TOKEN')
+      end
+
+      def given_the_configuration_service_token_is_not_appropriate_for_my_configuration
+        #valid token but one that will result in permission denied.
+        @iut.environment['CFGSRV_TOKEN'] = '00000000-0000-0000-0000-000000000000'
+      end
+
+      def given_a_failure_retrieving_my_configuration
+        #simulate a failure by providing an invalid configuration service uri
+        @iut.environment['CFGSRV_PROVIDER_ADDRESS'] = 'not\a\valid\uri'
+      end
+
       def given_a_valid_an_execution_environment_indicator
         @iut.environment['RACK_ENV'] = 'debug'
       end
@@ -201,8 +231,20 @@ module ServiceComponent
         not @bootstrap_status['data']['configuration']['local_only_test_configuration_entry'].nil?
       end
 
+      def has_retrieved_my_configuration
+        #Seeded the configuration service with an entry that this service can get hold of which is only on the configuration service
+        @bootstrap_status['data']['configuration']['remote_only_test_configuration_entry'] == 'sourced_from_remote_configuration_service'
+      end
+
       def has_remembered_the_execution_environment_indicator
         can_extract_the_execution_environment_indicator_from_the_environment_file
+      end
+
+      def has_remembered_the_session_configuration
+        #Cant really test this other than making sure that the environment keys are defined since
+        #the information is blanked out.  Testing that it is there at least.
+        ('********' == @bootstrap_status['data']['environment']['SESSION_KEY']) and
+        ('********' == @bootstrap_status['data']['environment']['SESSION_SECRET'])
       end
 
       def has_remembered_service_registry_uri

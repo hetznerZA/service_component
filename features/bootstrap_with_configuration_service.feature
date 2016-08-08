@@ -7,6 +7,7 @@ Feature: Bootstrapping with configuration service
 
   Scenario:
     Given a valid configuration service URI
+    And a configuration service identifier present
     And a valid configuration service token
     And the configuration service token is appropriate for my configuration
     When I am bootstrapped
@@ -15,6 +16,7 @@ Feature: Bootstrapping with configuration service
 
   Scenario:
     Given an invalid configuration service URI
+    And a configuration service identifier present
     And a valid configuration service token
     And the configuration service token is appropriate for my configuration
     When I am bootstrapped
@@ -23,6 +25,7 @@ Feature: Bootstrapping with configuration service
 
   Scenario:
     Given no configuration service URI
+    And a configuration service identifier present
     And no configuration file
     And a valid configuration service token
     And the configuration service token is appropriate for my configuration
@@ -32,7 +35,8 @@ Feature: Bootstrapping with configuration service
 
   Scenario:
     Given a valid configuration service URI
-    And an invalid configuration service token
+    And a configuration service identifier present
+    And a configuration service token string with a length of less than 12 characters
     And the configuration service token is appropriate for my configuration
     When I am bootstrapped
     Then I notify 'invalid configuration service token'
@@ -40,6 +44,7 @@ Feature: Bootstrapping with configuration service
 
   Scenario:
     Given a valid configuration service URI
+    And a configuration service identifier present
     And no configuration service token
     And the configuration service token is appropriate for my configuration
     When I am bootstrapped
@@ -48,6 +53,7 @@ Feature: Bootstrapping with configuration service
 
   Scenario:
     Given a valid configuration service URI
+    And a configuration service identifier present
     And a valid configuration service token
     And the configuration service token is not appropriate for my configuration
     When I am bootstrapped
@@ -56,6 +62,7 @@ Feature: Bootstrapping with configuration service
 
   Scenario:
     Given a valid configuration service URI
+    And a configuration service identifier present
     And a valid configuration service token
     And the configuration service token is appropriate for my configuration
     And a failure retrieving my configuration
