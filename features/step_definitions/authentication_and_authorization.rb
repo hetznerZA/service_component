@@ -46,10 +46,6 @@ Given(/^a request requiring authentication$/) do
   pending # Write code here that turns the phrase above into concrete actions
 end
 
-Given(/^a valid authentication provider$/) do
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
 Given(/^an authenticaton provider initialization failure$/) do
   pending # Write code here that turns the phrase above into concrete actions
 end

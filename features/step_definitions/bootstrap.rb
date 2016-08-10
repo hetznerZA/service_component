@@ -210,6 +210,50 @@ Given(/^a failure retrieving my configuration$/) do
   @test.given_a_failure_retrieving_my_configuration
 end
 
+Given(/^a valid configuration$/) do
+  @test.given_valid_configuration
+end
+
+Given(/^an invalid configuration$/) do
+  @test.given_invalid_configuration
+end
+
+Given(/^no configuration$/) do
+  @test.given_no_configuration
+end
+
+Given(/^a valid authentication provider$/) do
+  @test.given_a_valid_authentication_provider
+end
+
+Given(/^an invalid authentication provider$/) do
+  @test.given_an_invalid_authentication_provider
+end
+
+Then(/^I remember the authentication provider$/) do
+  expect(@test.has_remembered_authentication_provider).to eq(true)
+end
+
+Then(/^I notify 'invalid authentication provider'$/) do
+  expect(@test.has_received_notification?('invalid authentication provider')).to eq(true)
+end
+
+Then(/^I notify 'missing authentication provider'$/) do
+  expect(@test.has_received_notification?('missing authentication provider')).to eq(true)
+end
+
+Then(/^I remember my configuration$/) do
+  expect(@test.has_remembered_my_configuration).to eq(true)
+end
+
+Then(/^I notify 'Invalid configuration'$/) do
+  expect(@test.has_received_notification?('Invalid configuration')).to eq(true)
+end
+
+Then(/^I notify 'missing configuration'$/) do
+  expect(@test.has_received_notification?('missing configuration')).to eq(true)
+end
+
 Then(/^I can extract the service identifier from the environment file$/) do
   expect(@test.can_extract_the_service_identifier_from_the_environment_file).to eq(true)
 end
