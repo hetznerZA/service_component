@@ -24,6 +24,8 @@ module ServiceComponent
         @uri = uri
         @std_out_err_file = "#{ENV['SOAR_DIR']}/soar_sc.log"
 
+        @desired_execution_environment = 'development'
+
         @environment_example_file = "#{ENV['SOAR_DIR']}/config/environment.yml.example"
         @environment_file = "#{ENV['SOAR_DIR']}/config/environment.yml"
         @environment = load_yaml_file(@environment_example_file)
@@ -117,7 +119,7 @@ module ServiceComponent
           return
         end
 
-        `echo '#{@desired_execution_environment}' > #{ENV['SOAR_DIR']}/keep_running_execution_environment` if @desired_execution_environment
+        `echo '#{@desired_execution_environment}' > #{ENV['SOAR_DIR']}/keep_running_execution_environment`
 
         if @force_failure_reading_the_environment_file
           File.delete(@environment_file) rescue nil

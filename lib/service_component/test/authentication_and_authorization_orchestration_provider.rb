@@ -29,4 +29,3 @@ ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Pluggable authentication provider",              ServiceComponent::Test::AuthenticationAndAuthorizationOrchestrationProvider)
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Supporting development workflow authorization",  ServiceComponent::Test::AuthenticationAndAuthorizationOrchestrationProvider)
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Pluggable authorization provider",               ServiceComponent::Test::AuthenticationAndAuthorizationOrchestrationProvider)
-ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Authorization policies",                         ServiceComponent::Test::AuthenticationAndAuthorizationOrchestrationProvider)
