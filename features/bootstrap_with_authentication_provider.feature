@@ -17,7 +17,7 @@ Feature: Bootstrapping with an authentication provider
     And I do not complete bootstrap
 
   Scenario:
-    Given no configuration
+    Given no authentication provider
     When I am bootstrapped
-    Then I notify 'missing authentication provider'
-    And I do not complete bootstrap    
+    Then I notify 'Having no authentication is not recommended for production'
+    And I complete bootstrap

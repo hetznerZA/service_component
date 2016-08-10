@@ -27,7 +27,7 @@ Given(/^an invalid service identifier$/) do
 end
 
 Then(/^I notify 'invalid service identifier'$/) do
-  expect(@test.has_received_notification?('invalid service identifier')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('invalid service identifier')).to eq(true)
 end
 
 Then(/^I do not complete bootstrap$/) do
@@ -230,16 +230,20 @@ Given(/^an invalid authentication provider$/) do
   @test.given_an_invalid_authentication_provider
 end
 
+Given(/^no authentication provider$/) do
+  @test.given_no_authentication_provider
+end
+
 Then(/^I remember the authentication provider$/) do
   expect(@test.has_remembered_authentication_provider).to eq(true)
 end
 
 Then(/^I notify 'invalid authentication provider'$/) do
-  expect(@test.has_received_notification?('invalid authentication provider')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('invalid authentication provider')).to eq(true)
 end
 
-Then(/^I notify 'missing authentication provider'$/) do
-  expect(@test.has_received_notification?('missing authentication provider')).to eq(true)
+Then(/^I notify 'Having no authentication is not recommended for production'$/) do
+  expect(@test.audit_entry_with_message_exist?('Having no authentication is not recommended for production')).to eq(true)
 end
 
 Then(/^I remember my configuration$/) do
@@ -247,11 +251,11 @@ Then(/^I remember my configuration$/) do
 end
 
 Then(/^I notify 'Invalid configuration'$/) do
-  expect(@test.has_received_notification?('Invalid configuration')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Invalid configuration')).to eq(true)
 end
 
 Then(/^I notify 'missing configuration'$/) do
-  expect(@test.has_received_notification?('missing configuration')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('missing configuration')).to eq(true)
 end
 
 Then(/^I can extract the service identifier from the environment file$/) do
@@ -291,7 +295,7 @@ Then(/^I can extract the session secret from the environment file$/) do
 end
 
 Then(/^I notify 'Failure retrieving environment from file'$/) do
-  expect(@test.has_received_notification?('Failure retrieving environment from file')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Failure retrieving environment from file')).to eq(true)
 end
 
 Then(/^I remember the execution environment indicator$/) do
@@ -299,11 +303,11 @@ Then(/^I remember the execution environment indicator$/) do
 end
 
 Then(/^I notify 'Invalid execution environment indicator'$/) do
-  expect(@test.has_received_notification?('Invalid execution environment indicator')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Invalid execution environment indicator')).to eq(true)
 end
 
 Then(/^I notify 'Missing execution environment indicator'$/) do
-  expect(@test.has_received_notification?('Missing execution environment indicator')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Missing execution environment indicator')).to eq(true)
 end
 
 Then(/^I remember the session configuration$/) do
@@ -355,11 +359,11 @@ Then(/^I retrieve my configuration from the file$/) do
 end
 
 Then(/^I notify 'Invalid configuration file'$/) do
-  expect(@test.has_received_notification?('Invalid configuration file')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Invalid configuration file')).to eq(true)
 end
 
 Then(/^I notify 'Failure retrieving configuration from file'$/) do
-  expect(@test.has_received_notification?('Failure retrieving configuration from file')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Failure retrieving configuration from file')).to eq(true)
 end
 
 Then(/^I remember the service registry URI$/) do
@@ -367,11 +371,11 @@ Then(/^I remember the service registry URI$/) do
 end
 
 Then(/^I notify 'invalid URI'$/) do
-  expect(@test.has_received_notification?('invalid URI')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('invalid URI')).to eq(true)
 end
 
 Then(/^I notify 'Missing service registry URI'$/) do
-  expect(@test.has_received_notification?('Missing service registry URI')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('Missing service registry URI')).to eq(true)
 end
 
 Then(/^I retrieve my configuration$/) do
@@ -379,25 +383,25 @@ Then(/^I retrieve my configuration$/) do
 end
 
 Then(/^I notify 'invalid configuration service URI'$/) do
-  expect(@test.has_received_notification?('invalid configuration service URI')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('invalid configuration service URI')).to eq(true)
 end
 
 Then(/^I notify 'missing configuration service URI'$/) do
-  expect(@test.has_received_notification?('missing configuration service URI')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('missing configuration service URI')).to eq(true)
 end
 
 Then(/^I notify 'invalid configuration service token'$/) do
-  expect(@test.has_received_notification?('invalid configuration service token')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('invalid configuration service token')).to eq(true)
 end
 
 Then(/^I notify 'missing configuration service token'$/) do
-  expect(@test.has_received_notification?('missing configuration service token')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('missing configuration service token')).to eq(true)
 end
 
 Then(/^I notify 'incorrect configuration service token'$/) do
-  expect(@test.has_received_notification?('incorrect configuration service token')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('incorrect configuration service token')).to eq(true)
 end
 
 Then(/^I notify 'failure retrieving configuration'$/) do
-  expect(@test.has_received_notification?('failure retrieving configuration')).to eq(true)
+  expect(@test.audit_entry_with_message_exist?('failure retrieving configuration')).to eq(true)
 end

@@ -245,6 +245,11 @@ module ServiceComponent
         @iut.environment['CAS_SERVER'] = 'not\a\valid\uri'
       end
 
+      def given_no_authentication_provider
+        @iut.environment.delete('CAS_SERVER')
+        @iut.environment.delete('BASIC_AUTH_USER')
+      end
+
       def has_retrieved_configuration_from_the_configuration_service_only
         (@bootstrap_status['data']['configuration']['local_only_test_configuration_entry'].nil?) and
         (@bootstrap_status['data']['configuration']['remote_only_test_configuration_entry'] == 'sourced_from_remote_configuration_service') and
