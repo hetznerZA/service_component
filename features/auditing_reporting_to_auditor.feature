@@ -19,3 +19,16 @@ Feature: Auditing service component actions
     When I cannot report to the auditor
     Then I do not report to auditor
     And I do not remove the oldest audit event from the buffer
+
+  Scenario:
+    Given a buffer with audit events
+    When I can report to the auditor
+    And a shutdown is initiated
+    Then I report the buffer to the auditor
+
+  Scenario:
+    Given a buffer with audit events
+    When I cannot report to any auditor
+    And a shutdown is initiated
+    Then I notify 'flushing to stderr'
+    And I report the buffer to standard error stream

@@ -1,3 +1,4 @@
+Feature: Verifying signed requests
   Scenario: verifying signed requests - known sender
     As a service component
     When I receive an signed request

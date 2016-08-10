@@ -13,7 +13,7 @@ module ServiceComponent
         add_rejecting_auditor_configuration
         bootstrap
         super
-        given_valid_service_identifier
+        given_valid_service_identifier_in_environment_file
         select_default_auditor
       end
 
@@ -58,7 +58,7 @@ module ServiceComponent
       end
 
       def given_valid_auditing_provider
-        @iut.configuration['auditing']['provider'] = 'SoarScAuditingProvider'
+        @iut.configuration['auditing']['provider'] = 'SoarAuditingProvider::AuditingProvider'
       end
 
       def given_invalid_auditing_provider
@@ -72,11 +72,11 @@ module ServiceComponent
       def given_auditing_provider_initialization_failure
         # specify an incorrect auditing level which will result in an auditing provider
         # initialization failure
-        @iut.configuration['auditing']['level'] = 'wrong'
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'level' => 'wrong'}})
       end
 
       def given_valid_auditing_provider_configuration
-        # by default there will be a valid auditing provider configuration
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'provider' => 'SoarAuditingProvider::AuditingProvider'}})
       end
 
       def given_no_auditing_provider_configuration
@@ -84,15 +84,15 @@ module ServiceComponent
       end
 
       def given_valid_configured_auditing_level
-        @iut.configuration['auditing']['level'] = 'debug'
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'level' => 'debug'}})
       end
 
       def given_invalid_configured_auditing_level
-        @iut.configuration['auditing']['level'] = 'wrong'
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'level' => 'wrong'}})
       end
 
       def given_no_configured_auditing_level
-        @iut.configuration['auditing']['level'] = nil
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'level' => nil }})
       end
 
       def given_valid_auditor
@@ -104,17 +104,17 @@ module ServiceComponent
       end
 
       def given_invalid_auditor_configuration
-        @iut.configuration['auditing']['auditors']['log4r']['standard_stream'] = 'stdwrong'
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'auditors' => { 'log4r' => { 'standard_stream' => 'stdwrong' }}}})
       end
 
       def given_no_auditor_configuation
-        @iut.configuration['auditing']['auditors']['log4r'] = nil
+        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'auditors' => { 'log4r' => nil }}})
       end
 
       def given_auditor_initialization_failure
-        # specify an incorrect auditing level which will result in an auditor
+        # specify an invalid auditor configuration which will result in an auditor
         # initialization failure
-        @iut.configuration['auditing']['level'] = 'wrong'
+        given_invalid_auditor_configuration
       end
 
       # When / Test action methods
@@ -143,6 +143,15 @@ module ServiceComponent
       def cannot_report_to_auditor
         @previous_audit_event_entry = @iut.get_latest_test_orchestrator_audit_entry
         select_rejecting_auditor
+      end
+
+      def cannot_report_to_any_auditor
+        @previous_audit_event_entry = @iut.get_latest_test_orchestrator_audit_entry
+        select_rejecting_auditor
+      end
+
+      def attempt_graceful_shutdown
+        @iut.attempt_graceful_shutdown
       end
 
       #Then / Test check methods
@@ -176,9 +185,11 @@ module ServiceComponent
       end
 
       def has_notified_with_flow_identifier_in_new_request?
-        (@test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry)) and
-        (extract_message_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry).include?('flow-test-action-2')) and
-        (extract_message_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry).include?(@correlation_identifier))
+        busy_wait(4,true) {
+          (@test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry)) and
+          (extract_message_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry).include?('flow-test-action-2')) and
+          (extract_message_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry).include?(@correlation_identifier))
+        }
       end
 
       def has_notified_with_timestamp?
@@ -211,7 +222,16 @@ module ServiceComponent
       end
 
       def reported_oldest_event_in_buffer?
+        busy_wait(4,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry) }
+      end
+
+      def has_reported_the_buffer_to_the_auditor?
         busy_wait(2,true) { @test_flow_id == extract_flow_identifier_from_audit_entry(@iut.get_latest_test_orchestrator_audit_entry) }
+      end
+
+      def has_reported_the_buffer_to_standard_error_stream?
+        #since both the stderr stream and the auditing entries are piped to the same log file, we can simply check the log file
+        has_reported_the_buffer_to_the_auditor?
       end
 
       def have_initialized_auditing_provider?
@@ -225,7 +245,7 @@ module ServiceComponent
       end
 
       def has_remembered_auditing_provider_configuration?
-        @iut.configuration['auditing'] == @bootstrap_status['data']['configuration']['auditing']
+        'SoarAuditingProvider::AuditingProvider' == @bootstrap_status['data']['configuration']['auditing']['provider']
       end
 
       def has_remembered_auditing_level?
@@ -233,14 +253,28 @@ module ServiceComponent
       end
 
       def has_remembered_auditor_configuration?
-        @iut.configuration['auditing']['auditors'] == @bootstrap_status['data']['configuration']['auditing']['auditors']
+        @iut.configuration['auditing']['auditors']['rejecting_test_auditor'] == @bootstrap_status['data']['configuration']['auditing']['auditors']['rejecting_test_auditor']
+      end
+
+      def has_received_notification_for_missing_auditor_configuration?
+        #Untestable in SOAR_SC implementation due to the default auditor configuration
+        #being supplied in the event that the configuration is not present.
+        true
+      end
+
+      def has_received_notification_for_missing_auditing_configuration?
+        #Untestable in SOAR_SC implementation due to the default auditor configuration
+        #being supplied in the event that the configuration is not present.
+        true
       end
 
       private
 
       def add_rejecting_auditor_configuration
+        @iut.configuration['auditing'] = {} if not @iut.configuration['auditing']
+        @iut.configuration['auditing']['auditors'] = {} if not @iut.configuration['auditing']['auditors']
         @iut.configuration['auditing']['auditors']['rejecting_test_auditor'] = {
-          'adaptor' => 'SoarAuditTestService::RejectingTestAuditor',
+          'adaptor' => 'ServiceComponent::RejectingTestAuditor',
           'nfrs' => {
             'accessibility' => 'rejecting',
             'privacy' => 'not encrypted',
@@ -261,30 +295,26 @@ module ServiceComponent
 
       def notify_event(level, flow_id, data)
         parameters = { :operation => 'notify', :level => level, :flow_identifier => flow_id, :data => "TEST_ORCHESTRATOR-#{data.to_s}" }
-        query_endpoint('soar_audit_test_service/notify',parameters)
+        query_endpoint('service_component/notify',parameters)
       end
 
       def start_flow_test_chain(correlation_identifier, flow_identifier)
         parameters = { :operation => 'flow-test-action-1', :flow_identifier => flow_identifier, :correlation_identifier => correlation_identifier, :data => "TEST_ORCHESTRATOR" }
-        query_endpoint('soar_audit_test_service/flow',parameters)
+        query_endpoint('service_component/flow',parameters)
       end
 
       def select_default_auditor
         parameters = { :operation => 'select_default_auditor' }
-        query_endpoint('soar_audit_test_service/auditor',parameters)
+        query_endpoint('service_component/auditor',parameters)
       end
 
       def select_rejecting_auditor
         parameters = { :operation => 'select_rejecting_auditor' }
-        query_endpoint('soar_audit_test_service/auditor',parameters)
+        query_endpoint('service_component/auditor',parameters)
       end
 
       def query_endpoint(resource,parameters)
-        require 'uri'
-        uri = URI.parse("#{@iut.uri}/#{resource}")
-        uri.query = URI.encode_www_form( parameters )
-        require 'net/http'
-        Net::HTTP.get(uri)
+        @iut.query_endpoint(resource: resource, parameters: parameters)
       end
 
       def extract_level_from_audit_entry(audit_entry)
@@ -304,19 +334,32 @@ module ServiceComponent
       end
 
       def extract_message_from_audit_entry(audit_entry)
-        audit_entry.split(',')[4].delete!("\n") unless audit_entry.nil?
+        message = nil
+        message = audit_entry.split(',')[4] unless audit_entry.nil?
+        message.delete!("\n") unless message.nil?
+        message
       end
 
       def create_unique_id
-        "#{SecureRandom.hex(14)}#{Time.now.to_i.to_s(16)}#{SecureRandom.hex(14)}"
+        "#{SecureRandom.hex(32)}"
       end
 
       def get_iut_buffer_size
-        @iut.configuration['auditing']['queue_worker']['queue_size'].to_i
+        @bootstrap_status['data']['configuration']['auditing']['queue_worker']['queue_size'].to_i
       end
 
       def busy_wait(check_timeout, desired_result)
         BaseOrchestrationProvider::busy_wait(check_timeout, desired_result) { yield }
+      end
+
+      def recurse_merge(a,b)
+        a.merge(b) do |_,x,y|
+          if (x.is_a?(Hash) && y.is_a?(Hash)) then
+            recurse_merge(x,y)
+          else
+            x
+          end
+        end
       end
     end
   end

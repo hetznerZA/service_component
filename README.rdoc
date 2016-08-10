@@ -57,6 +57,8 @@ The domain analysis for the service component can be viewed here: https://docs.g
 * {file:features/service_registry_client.feature access to a full-featured} service registry client when needing to access the full suite of service registry functionality
 * {file:features/service_registry_client.feature Injecting a pluggable} service registry provider
 
+Note that the service registry feature suite in this service component only specifies the basic interaction with the service registry.  Implicitly this basic feature mapping extends to all service registry features as specified by the service registry client itself.
+
 === Authentication
 * {file:features/authentication_check.feature Indicating} whether a user or service has authenticated when needing to access control actions, given a request
 * {file:features/authentication_check.feature Identifying} the authenticated identity by identifier when needing to know who or what authenticated, given a request

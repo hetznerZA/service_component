@@ -18,6 +18,10 @@ module ServiceComponent
         @iut.environment['IDENTIFIER'] == @bootstrap_status['data']['environment']['IDENTIFIER']
       end
 
+      def get_startup_flow_identifier
+        @bootstrap_status['data']['status_store']['startup_flow_id']
+      end
+
       def has_not_remembered_service_identifier?
         not has_remembered_service_identifier
       end

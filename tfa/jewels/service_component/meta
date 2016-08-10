@@ -1,0 +1,5 @@
+architecture: 1.2.0
+path: /service_component
+view: soar_sc
+controller: lib/web/controllers/service_component_test_services.rb
+model: lib/web/models/service_component_test_services.rb

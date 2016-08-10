@@ -1,0 +1,5 @@
+architecture: 1.2.0
+path: /service_registry_tests
+view: soar_sc
+controller: lib/web/controllers/service_registry_tests.rb
+model: lib/web/models/service_registry_tests.rb

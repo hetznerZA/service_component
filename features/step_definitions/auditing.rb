@@ -76,10 +76,6 @@ Given(/^a flow identifier$/) do
   @test.given_flow_identifier
 end
 
-Given(/^a request$/) do
-  @test.given_request_message(TEST_MESSAGE)
-end
-
 Given(/^the request has no flow identifier$/) do
   @test.given_request_without_flow_identifier
 end
@@ -179,6 +175,15 @@ end
 When(/^I cannot report to the auditor$/) do
   @test.cannot_report_to_auditor
 end
+
+When(/^I cannot report to any auditor$/) do
+  @test.cannot_report_to_any_auditor
+end
+
+When(/^a shutdown is initiated$/) do
+  @test.attempt_graceful_shutdown
+end
+
 
 Then(/^it should generate a unique flow identifier$/) do
   expect(@test.has_notified_with_new_flow_identifier?).to eq(true)
@@ -326,7 +331,7 @@ Then(/^I notify 'Invalid auditing provider configuration'$/) do
 end
 
 Then(/^I notify 'Missing auditing provider configuration'$/) do
-  puts 'Missing auditing provider configuration untestable since we have default values'
+  expect(@test.has_received_notification_for_missing_auditing_configuration?).to eq(true)
 end
 
 Then(/^I remember the auditing level$/) do
@@ -350,5 +355,17 @@ Then(/^I notify 'Invalid auditor configuration'$/) do
 end
 
 Then(/^I notify 'Missing auditor configuration'$/) do
-  expect(@test.has_received_notification?('Missing auditor configuration')).to eq(true)
+  expect(@test.has_received_notification_for_missing_auditor_configuration?).to eq(true)
+end
+
+Then(/^I notify 'flushing to stderr'$/) do
+  expect(@test.has_received_notification?('flushing to stderr')).to eq(true)
+end
+
+Then(/^I report the buffer to the auditor$/) do
+  expect(@test.has_reported_the_buffer_to_the_auditor?).to eq(true)
+end
+
+Then(/^I report the buffer to standard error stream$/) do
+  expect(@test.has_reported_the_buffer_to_standard_error_stream?).to eq(true)
 end

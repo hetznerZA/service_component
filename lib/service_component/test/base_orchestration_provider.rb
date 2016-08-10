@@ -6,11 +6,12 @@ module ServiceComponent
   module Test
     class BaseOrchestrationProvider
       def setup
+        @iut.set_execution_environment('development')
         @notifications = []
         setup_service_identifiers
       end
 
-      def given_valid_service_identifier
+      def given_valid_service_identifier_in_environment_file
         @iut.environment['IDENTIFIER'] = @valid_service_identifier
       end
 
@@ -20,6 +21,9 @@ module ServiceComponent
 
       def given_no_service_identifier
         @iut.environment['IDENTIFIER'] = @no_service_identifier
+      end
+
+      def given_a_request
       end
 
       def inject_iut(iut)
@@ -57,6 +61,10 @@ module ServiceComponent
           return true if notification == message
         end
         false
+      end
+
+      def audit_entry_with_message_exist?(message)
+        @iut.audit_entry_with_message_exist?(message)
       end
 
       def self.busy_wait(check_timeout, desired_result)
