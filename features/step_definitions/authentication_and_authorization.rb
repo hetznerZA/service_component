@@ -1,53 +1,53 @@
 Given(/^an authenticated identity$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.given_an_authenticated_identity
 end
 
 Given(/^a request that requires authentication$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.given_a_request_that_requires_authentication
 end
 
 Given(/^an authenticated human identity$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.given_an_authenticated_human_identity
 end
 
 Given(/^an authenticated service identity$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.given_an_authenticated_service_identity
 end
 
 Given(/^no authenticated identity$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.given_no_authenticated_identity
 end
 
 Given(/^a request that does not require authentication$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.given_a_request_that_does_not_require_authentication
 end
 
 Given(/^an authentication failure$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.given_an_authentication_failure
 end
 
 Given(/^an originator of authentication delegation$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.given_an_originator_of_authentication_delegation
 end
 
 Given(/^a delegated request$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.given_a_delegated_request
 end
 
 Given(/^no originator of authentication delegation$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.given_no_originator_of_authentication_delegation
 end
 
 Given(/^an execution environment 'development'$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.given_an_development_execution_environment
 end
 
 Given(/^a request requiring authentication$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.given_a_request_requiring_authentication
 end
 
 Given(/^an authenticaton provider initialization failure$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.given_an_authenticaton_provider_initialization_failure
 end
 
 When(/^I am asked whether the request has authenticated$/) do
@@ -87,7 +87,7 @@ Then(/^I respond with the authenticated identity's identifier$/) do
 end
 
 Then(/^I notify 'Failure determining authentication identity'$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  expect(@test.audit_entry_with_message_exist?('Failure determining authentication identity')).to eq(true)
 end
 
 Then(/^I respond false$/) do
@@ -99,7 +99,7 @@ Then(/^I respond with the identity of the originator$/) do
 end
 
 Then(/^I notify 'Could not determine delegation'$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  expect(@test.audit_entry_with_message_exist?('Could not determine delegation')).to eq(true)
 end
 
 Then(/^I respond with 'developer'$/) do
@@ -107,9 +107,9 @@ Then(/^I respond with 'developer'$/) do
 end
 
 Then(/^I have an initialized authentication provider$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  expect(@test.have_an_initialized_authentication_provider?).to eq(true)
 end
 
 Then(/^I notify 'Failure initializing authentication provider'$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  expect(@test.audit_entry_with_message_exist?('Failure initializing authentication provider')).to eq(true)
 end
