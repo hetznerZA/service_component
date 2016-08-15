@@ -23,4 +23,3 @@ end
 
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Supporting development environment for applications", ServiceComponent::Test::ExecutionEnvironmentOrchestrationProvider)
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Supporting production environment for applications",  ServiceComponent::Test::ExecutionEnvironmentOrchestrationProvider)
-ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Supporting staging environment for applications",     ServiceComponent::Test::ExecutionEnvironmentOrchestrationProvider)

@@ -22,17 +22,12 @@ Scenario:
 Scenario:
   Given an execution environment 'production'
   When I start the service component
-  Then authentication should not allow development access 
+  Then authentication should not allow development access
 
 Scenario:
   Given an execution environment 'production'
   When I start the service component
   Then authentication should allow access to production credentials
-
-Scenario:
-  Given an execution environment 'production'
-  When I start the service component
-  Then authentication should not allow staging credential access 
 
 Scenario:
   Given an execution environment 'production'

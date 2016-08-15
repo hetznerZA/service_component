@@ -16,7 +16,7 @@ The domain analysis for the service component can be viewed here: https://docs.g
 * {file:features/bootstrap_with_configuration_service.feature boostrapping with a configuration service} URI, and access token
 * {file:features/bootstrap_with_service_registry.feature bootstrapping with a service registry} URI
 * {file:features/bootstrap_with_authentication_provider.feature bootstrapping with an authentication provider} URI
-* {file:features/bootstrap_with_execution_environment.feature bootstrapping with an execution environment} indicator (one of test, development, staging, production)
+* {file:features/bootstrap_with_execution_environment.feature bootstrapping with an execution environment} indicator (one of development or production)
 * {file:features/bootstrap_with_session_configuration.feature bootstrapping with a session secret and key}
 * {file:features/bootstrap_with_ca.feature bootstrapping with a certificate authority configuration}
 * {file:features/bootstrap_with_time.feature bootstrapping with a reliable time source}
