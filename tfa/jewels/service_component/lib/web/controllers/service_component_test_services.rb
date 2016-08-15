@@ -41,6 +41,17 @@ module SoarSc
           [200, ""]
         end
       end
+
+      class RoutingTestController < ConfiguredController
+        def serve(request)
+          SoarSc::auditing.debug("RoutingTestFirstController with path as #{request.path}",request.params['flow_identifier'].to_s)
+          [200, ""]
+        end
+        def serve_second_match(request)
+          SoarSc::auditing.debug("RoutingTestSecondController",request.params['flow_identifier'].to_s)
+          [200, ""]
+        end
+      end
     end
   end
 end

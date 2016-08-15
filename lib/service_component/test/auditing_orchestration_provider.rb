@@ -340,10 +340,6 @@ module ServiceComponent
         message
       end
 
-      def create_unique_id
-        "#{SecureRandom.hex(32)}"
-      end
-
       def get_iut_buffer_size
         @bootstrap_status['data']['configuration']['auditing']['queue_worker']['queue_size'].to_i
       end

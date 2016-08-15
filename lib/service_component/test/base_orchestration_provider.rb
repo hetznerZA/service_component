@@ -76,6 +76,10 @@ module ServiceComponent
         end
         return false
       end
+      
+      def create_unique_id
+        "#{SecureRandom.hex(32)}"
+      end
 
       private
 

@@ -75,9 +75,10 @@ module ServiceComponent
       end
 
       def has_audit_entry_with_message_and_flow_id?(message,flow_id)
-        lines = get_audit_entries_with_flow_id(flow_id)
-        return true if lines.include?(message)
-        return false
+        BaseOrchestrationProvider::busy_wait(4,true) {
+          lines = get_audit_entries_with_flow_id(flow_id)
+          lines.include?(message)
+        }
       end
 
       def get_audit_entries_with_flow_id(flow_id)

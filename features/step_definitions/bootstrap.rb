@@ -234,6 +234,74 @@ Given(/^no authentication provider$/) do
   @test.given_no_authentication_provider
 end
 
+Given(/^a valid certificate authority trust chain$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given(/^a valid certificate authority verification URI$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given(/^an invalid certificate authority trust chain$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given(/^a valid certificate revokation list URI$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given(/^an invalid certificate authority verification URI$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given(/^an valid certificate authority verification URI$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given(/^a invalid certificate revokation list URI$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given(/^no certificate authority trust chain$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given(/^no certificate authority verification URI$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given(/^no certificate revokation list URI$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then(/^I remember the configuration$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then(/^I notify 'invalid certificate authority trust chain'$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then(/^I notify 'invalid certificate authority verification URI'$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then(/^I notify 'invalid certificate revokation list URI'$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then(/^I notify 'missing certificate authority trust chain'$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then(/^I notify 'missing authority verification URI'$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then(/^I notify 'missing certificate revokation list URI'$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
 Then(/^I remember the authentication provider$/) do
   expect(@test.has_remembered_authentication_provider).to eq(true)
 end
