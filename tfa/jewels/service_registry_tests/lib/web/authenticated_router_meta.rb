@@ -87,3 +87,18 @@
           },
           'controller' => 'ServiceRegistryTestController'
         })
+
+        register_route({
+          'description' => 'Allow the test suite to view the authorization provider status',
+          'service_name' => 'architectural-test-service-with-registered-existing-policy',
+          'path' => 'authorization-tests/query-initialization-provider',
+          'method' => 'get',
+          'nfrs' => {
+            'authorization' => 'AUTHORIZED',
+            'secured' => 'UNSIGNED'
+          },
+          'view' => {
+            'renderer' => 'json'
+          },
+          'controller' => 'AuthorizationTestController'
+        })

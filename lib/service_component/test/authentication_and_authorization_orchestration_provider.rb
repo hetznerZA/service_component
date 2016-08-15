@@ -71,12 +71,31 @@ module ServiceComponent
         #basic auth will be used implicitly.
       end
 
+      def given_a_valid_authorization_provider
+        #by default there is always a valid authorization provider
+      end
+
+      def given_an_authorization_provider_initialization_failure
+        puts "Unable to test this at present in soar sc directly, simulate it indirectly by disabling the service registry on which authorization depends"
+        @iut.environment['SERVICE_REGISTRY'] = 'not\a\uri'
+      end
+
       def have_an_initialized_authentication_provider?
         #for test purposes we use basic auth so check that it is initialized
         @iut.audit_entry_with_message_exist?('BASIC_AUTH_USER specified, using basic auth for authentication. Basic auth is not recommended for production')
       end
 
+      def have_an_initialized_authorization_provider?
+        JSON.parse(get_authorization_provider_info.body)['access_manager'].include?("SoarPolicyAccessManager::PolicyAccessManager")
+      end
+
       private
+
+      def get_authorization_provider_info
+        @test_flow_id = create_unique_id
+        parameters = { :flow_identifier => @test_flow_id }
+        @iut.query_endpoint(resource: 'authorization-tests/query-initialization-provider', parameters: parameters)
+      end
 
       def busy_wait(check_timeout, desired_result)
         BaseOrchestrationProvider::busy_wait(check_timeout, desired_result) { yield }

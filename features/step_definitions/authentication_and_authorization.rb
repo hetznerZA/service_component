@@ -50,6 +50,14 @@ Given(/^an authenticaton provider initialization failure$/) do
   @test.given_an_authenticaton_provider_initialization_failure
 end
 
+Given(/^a valid authorization provider$/) do
+  @test.given_a_valid_authorization_provider
+end
+
+Given(/^an authorization provider initialization failure$/) do
+  @test.given_an_authorization_provider_initialization_failure
+end
+
 When(/^I am asked whether the request has authenticated$/) do
   pending # Write code here that turns the phrase above into concrete actions
 end
@@ -64,6 +72,14 @@ end
 
 When(/^I am asked whether the request has been delegated$/) do
   pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then(/^I have an initialized authorization provider$/) do
+  expect(@test.have_an_initialized_authorization_provider?).to eq(true)
+end
+
+Then(/^I notify 'Failure initializing authorization provider'$/) do
+  puts "Unable to test this in soar sc"
 end
 
 Then(/^I respond true$/) do
