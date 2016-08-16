@@ -66,6 +66,10 @@ service_name = 'authorization-policy-reject-all'
 @services.add_service_uri(service_name, 'http://localhost:9393/authorization-policy-reject-all/')
 @associations.associate_service_with_domain_perspective(service_name, 'testing')
 
+service_name = 'architectural-test-service-using-no-authorization-policy'
+@services.register_service( {'name' => service_name, 'description' => 'Test service that uses no policy' })
+@associations.associate_service_with_domain_perspective(service_name, 'testing')
+
 service_name = 'architectural-test-service-using-always-allow-authorization-policy'
 @services.register_service( {'name' => service_name, 'description' => 'Test service that uses policy which always allow access' })
 @services.configure_meta_for_service(service_name, {'policy' => 'authorization-policy-accept-all'})
