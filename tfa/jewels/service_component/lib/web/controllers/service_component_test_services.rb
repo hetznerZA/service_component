@@ -35,7 +35,7 @@ module SoarSc
             request['operation'] = 'flow-test-action-2'
 
             unauthenticated_meta = SoarSc::Web::UnauthenticatedRouterMeta.new(SoarSc::configuration)
-            unauthenticated_router = SoarSc::Web::BaseRouter.new(unauthenticated_meta)
+            unauthenticated_router = SoarScRouting::BaseRouter.new(unauthenticated_meta)
             unauthenticated_router.route(request)
           end
           [200, ""]
