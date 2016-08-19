@@ -13,11 +13,11 @@ Feature: Bootstrapping with a configuration
   Scenario:
     Given an invalid configuration
     When I am bootstrapped
-    Then I notify 'invalid configuration'
+    Then I notify 'Invalid configuration'
     And I do not complete bootstrap
 
   Scenario:
     Given no configuration
     When I am bootstrapped
     Then I notify 'missing configuration'
-    And I do not complete bootstrap    
+    And I do not complete bootstrap

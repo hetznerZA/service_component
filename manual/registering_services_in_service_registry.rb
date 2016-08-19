@@ -53,3 +53,34 @@ service_name = 'architectural-test-service-registered-with-2-uris-some-unreachab
 @services.add_service_uri(service_name, 'http://unreachable:9393/architectural-test-service-access-point-unreachable/')
 @services.add_service_uri(service_name, 'http://localhost:9393/architectural-test-service-access-point-2/')
 @associations.associate_service_with_domain_perspective(service_name, 'testing')
+
+# Authorization Policy related testing
+
+service_name = 'authorization-policy-accept-all'
+@services.register_service( {'name' => service_name, 'description' => 'Policy allowing anyone' })
+@services.add_service_uri(service_name, 'http://localhost:9393/authorization-policy-accept-all/')
+@associations.associate_service_with_domain_perspective(service_name, 'testing')
+
+service_name = 'authorization-policy-reject-all'
+@services.register_service( {'name' => service_name, 'description' => 'Policy rejecting anyone' })
+@services.add_service_uri(service_name, 'http://localhost:9393/authorization-policy-reject-all/')
+@associations.associate_service_with_domain_perspective(service_name, 'testing')
+
+service_name = 'architectural-test-service-using-no-authorization-policy'
+@services.register_service( {'name' => service_name, 'description' => 'Test service that uses no policy' })
+@associations.associate_service_with_domain_perspective(service_name, 'testing')
+
+service_name = 'architectural-test-service-using-always-allow-authorization-policy'
+@services.register_service( {'name' => service_name, 'description' => 'Test service that uses policy which always allow access' })
+@services.configure_meta_for_service(service_name, {'policy' => 'authorization-policy-accept-all'})
+@associations.associate_service_with_domain_perspective(service_name, 'testing')
+
+service_name = 'architectural-test-service-using-always-deny-authorization-policy'
+@services.register_service( {'name' => service_name, 'description' => 'Test service that uses policy which always deny access' })
+@services.configure_meta_for_service(service_name, {'policy' => 'authorization-policy-reject-all'})
+@associations.associate_service_with_domain_perspective(service_name, 'testing')
+
+service_name = 'architectural-test-service-using-invalid-authorization-policy'
+@services.register_service( {'name' => service_name, 'description' => 'Test service that uses policy with no access points to simulate failure' })
+@services.configure_meta_for_service(service_name, {'policy' => 'authorization-policy-with-no-access-points'})
+@associations.associate_service_with_domain_perspective(service_name, 'testing')

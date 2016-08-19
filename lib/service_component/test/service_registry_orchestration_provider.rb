@@ -230,10 +230,6 @@ module ServiceComponent
       def hit_endpoint_requiring_authorization(test_service,test_id)
         @iut.query_endpoint(resource: test_service, parameters: { :flow_identifier => test_id })
       end
-
-      def create_unique_id
-        "#{SecureRandom.hex(32)}"
-      end
     end
   end
 end
@@ -241,4 +237,3 @@ end
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Service registry client providing full suite of service registry functionality", ServiceComponent::Test::SoarScServiceRegistryOrchestrationProvider)
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Policy lookup",                                                                  ServiceComponent::Test::SoarScServiceRegistryOrchestrationProvider)
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Finding service URIs",                                                           ServiceComponent::Test::SoarScServiceRegistryOrchestrationProvider)
-ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Authorization policies",                                                         ServiceComponent::Test::SoarScServiceRegistryOrchestrationProvider)

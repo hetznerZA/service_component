@@ -152,7 +152,21 @@ module ServiceComponent
       end
 
       def given_no_configuration_file
-        puts "TODO - not implemented yet"
+        #use the same method that force a failure reading the file because it simply
+        #places the configuration in the wrong location, therefore no configuration file
+        given_a_failure_reading_the_configuration_file
+      end
+
+      def given_valid_configuration
+        given_a_valid_configuration_file
+      end
+
+      def given_invalid_configuration
+        given_an_invalid_configuration_file
+      end
+
+      def given_no_configuration
+        given_no_configuration_file
       end
 
       def given_an_invalid_configuration_service_token(minimum_valid_length)
@@ -173,6 +187,14 @@ module ServiceComponent
         @iut.environment['CFGSRV_PROVIDER_ADDRESS'] = 'not\a\valid\uri'
       end
 
+      def given_an_development_execution_environment
+        @iut.set_execution_environment('development')
+      end
+
+      def given_an_production_execution_environment
+        @iut.set_execution_environment('production')
+      end
+
       def given_a_valid_an_execution_environment_indicator
         @iut.set_execution_environment(VALID_EXECUTION_ENVIRONMENT)
       end
@@ -183,6 +205,10 @@ module ServiceComponent
 
       def given_no_execution_environment_indicator
         @iut.set_execution_environment(nil)
+      end
+
+      def given_no_execution_environment
+        given_no_execution_environment_indicator
       end
 
       def given_a_valid_configuration_service_URI
@@ -223,10 +249,27 @@ module ServiceComponent
         @iut.configuration_file = "#{ENV['SOAR_DIR']}/config/invalid-config-location.yml"
       end
 
+      def given_a_valid_authentication_provider
+        given_an_authentication_service_uri_present_in_the_environment_file
+      end
+
+      def given_an_invalid_authentication_provider
+        @iut.environment['CAS_SERVER'] = 'not\a\valid\uri'
+      end
+
+      def given_no_authentication_provider
+        @iut.environment.delete('CAS_SERVER')
+        @iut.environment.delete('BASIC_AUTH_USER')
+      end
+
       def has_retrieved_configuration_from_the_configuration_service_only
         (@bootstrap_status['data']['configuration']['local_only_test_configuration_entry'].nil?) and
         (@bootstrap_status['data']['configuration']['remote_only_test_configuration_entry'] == 'sourced_from_remote_configuration_service') and
         (@bootstrap_status['data']['configuration']['test_configuration_entry'] == 'sourced_from_remote_configuration_service')
+      end
+
+      def has_remembered_my_configuration
+        has_retrieved_configuration_from_the_file
       end
 
       def has_retrieved_configuration_from_the_file
@@ -251,6 +294,10 @@ module ServiceComponent
 
       def has_remembered_service_registry_uri
         can_extract_the_service_registry_uri_from_the_environment_file
+      end
+
+      def has_remembered_authentication_provider
+        can_extract_the_authentication_service_uri_from_the_environment_file
       end
 
       def can_extract_the_service_identifier_from_the_environment

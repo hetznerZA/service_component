@@ -234,6 +234,11 @@ module ServiceComponent
         has_reported_the_buffer_to_the_auditor?
       end
 
+      def did_not_complete_bootstrap_due_to_missing_auditing_configuration?
+        true
+        #Cannot test this on soar_sc since there is always a default auditing configuration
+      end
+
       def have_initialized_auditing_provider?
         notify_event(DEBUG_LEVEL, @test_flow_id, BUFFER_FILL_MESSAGE)
         did_report_anything?
@@ -338,10 +343,6 @@ module ServiceComponent
         message = audit_entry.split(',')[4] unless audit_entry.nil?
         message.delete!("\n") unless message.nil?
         message
-      end
-
-      def create_unique_id
-        "#{SecureRandom.hex(32)}"
       end
 
       def get_iut_buffer_size

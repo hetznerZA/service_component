@@ -369,3 +369,7 @@ end
 Then(/^I report the buffer to standard error stream$/) do
   expect(@test.has_reported_the_buffer_to_standard_error_stream?).to eq(true)
 end
+
+Then(/^I do not complete bootstrap due to missing auditing configuration$/) do
+  expect(@test.did_not_complete_bootstrap_due_to_missing_auditing_configuration?).to eq(true)
+end

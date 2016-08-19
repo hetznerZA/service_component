@@ -11,6 +11,11 @@ module ServiceComponent
       end
 
 
+      def start_the_service_component
+
+      end
+
+
       private
 
       def busy_wait(check_timeout, desired_result)
@@ -23,4 +28,3 @@ end
 
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Supporting development environment for applications", ServiceComponent::Test::ExecutionEnvironmentOrchestrationProvider)
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Supporting production environment for applications",  ServiceComponent::Test::ExecutionEnvironmentOrchestrationProvider)
-ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Supporting staging environment for applications",     ServiceComponent::Test::ExecutionEnvironmentOrchestrationProvider)

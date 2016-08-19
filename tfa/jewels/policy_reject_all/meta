@@ -1,0 +1,5 @@
+architecture: 1.2.0
+path: /policy_reject_all
+view: soar_sc
+controller: lib/web/controllers/policy_reject_all.rb
+model: lib/web/models/policy_reject_all.rb
