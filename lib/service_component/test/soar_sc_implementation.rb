@@ -37,6 +37,7 @@ module ServiceComponent
 
         @configuration_file = "#{ENV['SOAR_DIR']}/config/config.yml"
         @configuration = load_yaml_file(@configuration_file)
+        @configuration['auditing'] = {'auditors' => {'log4r' => {'file_name' => 'soar_sc_audit_file.log'}}}
         @original_configuration = load_yaml_file(@configuration_file)
 
         @audit_events_file = "#{ENV['SOAR_DIR']}/soar_sc.log"

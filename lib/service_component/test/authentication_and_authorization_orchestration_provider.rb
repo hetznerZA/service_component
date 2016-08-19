@@ -105,7 +105,6 @@ module ServiceComponent
 
       def authorize_the_service
         @service_name = "authorization-tests/architectural-test-service#{@using_policy}"
-        @service_name = "architectural-test-service-access-point-1"
         @authorization_result = @iut.query_endpoint(resource: @service_name, parameters: { :flow_identifier => @test_id })
       end
 
@@ -114,8 +113,8 @@ module ServiceComponent
       end
 
       def have_applied_the_policy?
-        true
-        #TODO Need to look out for certain notifications or a success/failure
+        @iut.has_audit_entry_with_message_and_flow_id?('PolicyAcceptAllController serving',@test_id) or
+        @iut.has_audit_entry_with_message_and_flow_id?('PolicyRejectAllController serving',@test_id)
       end
 
       def have_responded_with_allow?
@@ -123,8 +122,12 @@ module ServiceComponent
       end
 
       def have_responded_with_deny?
-        #byebug
         '403' == @authorization_result.code
+      end
+
+      def have_notified_authorization_failure?
+        #there are many messages to this affect but they all result in the authorization being rejected
+        @iut.has_audit_entry_with_message_and_flow_id?('Policy rejected authorization request',@test_id)
       end
 
       def have_an_initialized_authentication_provider?

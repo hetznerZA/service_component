@@ -15,7 +15,7 @@ module SoarSc
       class AuthorizationProtectedController < ConfiguredController
         def serve(request)
           SoarSc::auditing.info("AuthorizationProtectedController",request.params['flow_identifier'])
-          [200, data]
+          [200, {'result' =>'Yay, you are allowed to get here'}]
         end
       end
 

@@ -22,7 +22,7 @@ end
 module SoarSc
   module Web
     module Models
-      class PolicyAcceptAll < ConfiguredModel
+      class PolicyAcceptAllModel < ConfiguredModel
         attr_accessor :configuration
         attr_accessor :dependencies
 

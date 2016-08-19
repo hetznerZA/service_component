@@ -8,12 +8,16 @@ export SOAR_DIR=../soar_sc
 export SERVICE_COMPONENT_DIR=$BASE_DIR
 
 echo "Cleaning all repos involved in testing in preparation for jewel injection"
-cd $SOAR_DIR && git checkout . && git clean -fdx
+cd $SOAR_DIR/ && git checkout . && git clean -fdx
+cd $SOAR_DIR/jewels && git checkout . && git clean -fdx
+cd $SOAR_DIR/lib && git checkout . && git clean -fdx
 #cd $SERVICE_COMPONENT_DIR && git checkout . && git clean -fdx
 
 echo "Import jewels related to audit related testing"
 cd $SERVICE_COMPONENT_DIR && ./import.sh service_component
 cd $SERVICE_COMPONENT_DIR && ./import.sh policy_is_anyone
+cd $SERVICE_COMPONENT_DIR && ./import.sh policy_reject_all
+cd $SERVICE_COMPONENT_DIR && ./import.sh policy_accept_all
 cd $SERVICE_COMPONENT_DIR && ./import.sh service_registry_tests
 
 echo "Starting keep_running of soar_sc"
@@ -32,28 +36,28 @@ echo "Running service component BDD tests"
 cd $SERVICE_COMPONENT_DIR
 rvm use . && gem install bundler && bundle
 
-COUNTER=0
+if [ -z "$TEST_FEATURES" ]; then TEST_FEATURES=features/*; fi
+if [ -z "$ATTEMPTS" ]; then ATTEMPTS=1; fi
+
 TEST_EXIT_CODE=1
-echo $TEST_EXIT_CODE
-while [  $COUNTER -lt 3 ] && [ $TEST_EXIT_CODE -ne "0" ]; do
+COUNTER=0
+while [  $COUNTER -lt $ATTEMPTS ] && [ $TEST_EXIT_CODE -ne "0" ]; do
    let COUNTER=COUNTER+1
-   echo "--- Cucumber Test iteration $COUNTER START ---"
+   echo --- Cucumber Test iteration $COUNTER START ---
    if [ $COUNTER -eq "1" ]; then
-     TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber --format pretty --format rerun --out .cucumber_failed_tests features/*
+     TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber --format pretty --format rerun --out .cucumber_failed_tests $TEST_FEATURES
    else
      TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber --format pretty --format rerun --out .cucumber_failed_tests -q @.cucumber_tests_to_run
    fi
    TEST_EXIT_CODE=$?
    cp .cucumber_failed_tests .cucumber_tests_to_run
-   echo "--- Cucumber Test iteration $COUNTER END ---"
+   echo --- Cucumber Test iteration $COUNTER END ---
 done
 
-TEST_EXIT_CODE=$?
-
-echo "Stopping keep_running script and soar_sc service instance"
+echo Stopping keep_running script and soar_sc service instance
 kill $KEEP_RUNNING_PID
 $SOAR_DIR/stop.sh
 
-echo "Exiting with status code $TEST_EXIT_CODE"
+echo Exiting with status code $TEST_EXIT_CODE
 cd $BASE_DIR
 exit $TEST_EXIT_CODE

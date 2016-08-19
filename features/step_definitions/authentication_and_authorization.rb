@@ -111,7 +111,7 @@ Then(/^I respond with 'deny'$/) do
 end
 
 Then(/^I notify 'Authorization failure'$/) do
-  expect(@test.audit_entry_with_message_exist?('Authorization failure')).to eq(true)
+  expect(@test.have_notified_authorization_failure?).to eq(true)
 end
 
 Then(/^I have an initialized authorization provider$/) do
