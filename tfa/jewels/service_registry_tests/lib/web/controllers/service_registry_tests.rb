@@ -1,5 +1,3 @@
-require 'web/controllers/configured_controller'
-
 module SoarSc
   module Web
     module Controllers
