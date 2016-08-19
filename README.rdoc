@@ -189,3 +189,22 @@ Soft-link rspec suites for the Model View Controller test seams to the spec/ dir
 ==== My team wants to build and release a service into the Hetzner architecture:
 
 Using the reference implementation (soar_sc) the workflows are described here: https://docs.google.com/document/d/1eCVcmOcQc-aYcxWMhOkrnVBx-ihRLSayfiIrUEwpJx0/edit
+
+
+=== Debugging pointers
+
+==== Getting byebug shell access on the soar_sc instance
+
+Occasionally it is very useful to get shell access on the service in order to debug something.  This can be problamatic since the BDD test suite that creates that exact situation controlls the configuration and execution of the service component in a backgrounded process.  Therefore shell access is not possible.
+
+Steps for getting shell access:
+1. Checkout and run the BDD test suite on your workstation outside of docker.  Normally docker is used to run on CI and can also be used to run tests on a workstation but you need to be able to run the service and execute the tests on your workstation directly to get shell access.
+2. Place a byebug breakpoint in the code that will be hit by the service component
+3. Place a byebug breakpoint in the BDD test suite that will halt the test suite just after bootstrapping and starting up the service. Therefore before the line "detail = get_status_detail" in soar_sc_implementation
+4. Comment out the line "./keep_running.sh > /dev/null 2>&1 &" in run_bdd_tests.sh to prevent the background job trying to fire up the service all the time.
+5. Run the test suite which will halt at the byebug breakpoint set in step 3
+6. Run the test suite in another terminal "export SOAR_TECH=debug; ./soar_tech.sh; rvm use .; RACK_ENV=development ./run.sh"
+7. Now we have options of hitting the service manually using curl in another terminal or letting the test suite continue running and hitting the endpoint for you.
+7.1 curl "http://dev:dev@127.0.0.1:9393/service-registry-client-command-and-control"
+7.2 Or simply press c on the breakpoint set in step 3
+8. If all went well you should be hitting the breakpoint set in step 2.  Go forth and debug!

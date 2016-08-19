@@ -32,20 +32,21 @@ echo "Running service component BDD tests"
 cd $SERVICE_COMPONENT_DIR
 rvm use . && gem install bundler && bundle
 
-#All tests
-TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/*
-
-#Single test for development work
-#TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/authorization_policy.feature
-#EST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber features/bootstrap_with_execution_environment.feature
-
-
-
-# bootstrap_with_service_configuration.feature
-# bootstrap_with_configuration_service.feature
-# bootstrap_with_authentication_provider.feature
-# bootstrap_with_ca.feature
-
+COUNTER=0
+TEST_EXIT_CODE=1
+echo $TEST_EXIT_CODE
+while [  $COUNTER -lt 3 ] && [ $TEST_EXIT_CODE -ne "0" ]; do
+   let COUNTER=COUNTER+1
+   echo "--- Cucumber Test iteration $COUNTER START ---"
+   if [ $COUNTER -eq "1" ]; then
+     TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber --format pretty --format rerun --out .cucumber_failed_tests features/*
+   else
+     TEST_ORCHESTRATION_PROVIDER=tfa bundle exec cucumber --format pretty --format rerun --out .cucumber_failed_tests -q @.cucumber_tests_to_run
+   fi
+   TEST_EXIT_CODE=$?
+   cp .cucumber_failed_tests .cucumber_tests_to_run
+   echo "--- Cucumber Test iteration $COUNTER END ---"
+done
 
 TEST_EXIT_CODE=$?
 
