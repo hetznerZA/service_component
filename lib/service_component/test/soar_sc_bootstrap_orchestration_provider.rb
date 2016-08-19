@@ -187,6 +187,14 @@ module ServiceComponent
         @iut.environment['CFGSRV_PROVIDER_ADDRESS'] = 'not\a\valid\uri'
       end
 
+      def given_an_development_execution_environment
+        @iut.set_execution_environment('development')
+      end
+
+      def given_an_production_execution_environment
+        @iut.set_execution_environment('production')
+      end
+
       def given_a_valid_an_execution_environment_indicator
         @iut.set_execution_environment(VALID_EXECUTION_ENVIRONMENT)
       end
@@ -197,6 +205,10 @@ module ServiceComponent
 
       def given_no_execution_environment_indicator
         @iut.set_execution_environment(nil)
+      end
+
+      def given_no_execution_environment
+        given_no_execution_environment_indicator
       end
 
       def given_a_valid_configuration_service_URI

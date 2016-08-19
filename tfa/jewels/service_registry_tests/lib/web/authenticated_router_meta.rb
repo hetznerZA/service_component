@@ -102,3 +102,63 @@
           },
           'controller' => 'AuthorizationTestController'
         })
+
+        register_route({
+          'description' => 'End point that will always reject due to rejecting policy',
+          'service_name' => 'architectural-test-service-using-always-deny-authorization-policy',
+          'path' => 'authorization-tests/architectural-test-service-using-always-deny-authorization-policy',
+          'method' => 'get',
+          'nfrs' => {
+            'authorization' => 'AUTHORIZED',
+            'secured' => 'UNSIGNED'
+          },
+          'view' => {
+            'renderer' => 'json'
+          },
+          'controller' => 'AuthorizationProtectedController'
+        })
+
+        register_route({
+          'description' => 'End point that will always reject due to rejecting policy',
+          'service_name' => 'architectural-test-service-using-always-allow-authorization-policy',
+          'path' => 'authorization-tests/architectural-test-service-using-always-allow-authorization-policy',
+          'method' => 'get',
+          'nfrs' => {
+            'authorization' => 'AUTHORIZED',
+            'secured' => 'UNSIGNED'
+          },
+          'view' => {
+            'renderer' => 'json'
+          },
+          'controller' => 'AuthorizationProtectedController'
+        })
+
+        register_route({
+          'description' => 'End point that uses no policy',
+          'service_name' => 'architectural-test-service-using-no-authorization-policy',
+          'path' => 'authorization-tests/architectural-test-service-using-no-authorization-policy',
+          'method' => 'get',
+          'nfrs' => {
+            'authorization' => 'AUTHORIZED',
+            'secured' => 'UNSIGNED'
+          },
+          'view' => {
+            'renderer' => 'json'
+          },
+          'controller' => 'AuthorizationProtectedController'
+        })
+
+        register_route({
+          'description' => 'End point that uses invalid policy',
+          'service_name' => 'architectural-test-service-using-invalid-authorization-policy',
+          'path' => 'authorization-tests/architectural-test-service-using-invalid-authorization-policy',
+          'method' => 'get',
+          'nfrs' => {
+            'authorization' => 'AUTHORIZED',
+            'secured' => 'UNSIGNED'
+          },
+         'view' => {
+            'renderer' => 'json'
+          },
+          'controller' => 'AuthorizationProtectedController'
+        })

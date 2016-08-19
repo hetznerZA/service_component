@@ -38,10 +38,6 @@ Given(/^no originator of authentication delegation$/) do
   @test.given_no_originator_of_authentication_delegation
 end
 
-Given(/^an execution environment 'development'$/) do
-  @test.given_an_development_execution_environment
-end
-
 Given(/^a request requiring authentication$/) do
   @test.given_a_request_requiring_authentication
 end
@@ -58,6 +54,26 @@ Given(/^an authorization provider initialization failure$/) do
   @test.given_an_authorization_provider_initialization_failure
 end
 
+Given(/^an authorization policy that approves$/) do
+  @test.given_an_authorization_policy_that_approves
+end
+
+Given(/^an authorization policy that does not approve$/) do
+  @test.given_an_authorization_policy_that_does_not_approve
+end
+
+Given(/^no authorization policy$/) do
+  @test.given_no_authorization_policy
+end
+
+Given(/^an authorization policy$/) do
+  @test.given_an_authorization_policy
+end
+
+Given(/^an authorization failure$/) do
+  @test.given_an_authorization_failure
+end
+
 When(/^I am asked whether the request has authenticated$/) do
   pending # Write code here that turns the phrase above into concrete actions
 end
@@ -72,6 +88,30 @@ end
 
 When(/^I am asked whether the request has been delegated$/) do
   pending # Write code here that turns the phrase above into concrete actions
+end
+
+When(/^asked to authorize the service$/) do
+  @test.authorize_the_service
+end
+
+Then(/^I apply the policy$/) do
+  expect(@test.have_applied_the_policy?).to eq(true)
+end
+
+Then(/^I do not apply a policy$/) do
+  expect(@test.have_not_applied_the_policy?).to eq(true)
+end
+
+Then(/^I respond with 'allow'$/) do
+  expect(@test.have_responded_with_allow?).to eq(true)
+end
+
+Then(/^I respond with 'deny'$/) do
+  expect(@test.have_responded_with_deny?).to eq(true)
+end
+
+Then(/^I notify 'Authorization failure'$/) do
+  expect(@test.audit_entry_with_message_exist?('Authorization failure')).to eq(true)
 end
 
 Then(/^I have an initialized authorization provider$/) do

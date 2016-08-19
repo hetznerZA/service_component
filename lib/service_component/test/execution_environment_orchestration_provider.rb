@@ -11,6 +11,11 @@ module ServiceComponent
       end
 
 
+      def start_the_service_component
+
+      end
+
+
       private
 
       def busy_wait(check_timeout, desired_result)

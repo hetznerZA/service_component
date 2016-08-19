@@ -8,8 +8,13 @@ module SoarSc
           data = {}
           access_managers = SoarAuthorization::Authorize.class_variable_get(:@@access_managers)
           data['access_manager'] = access_managers['/architectural-test-service-with-registered-existing-policy'][0]['access_manager'].class
-          print data['access_manager'].to_yaml
-          SoarSc::auditing.debug("#{data['access_manager']}",request.params['flow_identifier'])
+          [200, data]
+        end
+      end
+
+      class AuthorizationProtectedController < ConfiguredController
+        def serve(request)
+          SoarSc::auditing.info("AuthorizationProtectedController",request.params['flow_identifier'])
           [200, data]
         end
       end

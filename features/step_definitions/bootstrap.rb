@@ -110,6 +110,18 @@ Given(/^no execution environment indicator$/) do
   @test.given_no_execution_environment_indicator
 end
 
+Given(/^no execution environment$/) do
+  @test.given_no_execution_environment
+end
+
+Given(/^an execution environment 'development'$/) do
+  @test.given_an_development_execution_environment
+end
+
+Given(/^an execution environment 'production'$/) do
+  @test.given_an_production_execution_environment
+end
+
 Given(/^an environment$/) do
   @test.given_an_environment
 end

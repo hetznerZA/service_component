@@ -9,6 +9,12 @@ module ServiceComponent
       def setup
         super
         @iut.set_execution_environment('production')
+        bootstrap
+      end
+
+      def given_a_request_for_a_service
+        #request is setup as a collection of other aspects right before the request.
+        @test_id = create_unique_id
       end
 
       def given_an_authenticated_identity
@@ -54,10 +60,6 @@ module ServiceComponent
         puts "TODO not yet implementated"
       end
 
-      def given_an_development_execution_environment
-        @iut.set_execution_environment('development')
-      end
-
       def given_a_request_requiring_authentication
         @service_endpoint_name = 'architectural-test-service-access-point-1'
       end
@@ -75,9 +77,54 @@ module ServiceComponent
         #by default there is always a valid authorization provider
       end
 
+      def given_an_authorization_policy_that_approves
+        @using_policy = '-using-always-allow-authorization-policy'
+      end
+
+      def given_an_authorization_policy_that_does_not_approve
+        @using_policy = '-using-always-deny-authorization-policy'
+      end
+
+      def given_no_authorization_policy
+        @using_policy = '-using-no-authorization-policy'
+      end
+
+      def given_an_authorization_policy
+        #default to this policy, but specialized using other givens
+        @using_policy = '-using-always-allow-authorization-policy'
+      end
+
+      def given_an_authorization_failure
+        @using_policy = '-using-invalid-authorization-policy'
+      end
+
       def given_an_authorization_provider_initialization_failure
         puts "Unable to test this at present in soar sc directly, simulate it indirectly by disabling the service registry on which authorization depends"
         @iut.environment['SERVICE_REGISTRY'] = 'not\a\uri'
+      end
+
+      def authorize_the_service
+        @service_name = "authorization-tests/architectural-test-service#{@using_policy}"
+        @service_name = "architectural-test-service-access-point-1"
+        @authorization_result = @iut.query_endpoint(resource: @service_name, parameters: { :flow_identifier => @test_id })
+      end
+
+      def have_not_applied_the_policy?
+        not have_applied_the_policy?
+      end
+
+      def have_applied_the_policy?
+        true
+        #TODO Need to look out for certain notifications or a success/failure
+      end
+
+      def have_responded_with_allow?
+        '200' == @authorization_result.code
+      end
+
+      def have_responded_with_deny?
+        #byebug
+        '403' == @authorization_result.code
       end
 
       def have_an_initialized_authentication_provider?
@@ -113,3 +160,4 @@ ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Pluggable authentication provider",              ServiceComponent::Test::AuthenticationAndAuthorizationOrchestrationProvider)
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Supporting development workflow authorization",  ServiceComponent::Test::AuthenticationAndAuthorizationOrchestrationProvider)
 ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Pluggable authorization provider",               ServiceComponent::Test::AuthenticationAndAuthorizationOrchestrationProvider)
+ServiceComponent::Test::OrchestrationProviderRegistry.instance.register("tfa", "Authorization policies",                         ServiceComponent::Test::AuthenticationAndAuthorizationOrchestrationProvider)

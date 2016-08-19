@@ -5,6 +5,7 @@ module SoarSc
     module Controllers
       class PolicyAcceptAllController < ConfiguredController
         def serve(request)
+          SoarSc::auditing.info("PolicyAcceptAllController serving",request.params['flow_identifier'])
           subject_identifier = request.params['subject_identifier']
           policy = SoarSc::Authorization::AuthorizationPolicyAcceptAll.new
           result = policy.authorize(subject_identifier)
