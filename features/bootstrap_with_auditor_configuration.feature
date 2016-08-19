@@ -20,4 +20,4 @@ Feature: Bootstrapping with auditor configuration
     Given no auditor configuration
     When I am bootstrapped
     Then I notify 'Missing auditor configuration'
-    And I do not complete bootstrap
+    And I do not complete bootstrap due to missing auditing configuration

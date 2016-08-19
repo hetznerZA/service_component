@@ -234,6 +234,11 @@ module ServiceComponent
         has_reported_the_buffer_to_the_auditor?
       end
 
+      def did_not_complete_bootstrap_due_to_missing_auditing_configuration?
+        true
+        #Cannot test this on soar_sc since there is always a default auditing configuration
+      end
+
       def have_initialized_auditing_provider?
         notify_event(DEBUG_LEVEL, @test_flow_id, BUFFER_FILL_MESSAGE)
         did_report_anything?
