@@ -51,6 +51,10 @@ while [  $COUNTER -lt $ATTEMPTS ] && [ $TEST_EXIT_CODE -ne "0" ]; do
    fi
    TEST_EXIT_CODE=$?
    cp .cucumber_failed_tests .cucumber_tests_to_run
+   if [ $TEST_EXIT_CODE -ne "0" ]; then
+     echo Sleeping for 30 seconds due to failure. Hoping that transient network issues will resolve over time.
+     sleep 30
+   fi
    echo --- Cucumber Test iteration $COUNTER END ---
 done
 
