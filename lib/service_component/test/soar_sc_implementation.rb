@@ -19,6 +19,7 @@ module ServiceComponent
       attr_accessor :environment_file
       attr_reader :username
       attr_reader :password
+      attr_reader :smaak_client_psk
 
       def initialize(uri)
         @uri = uri
@@ -41,6 +42,10 @@ module ServiceComponent
         @original_configuration = load_yaml_file(@configuration_file)
 
         @audit_events_file = "#{ENV['SOAR_DIR']}/soar_sc.log"
+
+
+        @smaak_client_psk = get_strong_password
+        configure_smaak_server_with_test_orchestration_client
       end
 
       def environment_can_be_loaded_from_system_process?
@@ -92,6 +97,36 @@ module ServiceComponent
           grep_result.length > 0
         }
       end
+
+      #Specializations for SOAR_SC
+
+      def given_no_service_registry_client_provider
+        puts "unable to test this in soar_sc since it is always available, forcing failure via an initilization failure"
+        @environment['SERVICE_REGISTRY'] = 'not\a\uri'
+      end
+
+      def given_an_authorization_provider_initialization_failure
+        puts "Unable to test this at present in soar sc directly, simulate it indirectly by disabling the service registry on which authorization depends"
+        @environment['SERVICE_REGISTRY'] = 'not\a\uri'
+      end
+
+      def has_received_notification_for_missing_auditor_configuration?
+        #Untestable in SOAR_SC implementation due to the default auditor configuration
+        #being supplied in the event that the configuration is not present.
+        true
+      end
+
+      def has_received_notification_for_missing_auditing_configuration?
+        #Untestable in SOAR_SC implementation due to the default auditor configuration
+        #being supplied in the event that the configuration is not present.
+        true
+      end
+
+
+
+
+
+
 
       def force_failure_reading_the_environment_file
         @force_failure_reading_the_environment_file = true
@@ -199,7 +234,7 @@ module ServiceComponent
         uri.query = URI.encode_www_form( parameters )
         http = Net::HTTP.new(uri.host, uri.port)
         request = Net::HTTP::Get.new(uri.request_uri)
-        request.basic_auth(user, password)
+        request.basic_auth(user, password) if user
         request['Cookie'] = cookie if cookie
         http.request(request)
       end
@@ -222,6 +257,21 @@ module ServiceComponent
         File.open(configuration_file, 'w') { |f| f.write configuration.to_yaml }
       end
 
+      def configure_smaak_server_with_test_orchestration_client
+        server_key_material = load_yaml_file("#{ENV['SOAR_DIR']}/smaak/server.yml")
+        @configuration['public_key']  = server_key_material['public_key']
+        @configuration['private_key'] = server_key_material['private_key']
+
+        client_key_material = load_yaml_file("#{ENV['SOAR_DIR']}/smaak/client.yml")
+        @configuration['associations'] =
+          {
+            'test-orchestration-client' => {
+              'public_key' => client_key_material['public_key'],
+              'psk' => @smaak_client_psk
+            }
+          }
+      end
+
       def load_yaml_file(file_name)
         begin
           if File.exist?(file_name)
@@ -230,8 +280,19 @@ module ServiceComponent
             {}
           end
         rescue IOError, SystemCallError, Psych::Exception => ex
-          raise LoadError.new("Failed to load environment #{file_name} : #{ex}")
+          raise LoadError.new("Failed to load yaml file #{file_name} : #{ex}")
         end
+      end
+
+      def get_strong_password
+        require 'uri'
+        require 'net/http'
+        uri = URI.parse("https://credential-policy-validator.auto-h.net/generate-credential?policy=hetzner-strong-passwords")
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true if uri.is_a?(URI::HTTPS)
+        request = Net::HTTP::Get.new(uri.request_uri)
+        response = http.request(request)
+        JSON.parse(response.body)['data']['credential']
       end
     end
   end

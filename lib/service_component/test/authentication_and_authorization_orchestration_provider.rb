@@ -1,6 +1,16 @@
 require 'json'
+require 'yaml'
 require "./lib/service_component/test/bootstrap_orchestration_provider"
 require "./lib/service_component/test/soar_sc_bootstrap_orchestration_provider"
+require 'rack'
+require 'net/http'
+require 'smaak'
+
+require 'smaak/associate'
+require 'smaak/server'
+require 'smaak/client'
+require 'smaak/auth_message'
+require 'smaak/smaak_service'
 
 module ServiceComponent
   module Test
@@ -9,7 +19,9 @@ module ServiceComponent
       def setup
         super
         @iut.set_execution_environment('production')
-        bootstrap
+        given_an_authenticated_human_identity
+        given_no_authorization_policy
+        create_smaak_client
       end
 
       def given_a_request_for_a_service
@@ -28,24 +40,25 @@ module ServiceComponent
       def given_an_authenticated_human_identity
         @user = 'dev'
         @password = 'dev'
+        @identity_type = 'human'
       end
 
       def given_an_authenticated_service_identity
-        puts "TODO not yet implementated using SMAAK"
+        @identity_type = 'service'
       end
 
       def given_no_authenticated_identity
-        @user = 'wrong username'
-        @password = 'wrong password'
+        @user = nil
+        @password = nil
       end
 
       def given_a_request_that_does_not_require_authentication
-        @service_endpoint_name = 'service_component/notify'
+        @service_endpoint_with_no_authentication = true
       end
 
       def given_an_authentication_failure
-        @user = 'wrong username'
-        @password = 'wrong password'
+        #@iut.environment['CAS_SERVER'] = 'https://invalid-login.konsoleh.co.za/cas'
+        #TODO I think it might be best to implement this using SMAAK auth failure.
       end
 
       def given_an_originator_of_authentication_delegation
@@ -99,13 +112,86 @@ module ServiceComponent
       end
 
       def given_an_authorization_provider_initialization_failure
-        puts "Unable to test this at present in soar sc directly, simulate it indirectly by disabling the service registry on which authorization depends"
-        @iut.environment['SERVICE_REGISTRY'] = 'not\a\uri'
+        @iut.given_an_authorization_provider_initialization_failure
       end
 
       def authorize_the_service
         @service_name = "authorization-tests/architectural-test-service#{@using_policy}"
-        @authorization_result = @iut.query_endpoint(resource: @service_name, parameters: { :flow_identifier => @test_id })
+        authorize
+      end
+
+      def when_asked_whether_the_request_has_authenticated
+        @service_name = "authorization-tests/architectural-test-service#{@using_policy}"
+        authorize
+      end
+
+      def when_asked_who_has_authenticated
+        if 'service' == @identity_type
+          @service_name = 'architectural-test-service-using-smaak'
+        elsif @service_endpoint_with_no_authentication
+          @service_name = 'endpoint-not-requiring-authentication'
+        else
+          @service_name = "authorization-tests/architectural-test-service#{@using_policy}"
+        end
+        authorize
+      end
+
+      def when_asked_who_delegated_the_authentication
+        @service_name = "authorization-tests/architectural-test-service#{@using_policy}"
+        authorize
+      end
+
+      def when_asked_whether_the_request_has_been_delegated
+        @service_name = "authorization-tests/architectural-test-service#{@using_policy}"
+        authorize
+      end
+
+      def authorize
+        if 'service' == @identity_type
+          @iut.environment.delete('CAS_SERVER')
+          @iut.environment.delete('BASIC_AUTH_USER')
+        end
+        bootstrap
+        if false #'service' == @identity_type
+          @result = @smaak_client.post('service-provider', "http://localhost:9393/#{@service_name}/", { 'index1' => 'data1', 'index2' => 'data2' }.to_json)
+        else
+          @result = @iut.query_endpoint(user: @user, password: @password, resource: @service_name, parameters: { :flow_identifier => @test_id })
+        end
+      end
+
+
+      def have_responded_with_true?
+        '200' == @result.code
+      end
+
+      def have_responded_with_false?
+        '401' == @result.code
+      end
+
+      def have_responded_with_the_authenticated_human_identity_identifier?
+        'dev' == JSON.parse(@result.body)['authentication_identity']
+      end
+
+      def have_responded_with_the_authenticated_service_identity_identifier?
+        #TODO
+        false
+      end
+
+      def have_responded_with_nil?
+        JSON.parse(@result.body)['authentication_identity'].nil?
+      end
+
+      def have_responded_with_with_the_authenticated_identity_identifier?
+        'dev' == JSON.parse(@result.body)['authentication_identity']
+      end
+
+      def have_responded_with_the_identity_of_the_originator?
+        #TODO
+        false
+      end
+
+      def have_responded_with_developer?
+        'developer' == JSON.parse(@result.body)['authentication_identity']
       end
 
       def have_not_applied_the_policy?
@@ -118,11 +204,11 @@ module ServiceComponent
       end
 
       def have_responded_with_allow?
-        '200' == @authorization_result.code
+        '200' == @result.code
       end
 
       def have_responded_with_deny?
-        '403' == @authorization_result.code
+        '403' == @result.code
       end
 
       def have_notified_authorization_failure?
@@ -141,6 +227,27 @@ module ServiceComponent
 
       private
 
+      def create_smaak_client
+        @smaak_client = Smaak::Client.new
+        @smaak_client.set_identifier('test-orchestration-client')
+        @smaak_client.set_private_key(get_smaak_client_private_key)
+        @smaak_client.add_association('service-provider', get_smaak_server_public_key, get_client_pre_shared_key, true) # encrypted
+      end
+
+      def get_smaak_client_private_key
+        configuration = YAML.load_file("#{ENV['SOAR_DIR']}/smaak/client.yml")
+        configuration['private_key']
+      end
+
+      def get_smaak_server_public_key
+        configuration = YAML.load_file("#{ENV['SOAR_DIR']}/smaak/server.yml")
+        configuration['public_key']
+      end
+
+      def get_client_pre_shared_key
+        @iut.smaak_client_psk
+      end
+
       def get_authorization_provider_info
         @test_flow_id = create_unique_id
         parameters = { :flow_identifier => @test_flow_id }
@@ -150,7 +257,6 @@ module ServiceComponent
       def busy_wait(check_timeout, desired_result)
         BaseOrchestrationProvider::busy_wait(check_timeout, desired_result) { yield }
       end
-
     end
   end
 end

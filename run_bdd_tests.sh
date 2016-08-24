@@ -4,7 +4,7 @@ source ~/.rvm/scripts/rvm
 #This script must be run from the parent folder of the soar_sc, service_component repo folders
 export BASE_DIR=$(pwd)
 
-export SOAR_DIR=../soar_sc
+export SOAR_DIR=$(pwd)/../soar_sc
 export SERVICE_COMPONENT_DIR=$BASE_DIR
 
 echo "Cleaning all repos involved in testing in preparation for jewel injection"
@@ -12,6 +12,11 @@ cd $SOAR_DIR/ && git checkout . && git clean -fdx
 cd $SOAR_DIR/jewels && git checkout . && git clean -fdx
 cd $SOAR_DIR/lib && git checkout . && git clean -fdx
 #cd $SERVICE_COMPONENT_DIR && git checkout . && git clean -fdx
+
+echo "Generating SMAAK key pairs"
+bundle exec ruby $SOAR_DIR/smaak/generate_4096_key_pair.rb $SOAR_DIR/smaak/client.yml
+bundle exec ruby $SOAR_DIR/smaak/generate_4096_key_pair.rb $SOAR_DIR/smaak/server.yml
+cd $SERVICE_COMPONENT_DIR
 
 echo "Import jewels related to audit related testing"
 cd $SERVICE_COMPONENT_DIR && ./import.sh service_component
@@ -38,6 +43,7 @@ rvm use . && gem install bundler && bundle
 
 if [ -z "$TEST_FEATURES" ]; then TEST_FEATURES=features/*; fi
 if [ -z "$ATTEMPTS" ]; then ATTEMPTS=1; fi
+if [ -z "$ITERATION_SLEEP" ]; then ITERATION_SLEEP=30; fi
 
 TEST_EXIT_CODE=1
 COUNTER=0
@@ -52,8 +58,8 @@ while [  $COUNTER -lt $ATTEMPTS ] && [ $TEST_EXIT_CODE -ne "0" ]; do
    TEST_EXIT_CODE=$?
    cp .cucumber_failed_tests .cucumber_tests_to_run
    if [ $TEST_EXIT_CODE -ne "0" ]; then
-     echo Sleeping for 30 seconds due to failure. Hoping that transient network issues will resolve over time.
-     sleep 30
+     echo Sleeping for $ITERATION_SLEEP seconds due to failure. Hoping that transient network issues will resolve over time.
+     sleep $ITERATION_SLEEP
    fi
    echo --- Cucumber Test iteration $COUNTER END ---
 done

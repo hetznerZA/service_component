@@ -1,4 +1,19 @@
         register_route({
+          'description' => 'Access Point that uses SMAAK but no authentication or authorization',
+          'service_name' => 'none', #'architectural-test-service-using-no-authorization-policy',
+          'path' => '/architectural-test-service-using-smaak',
+          'method' => 'get',
+          'nfrs' => {
+            'authorization' => 'UNAUTHORIZED',
+            'secured' => 'UNSIGNED'
+          },
+          'view' => {
+            'renderer' => 'json'
+          },
+          'controller' => 'SmaakEnabledTestController'
+        })
+
+        register_route({
           'description' => 'Access Point for command and control of service registry client in soar_sc',
           'service_name' => 'service-registry-client-command-and-control',
           'path' => '/service-registry-client-command-and-control',

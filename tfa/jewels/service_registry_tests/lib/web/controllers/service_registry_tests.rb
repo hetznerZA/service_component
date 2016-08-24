@@ -12,8 +12,21 @@ module SoarSc
 
       class AuthorizationProtectedController < ConfiguredController
         def serve(request)
+          data = {'result' =>'Yay, you are allowed to get here'}
           SoarSc::auditing.info("AuthorizationProtectedController",request.params['flow_identifier'])
-          [200, {'result' =>'Yay, you are allowed to get here'}]
+          authentication = SoarAuthentication::Authentication.new(request)
+          data['authentication_identity'] = authentication.identifier
+          [200, data]
+        end
+      end
+
+      class SmaakEnabledTestController < ConfiguredController
+        def serve(request)
+          data = {'result' =>'Yay, you are allowed to get here'}
+          SoarSc::auditing.info("SmaakEnabledTestController",request.params['flow_identifier'])
+          authentication = SoarAuthentication::Authentication.new(request)
+          data['authentication_identity'] = authentication.identifier
+          [200, data.to_json]
         end
       end
 

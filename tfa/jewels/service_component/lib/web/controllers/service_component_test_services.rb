@@ -50,6 +50,16 @@ module SoarSc
           [200, ""]
         end
       end
+
+      class NoAuthenticationTestController < ConfiguredController
+        def serve(request)
+          data = {'result' =>'Yay, you are allowed to get here'}
+          SoarSc::auditing.info("NoAuthenticationTestController",request.params['flow_identifier'])
+          authentication = SoarAuthentication::Authentication.new(request)
+          data['authentication_identity'] = authentication.identifier
+          [200, data.to_json]
+        end
+      end
     end
   end
 end
