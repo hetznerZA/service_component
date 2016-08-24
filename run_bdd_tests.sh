@@ -43,7 +43,7 @@ rvm use . && gem install bundler && bundle
 
 if [ -z "$TEST_FEATURES" ]; then TEST_FEATURES=features/*; fi
 if [ -z "$ATTEMPTS" ]; then ATTEMPTS=1; fi
-if [ -z "$ITERATION_SLEEP" ]; then ITERATION_SLEEP=30; fi
+if [ -z "$ITERATION_SLEEP" ]; then ITERATION_SLEEP=0; fi
 
 TEST_EXIT_CODE=1
 COUNTER=0
