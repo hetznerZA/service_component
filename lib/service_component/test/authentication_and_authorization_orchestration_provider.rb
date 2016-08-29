@@ -57,8 +57,7 @@ module ServiceComponent
       end
 
       def given_an_authentication_failure
-        #@iut.environment['CAS_SERVER'] = 'https://invalid-login.konsoleh.co.za/cas'
-        #TODO I think it might be best to implement this using SMAAK auth failure.
+        @iut.environment['CAS_SERVER'] = 'https://invalid-login.konsoleh.co.za/cas'
       end
 
       def given_an_originator_of_authentication_delegation
@@ -152,13 +151,15 @@ module ServiceComponent
           @iut.environment.delete('BASIC_AUTH_USER')
         end
         bootstrap
-        if false #'service' == @identity_type
-          @result = @smaak_client.post('service-provider', "http://localhost:9393/#{@service_name}/", { 'index1' => 'data1', 'index2' => 'data2' }.to_json)
+        if 'service' == @identity_type
+          @result = @smaak_client.get('service-server.dev.auto-h.net',
+                                       "http://localhost:9393/#{@service_name}/",
+                                       { 'request' => {'bla' => 'foo'},
+                                         'identifier' => "service-client.dev.auto-h.net"}.to_json)
         else
           @result = @iut.query_endpoint(user: @user, password: @password, resource: @service_name, parameters: { :flow_identifier => @test_id })
         end
       end
-
 
       def have_responded_with_true?
         '200' == @result.code
@@ -173,12 +174,23 @@ module ServiceComponent
       end
 
       def have_responded_with_the_authenticated_service_identity_identifier?
-        #TODO
-        false
+        'service-client.dev.auto-h.net' == JSON.parse(@result.body)['authentication_identity']
       end
 
       def have_responded_with_nil?
         JSON.parse(@result.body)['authentication_identity'].nil?
+      end
+
+      def have_responded_with_no_authenticated_identity?
+        @iut.have_responded_with_no_authenticated_identity?
+      end
+
+      def have_responded_with_the_authenticated_identity_identifier_in_request_not_requiring_authentication?
+        @iut.have_responded_with_the_authenticated_identity_identifier_in_request_not_requiring_authentication?
+      end
+
+      def have_notified_of_a_failure_determining_authentication_identity?
+        @iut.have_notified_of_a_failure_determining_authentication_identity?
       end
 
       def have_responded_with_with_the_authenticated_identity_identifier?
@@ -229,9 +241,9 @@ module ServiceComponent
 
       def create_smaak_client
         @smaak_client = Smaak::Client.new
-        @smaak_client.set_identifier('test-orchestration-client')
+        @smaak_client.set_identifier('service-client.dev.auto-h.net')
         @smaak_client.set_private_key(get_smaak_client_private_key)
-        @smaak_client.add_association('service-provider', get_smaak_server_public_key, get_client_pre_shared_key, true) # encrypted
+        @smaak_client.add_association('service-server.dev.auto-h.net', get_smaak_server_public_key, get_client_pre_shared_key, false) # false = not encrypted
       end
 
       def get_smaak_client_private_key

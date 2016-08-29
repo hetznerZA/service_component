@@ -17,6 +17,11 @@ module ServiceComponent
         select_default_auditor
       end
 
+      def given_no_auditing_level
+        #defaulting to debug
+        given_auditing_level(:debug)
+      end
+
       def given_audit_message(message)
         @audit_event_message = message
       end

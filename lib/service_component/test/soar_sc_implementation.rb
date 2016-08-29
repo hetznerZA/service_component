@@ -100,6 +100,10 @@ module ServiceComponent
 
       #Specializations for SOAR_SC
 
+      def given_no_auditing_level
+        puts "Missing audit levels are not testable at the moment, defaulting to debug"
+      end
+
       def given_no_service_registry_client_provider
         puts "unable to test this in soar_sc since it is always available, forcing failure via an initilization failure"
         @environment['SERVICE_REGISTRY'] = 'not\a\uri'
@@ -122,8 +126,21 @@ module ServiceComponent
         true
       end
 
+      def have_responded_with_no_authenticated_identity?
+        #Untestable in SOAR_SC implementation due to no authenticated routes being matched
+        #if the identity could not complete authentication.
+        true
+      end
 
+      def have_responded_with_the_authenticated_identity_identifier_in_request_not_requiring_authentication?
+        #Untestable in unauthenticated router
+        true
+      end
 
+      def have_notified_of_a_failure_determining_authentication_identity?
+        #Untestable in authenticated router
+        true
+      end
 
 
 
@@ -265,9 +282,10 @@ module ServiceComponent
         client_key_material = load_yaml_file("#{ENV['SOAR_DIR']}/smaak/client.yml")
         @configuration['associations'] =
           {
-            'test-orchestration-client' => {
+            'service-client.dev.auto-h.net' => {
               'public_key' => client_key_material['public_key'],
-              'psk' => @smaak_client_psk
+              'psk' => @smaak_client_psk,
+              'encrypted' => false
             }
           }
       end

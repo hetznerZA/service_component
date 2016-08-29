@@ -138,12 +138,20 @@ Then(/^I respond with nil$/) do
   expect(@test.have_responded_with_nil?).to eq(true)
 end
 
+Then(/^I respond with no authenticated identity$/) do
+  expect(@test.have_responded_with_no_authenticated_identity?).to eq(true)
+end
+
+Then(/^I respond with the authenticated identity's identifier in request not requiring authentication$/) do
+  expect(@test.have_responded_with_the_authenticated_identity_identifier_in_request_not_requiring_authentication?).to eq(true)
+end
+
 Then(/^I respond with the authenticated identity's identifier$/) do
   expect(@test.have_responded_with_with_the_authenticated_identity_identifier?).to eq(true)
 end
 
 Then(/^I notify 'Failure determining authentication identity'$/) do
-  expect(@test.audit_entry_with_message_exist?('Failure determining authentication identity')).to eq(true)
+  expect(@test.have_notified_of_a_failure_determining_authentication_identity?).to eq(true)
 end
 
 Then(/^I respond false$/) do
