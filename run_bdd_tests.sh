@@ -14,6 +14,7 @@ cd $SOAR_DIR/lib && git checkout . && git clean -fdx
 #cd $SERVICE_COMPONENT_DIR && git checkout . && git clean -fdx
 
 echo "Generating SMAAK key pairs"
+cd $SOAR_DIR
 bundle exec ruby $SOAR_DIR/smaak/generate_4096_key_pair.rb $SOAR_DIR/smaak/client.yml
 bundle exec ruby $SOAR_DIR/smaak/generate_4096_key_pair.rb $SOAR_DIR/smaak/server.yml
 cd $SERVICE_COMPONENT_DIR
