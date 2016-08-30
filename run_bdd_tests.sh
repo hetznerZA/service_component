@@ -14,10 +14,10 @@ cd $SOAR_DIR/lib && git checkout . && git clean -fdx
 #cd $SERVICE_COMPONENT_DIR && git checkout . && git clean -fdx
 
 echo "Generating SMAAK key pairs"
-cd $SOAR_DIR
-bundle exec ruby $SOAR_DIR/smaak/generate_4096_key_pair.rb $SOAR_DIR/smaak/client.yml
-bundle exec ruby $SOAR_DIR/smaak/generate_4096_key_pair.rb $SOAR_DIR/smaak/server.yml
+#cd $SOAR_DIR
+#rvm use . && gem install bundler && bundle install
 cd $SERVICE_COMPONENT_DIR
+
 
 echo "Import jewels related to audit related testing"
 cd $SERVICE_COMPONENT_DIR && ./import.sh service_component
@@ -34,6 +34,10 @@ export SOAR_TECH=rackup
 export RACK_ENV=production
 ./soar_tech.sh
 rvm use . && gem install bundler && bundle install
+
+echo "Generating SMAAK key pairs"
+bundle exec ruby $SOAR_DIR/smaak/generate_4096_key_pair.rb $SOAR_DIR/smaak/client.yml
+bundle exec ruby $SOAR_DIR/smaak/generate_4096_key_pair.rb $SOAR_DIR/smaak/server.yml
 
 ./keep_running.sh > /dev/null 2>&1 &
 export KEEP_RUNNING_PID=$!
