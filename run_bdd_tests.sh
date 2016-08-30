@@ -41,7 +41,7 @@ echo "Running service component BDD tests"
 cd $SERVICE_COMPONENT_DIR
 rvm use . && gem install bundler && bundle
 
-if [ -z "$TEST_FEATURES" ]; then TEST_FEATURES=features/*; fi
+if [ -z "$TEST_FEATURES" ]; then TEST_FEATURES=features/*.feature; fi
 if [ -z "$ATTEMPTS" ]; then ATTEMPTS=1; fi
 if [ -z "$ITERATION_SLEEP" ]; then ITERATION_SLEEP=0; fi
 
