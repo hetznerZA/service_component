@@ -22,7 +22,7 @@ Feature: Supporting development workflow authentication
     Given an execution environment 'development'
     And an authentication failure
     When I am asked who has authenticated
-    Then I respond with nil
+    Then I respond with nil due to failure to determine authentication identity
     And I notify 'Failure determining authentication identity'
 
   Scenario:

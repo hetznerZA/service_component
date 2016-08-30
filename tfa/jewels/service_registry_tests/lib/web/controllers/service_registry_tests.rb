@@ -1,6 +1,28 @@
 module SoarSc
   module Web
     module Controllers
+      class DelegationTestControllerFrontend < ConfiguredController
+        def serve(request)
+          data = {}
+          authentication = SoarAuthentication::Authentication.new(request)
+          $stderr.puts "DelegationTestControllerFrontend hit with authentication_identity <#{authentication.identifier}>"
+
+          res = query_endpoint(request)
+          data['backend_result_body'] = JSON.parse(res.body)
+          data['backend_result_code'] = res.code
+          data['authentication_identity'] = data['backend_result_body']['authentication_identity']
+          [200, data]
+        end
+
+        def query_endpoint(front_end_request)
+          uri = URI.parse('http://localhost:9393/architectural-test-service_backend_for_delegation_testing')
+          uri.query = URI.encode_www_form( {} )
+          http = Net::HTTP.new(uri.host, uri.port)
+          request = Net::HTTP::Get.new(uri.request_uri)
+          http.request(request)
+        end
+      end
+
       class AuthorizationTestController < ConfiguredController
         def serve(request)
           data = {}

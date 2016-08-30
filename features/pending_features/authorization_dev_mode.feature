@@ -7,20 +7,21 @@ Feature: Supporting development workflow authorization
   Scenario:
     Given an execution environment 'development'
     And an authenticated identity
-    And a request requiring authorization
-    When I am asked to authorize
+    And an authorization policy
+    When asked to authorize the service
     Then I respond with 'allow'
 
   Scenario:
     Given an execution environment 'development'
     And no authenticated identity
-    And a request requiring authorization
-    When I am asked to authorize
+    And an authorization policy
+    When asked to authorize the service
     Then I respond with 'allow'
 
   Scenario:
     Given an execution environment 'development'
+    And an authorization policy
     And an authorization failure
-    When I am asked to authorize
+    When asked to authorize the service
     Then I respond with 'deny'
     And I notify 'Failure authorizing'

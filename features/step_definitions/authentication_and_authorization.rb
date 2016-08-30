@@ -35,7 +35,7 @@ Given(/^a delegated request$/) do
 end
 
 Given(/^no originator of authentication delegation$/) do
-  @test.given_no_originator_of_authentication_delegation
+  pending
 end
 
 Given(/^a request requiring authentication$/) do
@@ -118,6 +118,10 @@ Then(/^I have an initialized authorization provider$/) do
   expect(@test.have_an_initialized_authorization_provider?).to eq(true)
 end
 
+Then(/^I respond with nil due to failure to determine authentication identity$/) do
+  expect(@test.have_responded_with_nil_due_to_failure_to_determine_authentication_identity?).to eq(true)
+end
+
 Then(/^I notify 'Failure initializing authorization provider'$/) do
   puts "Unable to test this in soar sc"
 end
@@ -159,7 +163,7 @@ Then(/^I respond false$/) do
 end
 
 Then(/^I respond with the identity of the originator$/) do
-  expect(@test.have_responded_with_the_identity_of_the_originator?).to eq(true)
+  pending
 end
 
 Then(/^I notify 'Could not determine delegation'$/) do

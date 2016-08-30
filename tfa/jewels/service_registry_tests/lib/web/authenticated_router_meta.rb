@@ -177,3 +177,18 @@
           },
           'controller' => 'AuthorizationProtectedController'
         })
+
+        register_route({
+          'description' => 'End point that results in delegation to another endpoint',
+          'service_name' => 'architectural-test-service_that_will_result_in_delegation',
+          'path' => '/architectural-test-service_that_will_result_in_delegation',
+          'method' => 'get',
+          'nfrs' => {
+            'authorization' => 'UNAUTHORIZED',
+            'secured' => 'UNSIGNED'
+          },
+         'view' => {
+            'renderer' => 'json'
+          },
+          'controller' => 'DelegationTestControllerFrontend'
+        })

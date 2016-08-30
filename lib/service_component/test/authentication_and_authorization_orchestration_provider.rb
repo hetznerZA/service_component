@@ -58,18 +58,16 @@ module ServiceComponent
 
       def given_an_authentication_failure
         @iut.environment['CAS_SERVER'] = 'https://invalid-login.konsoleh.co.za/cas'
+        @iut.set_execution_environment('production')
       end
 
       def given_an_originator_of_authentication_delegation
-        puts "TODO not yet implementated"
+        #This is implemented using the standard testing human identity "dev"
+        given_an_authenticated_human_identity
       end
 
       def given_a_delegated_request
-        puts "TODO not yet implementated"
-      end
-
-      def given_no_originator_of_authentication_delegation
-        puts "TODO not yet implementated"
+        @service_name = 'architectural-test-service_that_will_result_in_delegation'
       end
 
       def given_a_request_requiring_authentication
@@ -136,7 +134,6 @@ module ServiceComponent
       end
 
       def when_asked_who_delegated_the_authentication
-        @service_name = "authorization-tests/architectural-test-service#{@using_policy}"
         authorize
       end
 
@@ -166,7 +163,8 @@ module ServiceComponent
       end
 
       def have_responded_with_false?
-        '401' == @result.code
+        '401' == @result.code or
+        '302' == @result.code  #redirect to cas for login
       end
 
       def have_responded_with_the_authenticated_human_identity_identifier?
@@ -197,11 +195,6 @@ module ServiceComponent
         'dev' == JSON.parse(@result.body)['authentication_identity']
       end
 
-      def have_responded_with_the_identity_of_the_originator?
-        #TODO
-        false
-      end
-
       def have_responded_with_developer?
         'developer' == JSON.parse(@result.body)['authentication_identity']
       end
@@ -220,7 +213,8 @@ module ServiceComponent
       end
 
       def have_responded_with_deny?
-        '403' == @result.code
+        '403' == @result.code or
+        '401' == @result.code
       end
 
       def have_notified_authorization_failure?
@@ -231,6 +225,10 @@ module ServiceComponent
       def have_an_initialized_authentication_provider?
         #for test purposes we use basic auth so check that it is initialized
         @iut.audit_entry_with_message_exist?('BASIC_AUTH_USER specified, using basic auth for authentication. Basic auth is not recommended for production')
+      end
+
+      def have_responded_with_nil_due_to_failure_to_determine_authentication_identity?
+        @iut.have_responded_with_nil_due_to_failure_to_determine_authentication_identity?
       end
 
       def have_an_initialized_authorization_provider?

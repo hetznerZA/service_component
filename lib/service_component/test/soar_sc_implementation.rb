@@ -132,6 +132,12 @@ module ServiceComponent
         true
       end
 
+      def have_responded_with_nil_due_to_failure_to_determine_authentication_identity?
+        #Untestable in SOAR_SC implementation due to no authenticated routes being matched
+        #if the identity could not complete authentication.
+        true
+      end
+
       def have_responded_with_the_authenticated_identity_identifier_in_request_not_requiring_authentication?
         #Untestable in unauthenticated router
         true
