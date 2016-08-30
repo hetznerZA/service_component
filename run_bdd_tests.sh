@@ -32,14 +32,14 @@ cp config/environment.yml.example config/environment.yml
 export SOAR_TECH=rackup
 export RACK_ENV=production
 ./soar_tech.sh
-rvm use . && gem install bundler && bundle
+rvm use . && gem install bundler && bundle install
 
 ./keep_running.sh > /dev/null 2>&1 &
 export KEEP_RUNNING_PID=$!
 
 echo "Running service component BDD tests"
 cd $SERVICE_COMPONENT_DIR
-rvm use . && gem install bundler && bundle
+rvm use . && gem install bundler && bundle install
 
 if [ -z "$TEST_FEATURES" ]; then TEST_FEATURES=features/*.feature; fi
 if [ -z "$ATTEMPTS" ]; then ATTEMPTS=1; fi
