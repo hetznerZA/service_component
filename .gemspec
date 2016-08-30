@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'soar_auditing_format', '~> 0.0.5'
   spec.add_development_dependency 'activesupport', '~> 5.0'
   spec.add_development_dependency 'rack', '~> 1.6.4'
+  spec.add_development_dependency 'smaak', '~> 0.2.2'
 
   #Requirements for running the manual script to publish services to the service registry
   spec.add_development_dependency 'soar_sr', '~> 1.1.22'

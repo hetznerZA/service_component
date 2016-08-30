@@ -1,4 +1,19 @@
         register_route({
+          'description' => 'Access Point that uses SMAAK but no authentication or authorization',
+          'service_name' => 'service-server.dev.auto-h.net',
+          'path' => '/architectural-test-service-using-smaak',
+          'method' => 'get',
+          'nfrs' => {
+            'authorization' => 'UNAUTHORIZED',
+            'secured' => 'SIGNED'
+          },
+          'view' => {
+            'renderer' => 'json'
+          },
+          'controller' => 'SmaakEnabledTestController'
+        })
+
+        register_route({
           'description' => 'Access Point for command and control of service registry client in soar_sc',
           'service_name' => 'service-registry-client-command-and-control',
           'path' => '/service-registry-client-command-and-control',
@@ -161,4 +176,19 @@
             'renderer' => 'json'
           },
           'controller' => 'AuthorizationProtectedController'
+        })
+
+        register_route({
+          'description' => 'End point that results in delegation to another endpoint',
+          'service_name' => 'architectural-test-service_that_will_result_in_delegation',
+          'path' => '/architectural-test-service_that_will_result_in_delegation',
+          'method' => 'get',
+          'nfrs' => {
+            'authorization' => 'UNAUTHORIZED',
+            'secured' => 'UNSIGNED'
+          },
+         'view' => {
+            'renderer' => 'json'
+          },
+          'controller' => 'DelegationTestControllerFrontend'
         })

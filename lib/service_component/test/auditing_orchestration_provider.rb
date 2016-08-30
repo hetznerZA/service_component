@@ -17,6 +17,11 @@ module ServiceComponent
         select_default_auditor
       end
 
+      def given_no_auditing_level
+        #defaulting to debug
+        given_auditing_level(:debug)
+      end
+
       def given_audit_message(message)
         @audit_event_message = message
       end
@@ -262,15 +267,11 @@ module ServiceComponent
       end
 
       def has_received_notification_for_missing_auditor_configuration?
-        #Untestable in SOAR_SC implementation due to the default auditor configuration
-        #being supplied in the event that the configuration is not present.
-        true
+        @iut.has_received_notification_for_missing_auditor_configuration?
       end
 
       def has_received_notification_for_missing_auditing_configuration?
-        #Untestable in SOAR_SC implementation due to the default auditor configuration
-        #being supplied in the event that the configuration is not present.
-        true
+        @iut.has_received_notification_for_missing_auditing_configuration?
       end
 
       private

@@ -40,6 +40,16 @@ module SoarSc
         end
       end
 
+      class DelegationTestControllerBackend < ConfiguredController
+        def serve(request)
+          data = {}
+          authentication = SoarAuthentication::Authentication.new(request)
+          data['authentication_identity'] = authentication.identifier
+          $stderr.puts "DelegationTestControllerBackend hit with authentication_identity <#{data['authentication_identity']}>"
+          [200, data]
+        end
+      end
+
       class RoutingTestController < ConfiguredController
         def serve(request)
           SoarSc::auditing.debug("RoutingTestFirstController with path as #{request.path}",request.params['flow_identifier'].to_s)
@@ -48,6 +58,16 @@ module SoarSc
         def serve_second_match(request)
           SoarSc::auditing.debug("RoutingTestSecondController",request.params['flow_identifier'].to_s)
           [200, ""]
+        end
+      end
+
+      class NoAuthenticationTestController < ConfiguredController
+        def serve(request)
+          data = {'result' =>'Yay, you are allowed to get here'}
+          SoarSc::auditing.info("NoAuthenticationTestController",request.params['flow_identifier'])
+          authentication = SoarAuthentication::Authentication.new(request)
+          data['authentication_identity'] = authentication.identifier
+          [200, data.to_json]
         end
       end
     end

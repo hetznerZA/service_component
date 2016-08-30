@@ -254,10 +254,12 @@ module ServiceComponent
       end
 
       def given_an_invalid_authentication_provider
+        @iut.set_execution_environment('production')
         @iut.environment['CAS_SERVER'] = 'not\a\valid\uri'
       end
 
       def given_no_authentication_provider
+        @iut.set_execution_environment('production')
         @iut.environment.delete('CAS_SERVER')
         @iut.environment.delete('BASIC_AUTH_USER')
       end

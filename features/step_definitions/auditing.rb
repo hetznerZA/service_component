@@ -23,8 +23,7 @@ Given(/^a message$/) do
 end
 
 Given(/^no auditing level$/) do
-  puts "Missing audit levels are not testable at the moment, defaulting to debug"
-  @test.given_auditing_level(DEBUG_LEVEL)
+  @test.given_no_auditing_level
 end
 
 Given(/^a valid auditing level$/) do

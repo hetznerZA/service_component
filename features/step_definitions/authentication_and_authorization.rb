@@ -35,7 +35,7 @@ Given(/^a delegated request$/) do
 end
 
 Given(/^no originator of authentication delegation$/) do
-  @test.given_no_originator_of_authentication_delegation
+  pending
 end
 
 Given(/^a request requiring authentication$/) do
@@ -75,19 +75,19 @@ Given(/^an authorization failure$/) do
 end
 
 When(/^I am asked whether the request has authenticated$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.when_asked_whether_the_request_has_authenticated
 end
 
 When(/^I am asked who has authenticated$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.when_asked_who_has_authenticated
 end
 
 When(/^I am asked who delegated the authentication$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.when_asked_who_delegated_the_authentication
 end
 
 When(/^I am asked whether the request has been delegated$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  @test.when_asked_whether_the_request_has_been_delegated
 end
 
 When(/^asked to authorize the service$/) do
@@ -118,40 +118,52 @@ Then(/^I have an initialized authorization provider$/) do
   expect(@test.have_an_initialized_authorization_provider?).to eq(true)
 end
 
+Then(/^I respond with nil due to failure to determine authentication identity$/) do
+  expect(@test.have_responded_with_nil_due_to_failure_to_determine_authentication_identity?).to eq(true)
+end
+
 Then(/^I notify 'Failure initializing authorization provider'$/) do
   puts "Unable to test this in soar sc"
 end
 
 Then(/^I respond true$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  expect(@test.have_responded_with_true?).to eq(true)
 end
 
 Then(/^I respond with the authenticated human identity's identifier$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  expect(@test.have_responded_with_the_authenticated_human_identity_identifier?).to eq(true)
 end
 
 Then(/^I respond with the authenticated service identity's identifier$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  expect(@test.have_responded_with_the_authenticated_service_identity_identifier?).to eq(true)
 end
 
 Then(/^I respond with nil$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  expect(@test.have_responded_with_nil?).to eq(true)
+end
+
+Then(/^I respond with no authenticated identity$/) do
+  expect(@test.have_responded_with_no_authenticated_identity?).to eq(true)
+end
+
+Then(/^I respond with the authenticated identity's identifier in request not requiring authentication$/) do
+  expect(@test.have_responded_with_the_authenticated_identity_identifier_in_request_not_requiring_authentication?).to eq(true)
 end
 
 Then(/^I respond with the authenticated identity's identifier$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  expect(@test.have_responded_with_with_the_authenticated_identity_identifier?).to eq(true)
 end
 
 Then(/^I notify 'Failure determining authentication identity'$/) do
-  expect(@test.audit_entry_with_message_exist?('Failure determining authentication identity')).to eq(true)
+  expect(@test.have_notified_of_a_failure_determining_authentication_identity?).to eq(true)
 end
 
 Then(/^I respond false$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  expect(@test.have_responded_with_false?).to eq(true)
 end
 
 Then(/^I respond with the identity of the originator$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  pending
 end
 
 Then(/^I notify 'Could not determine delegation'$/) do
@@ -159,7 +171,7 @@ Then(/^I notify 'Could not determine delegation'$/) do
 end
 
 Then(/^I respond with 'developer'$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+  expect(@test.have_responded_with_developer?).to eq(true)
 end
 
 Then(/^I have an initialized authentication provider$/) do
