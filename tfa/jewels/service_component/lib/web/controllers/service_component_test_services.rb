@@ -28,7 +28,7 @@ module SoarSc
 
       class AuditFlowTest < ConfiguredController
         def serve(request)
-          SoarSc::auditing.debug("#{request['data'].to_s}-#{request['operation'].to_s}-#{request['correlation_identifier'].to_s}",request.params['flow_identifier'].to_s)
+          SoarSc::auditing.info("#{request['data'].to_s}-#{request['operation'].to_s}-#{request['correlation_identifier'].to_s}",request.params['flow_identifier'].to_s)
           if request['operation'] == 'flow-test-action-1' then
             request['operation'] = 'flow-test-action-2'
 
@@ -52,11 +52,11 @@ module SoarSc
 
       class RoutingTestController < ConfiguredController
         def serve(request)
-          SoarSc::auditing.debug("RoutingTestFirstController with path as #{request.path}",request.params['flow_identifier'].to_s)
+          SoarSc::auditing.info("RoutingTestFirstController with path as #{request.path}",request.params['flow_identifier'].to_s)
           [200, ""]
         end
         def serve_second_match(request)
-          SoarSc::auditing.debug("RoutingTestSecondController",request.params['flow_identifier'].to_s)
+          SoarSc::auditing.info("RoutingTestSecondController",request.params['flow_identifier'].to_s)
           [200, ""]
         end
       end

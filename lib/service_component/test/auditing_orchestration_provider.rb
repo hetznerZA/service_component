@@ -77,7 +77,7 @@ module ServiceComponent
       def given_auditing_provider_initialization_failure
         # specify an incorrect auditing level which will result in an auditing provider
         # initialization failure
-        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'level' => 'wrong'}})
+        @iut.configuration['auditing']['level'] = 'wrong'
       end
 
       def given_valid_auditing_provider_configuration
@@ -89,15 +89,15 @@ module ServiceComponent
       end
 
       def given_valid_configured_auditing_level
-        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'level' => 'debug'}})
+        @iut.configuration['auditing']['level'] = 'debug'
       end
 
       def given_invalid_configured_auditing_level
-        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'level' => 'wrong'}})
+        @iut.configuration['auditing']['level'] = 'wrong'
       end
 
       def given_no_configured_auditing_level
-        @iut.configuration = recurse_merge(@iut.configuration, {'auditing' => { 'level' => nil }})
+        @iut.configuration['auditing']['level'] = nil
       end
 
       def given_valid_auditor
