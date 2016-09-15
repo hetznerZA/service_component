@@ -1,7 +1,7 @@
         register_route({
           'description' => 'Access Point that uses SMAAK but no authentication or authorization',
           'service_name' => 'service-server.dev.auto-h.net',
-          'path' => '/architectural-test-service-using-smaak',
+          'path' => '/architectural-test-service-using-smaak/',
           'method' => 'get',
           'nfrs' => {
             'authorization' => 'UNAUTHORIZED',

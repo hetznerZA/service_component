@@ -11,7 +11,9 @@ Given(/^a request for a service that matches no controller$/) do
 end
 
 Given(/^a request for a service with REST parametrized resource$/) do
-  @test.given_a_request_for_a_service_with_rest_parametrized_resource
+  puts "Have to still implement exclude parametrized resource matching in strict path matching yet.  Waiting for the need."
+  pending
+  #@test.given_a_request_for_a_service_with_rest_parametrized_resource
 end
 
 Given(/^no controller matches the request directly$/) do
@@ -51,5 +53,7 @@ Then(/^I notify 'no match'$/) do
 end
 
 Then(/^I do not exclude parametrized resource matching in the design$/) do
-  expect(@test.has_not_excluded_parametrized_resource_matching_in_the_design?).to eq(true)
+  puts "Have to still implement exclude parametrized resource matching in strict path matching yet.  Waiting for the need."
+  pending
+  #expect(@test.has_not_excluded_parametrized_resource_matching_in_the_design?).to eq(true)
 end

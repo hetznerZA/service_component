@@ -19,7 +19,7 @@ module ServiceComponent
       end
 
       def get_startup_flow_identifier
-        @bootstrap_status['data']['status_store']['startup_flow_id']
+        @bootstrap_status['data']['detail']['auditing']['startup_flow_id']
       end
 
       def has_not_remembered_service_identifier?
