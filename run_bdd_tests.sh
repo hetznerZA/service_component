@@ -8,7 +8,7 @@ export SOAR_DIR=$(pwd)/../soar_sc
 export SERVICE_COMPONENT_DIR=$BASE_DIR
 
 echo "Cleaning all repos involved in testing in preparation for jewel injection"
-#cd $SOAR_DIR/ && git checkout . && git clean -fdx
+cd $SOAR_DIR/ && git checkout . && git clean -fdx
 cd $SOAR_DIR/jewels && git checkout . && git clean -fdx
 cd $SOAR_DIR/lib && git checkout . && git clean -fdx
 #cd $SERVICE_COMPONENT_DIR && git checkout . && git clean -fdx
