@@ -60,3 +60,63 @@
           },
           'controller' => 'DelegationTestControllerBackend'
         })
+
+        register_route({
+          'description' => 'Paramter validation test endpoint',
+          'service_name' => 'parameter-validation-test',
+          'path' => "/parameter-validation-test-no-parameters-specified",
+          'method' => 'get',
+          'params' => {
+          },
+          'nfrs' => {
+            'authorization' => 'UNAUTHORIZED',
+            'secured' => 'UNSIGNED'
+          },
+            'view' => {
+            'renderer' => 'json',
+            'name' => 'where_is_it'
+          },
+          'controller' => 'ParameterValidationTestController'
+          }, nil)
+
+        register_route({
+          'description' => 'Paramter validation test endpoint',
+          'service_name' => 'parameter-validation-test',
+          'path' => "/parameter-validation-test-nonrequired-parameters-specified",
+          'method' => 'get',
+          'params' => {
+            'some_required_parameter' => {
+              'required' => 'false', 'type' => 'string'
+            }
+          },
+          'nfrs' => {
+            'authorization' => 'UNAUTHORIZED',
+            'secured' => 'UNSIGNED'
+          },
+            'view' => {
+            'renderer' => 'json',
+            'name' => 'where_is_it'
+          },
+          'controller' => 'ParameterValidationTestController'
+          }, nil)
+
+        register_route({
+          'description' => 'Paramter validation test endpoint',
+          'service_name' => 'parameter-validation-test',
+          'path' => "/parameter-validation-test-required-parameters-specified",
+          'method' => 'get',
+          'params' => {
+            'some_required_parameter' => {
+              'required' => 'true', 'type' => 'string'
+            }
+          },
+          'nfrs' => {
+            'authorization' => 'UNAUTHORIZED',
+            'secured' => 'UNSIGNED'
+          },
+            'view' => {
+            'renderer' => 'json',
+            'name' => 'where_is_it'
+          },
+          'controller' => 'ParameterValidationTestController'
+          }, nil)

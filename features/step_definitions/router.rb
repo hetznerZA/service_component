@@ -20,6 +20,26 @@ Given(/^no controller matches the request directly$/) do
   @test.given_no_controller_matches_the_request_directly
 end
 
+Given(/^valid request parameters$/) do
+  @test.given_request_with_valid_parameters
+end
+
+Given(/^invalid request parameters$/) do
+  @test.given_request_with_invalid_parameters
+end
+
+Given(/^a routing that does not specify parameters$/) do
+  @test.given_a_routing_that_does_not_specify_parameters
+end
+
+Given(/^a routing that specify non\-required parameters$/) do
+  @test.given_a_routing_that_specify_nonrequired_parameters
+end
+
+Given(/^a routing that specify required parameters$/) do
+  @test.given_a_routing_that_specify_required_parameters
+end
+
 When(/^I receive a request$/) do
   @test.receive_a_request
 end
@@ -56,4 +76,12 @@ Then(/^I do not exclude parametrized resource matching in the design$/) do
   puts "Have to still implement exclude parametrized resource matching in strict path matching yet.  Waiting for the need."
   pending
   #expect(@test.has_not_excluded_parametrized_resource_matching_in_the_design?).to eq(true)
+end
+
+Then(/^I allow the request to be routed to the controller$/) do
+  expect(@test.request_was_allowed_to_be_routed_to_controller?).to eq(true)
+end
+
+Then(/^I reject the request due to invalid request parameters$/) do
+  expect(@test.request_was_rejected_due_to_invalid_request_parameters?).to eq(true)
 end

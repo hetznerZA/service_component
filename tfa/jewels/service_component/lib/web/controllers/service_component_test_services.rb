@@ -70,6 +70,12 @@ module SoarSc
           [200, data.to_json]
         end
       end
+
+      class ParameterValidationTestController < ConfiguredController
+        def serve(request)
+          [200, {"parameters_received" => request.params}]
+        end
+      end
     end
   end
 end
