@@ -8,7 +8,7 @@ export SOAR_DIR=$(pwd)/../soar_sc
 export SERVICE_COMPONENT_DIR=$BASE_DIR
 
 echo "Cleaning all repos involved in testing in preparation for jewel injection"
-cd $SOAR_DIR/ && git checkout . && git clean -fdx
+# cd $SOAR_DIR/ && git checkout . && git clean -fdx
 cd $SOAR_DIR/jewels && git checkout . && git clean -fdx
 cd $SOAR_DIR/lib && git checkout . && git clean -fdx
 #cd $SERVICE_COMPONENT_DIR && git checkout . && git clean -fdx
@@ -33,7 +33,7 @@ cp config/environment.yml.example config/environment.yml
 export SOAR_TECH=rackup
 export RACK_ENV=production
 ./soar_tech.sh
-rvm use . && gem install bundler && bundle install
+rvm use . && gem install bundler && bundle install --full-index
 
 echo "Generating SMAAK key pairs"
 bundle exec ruby $SOAR_DIR/smaak/generate_4096_key_pair.rb $SOAR_DIR/smaak/client.yml
@@ -44,7 +44,7 @@ export KEEP_RUNNING_PID=$!
 
 echo "Running service component BDD tests"
 cd $SERVICE_COMPONENT_DIR
-rvm use . && gem install bundler && bundle install
+rvm use . && gem install bundler && bundle install --full-index
 
 if [ -z "$TEST_FEATURES" ]; then TEST_FEATURES=features/*.feature; fi
 if [ -z "$ATTEMPTS" ]; then ATTEMPTS=1; fi
