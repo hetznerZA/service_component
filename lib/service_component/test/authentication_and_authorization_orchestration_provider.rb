@@ -232,7 +232,7 @@ module ServiceComponent
       end
 
       def have_an_initialized_authorization_provider?
-        JSON.parse(get_authorization_provider_info.body)['access_manager'].include?("SoarPolicyAccessManager::PolicyAccessManager")
+        JSON.parse(get_authorization_provider_info.body)['access_manager'].include?("Soar::Policy::AccessManager::Model")
       end
 
       private
