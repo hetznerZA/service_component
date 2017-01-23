@@ -77,4 +77,4 @@ Feature: Finding service URIs
     And I ask the services for their functional status
     And I return the service URI for which the best functional status was obtained
     And I do not update the cache based on functional status
-    And I answer in no more than 2 seconds
+    And I answer in no more than 4 seconds
